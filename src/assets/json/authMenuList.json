@@ -1,0 +1,36 @@
+{
+  "code": 200,
+  "data": [
+    {
+      "path": "/config",
+      "name": "config",
+      "redirect": "/config/character",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "配置",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/config/character",
+          "name": "character",
+          "component": "/config/character/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "人物配置",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": true,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    }
+  ],
+  "msg": "成功"
+}
