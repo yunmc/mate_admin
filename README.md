@@ -1,7 +1,3 @@
-### 介绍 📖
-
-Geeker-Admin 一款基于 Vue3.3、TypeScript、Vite4、Pinia、Element-Plus 开源的后台管理框架，使用目前最新技术栈开发。项目提供强大的 [ProTable](https://juejin.cn/post/7166068828202336263) 组件，在一定程度上节省您的开发效率。另外本项目还封装了一些常用组件、Hooks、指令、动态路由、按钮级别权限控制等功能。
-
 ### 项目功能 🔨
 
 - 使用 Vue3.3 + TypeScript 开发，单文件组件**＜ script setup ＞**
@@ -15,17 +11,6 @@ Geeker-Admin 一款基于 Vue3.3、TypeScript、Vite4、Pinia、Element-Plus 开
 - 常用自定义指令开发（权限、复制、水印、拖拽、节流、防抖、长按…）
 - 使用 Prettier 统一格式化代码，集成 ESLint、Stylelint 代码校验规范
 - 使用 husky、lint-staged、commitlint、czg、cz-git 规范提交信息
-
-### 安装使用步骤 📔
-
-- **Clone：**
-
-```text
-# Gitee
-git clone https://gitee.com/HalseySpicy/Geeker-Admin.git
-# GitHub
-git clone https://github.com/HalseySpicy/Geeker-Admin.git
-```
 
 - **Install：**
 
