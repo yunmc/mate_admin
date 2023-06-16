@@ -50,7 +50,7 @@
 <script setup lang="tsx" name="useProTable">
 import { ref, reactive } from "vue";
 import { User } from "@/api/interface";
-import { useHandleData } from "@/hooks/useHandleData";
+// import { useHandleData } from "@/hooks/useHandleData";
 // import { useDownload } from "@/hooks/useDownload";
 // import { useAuthButtons } from "@/hooks/useAuthButtons";
 import { ElMessage } from "element-plus";
@@ -60,7 +60,7 @@ import UserDrawer from "@/views/proTable/components/UserDrawer.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { CirclePlus, EditPen, View } from "@element-plus/icons-vue";
-import { getUserList, editUser, addUser, changeUserStatus } from "@/api/modules/user";
+import { getUserList, editUser, addUser } from "@/api/modules/user";
 
 // const router = useRouter();
 
@@ -109,15 +109,6 @@ const getStateStatus = () => {
 
 // 页面按钮权限（按钮权限既可以使用 hooks，也可以直接使用 v-auth 指令，指令适合直接绑定在按钮上，hooks 适合根据按钮权限显示不同的内容）
 // const { BUTTONS } = useAuthButtons();
-
-// 自定义渲染表头（使用tsx语法）
-// const headerRender = (scope: HeaderRenderScope<User.ResUserList>) => {
-//   return (
-//     <el-button type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
-//       {scope.column.label}
-//     </el-button>
-//   );
-// };
 
 // 表格配置项
 const columns: ColumnProps<User.ResUserList>[] = [
@@ -179,11 +170,7 @@ const columns: ColumnProps<User.ResUserList>[] = [
       return (
         <>
           {scope.row.ai_state > 1 ? (
-            <el-switch
-              model-value={scope.row.ai_state == 2}
-              active-text={scope.row.ai_state == 3 ? "已下线" : "已上线"}
-              onClick={() => changeStatus(scope.row)}
-            />
+            <el-switch model-value={scope.row.ai_state == 2} active-text={scope.row.ai_state == 3 ? "已下线" : "已上线"} />
           ) : (
             <el-tag type="danger">{"初始化"}</el-tag>
           )}
@@ -197,11 +184,6 @@ const columns: ColumnProps<User.ResUserList>[] = [
   },
   { prop: "operation", label: "操作", fixed: "right", width: 160 }
 ];
-// 切换用户状态
-const changeStatus = async (row: User.ResUserList) => {
-  await useHandleData(changeUserStatus, { ai_uid: row.ai_uid }, `切换【${row.ai_name}】用户状态`);
-  proTable.value?.getTableList();
-};
 
 const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 // const imageIndex = ref(0);

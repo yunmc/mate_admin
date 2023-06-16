@@ -38,6 +38,9 @@ pnpm build:test
 pnpm build:pro
 ```
 
+ProTable 文档：
+https://juejin.cn/post/7166068828202336263#heading-14
+
 - **Lint：**
 
 ```text
