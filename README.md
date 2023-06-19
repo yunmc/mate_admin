@@ -1,3 +1,9 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [1.0.0](https://github.com/HalseySpicy/Geeker-Admin/compare/v0.0.7...v1.0.0) (2023-04-15)
+
 ### 项目功能 🔨
 
 - 使用 Vue3.3 + TypeScript 开发，单文件组件**＜ script setup ＞**
