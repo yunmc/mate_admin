@@ -79,7 +79,7 @@
   </div>
 </template>
 
-<script setup name="cyberStarDetail">
+<script setup lang="tsx" name="cyberStarDetail">
 import { useRouter, useRoute } from "vue-router";
 import { getCyberStarInfo } from "@/api/user/cyberStar";
 import { ref } from "vue";
@@ -88,13 +88,11 @@ const router = useRouter();
 
 const staffId = route.query.uid || "google_4423fd45d28c455a9498cec5b";
 
-const userInfo = ref({});
+const userInfo = ref<{ [key: string]: any }>({});
 
 // 获取用户信息
-getCyberStarInfo(staffId).then(res => {
-  if (res.code == 200) {
-    userInfo.value = res.data;
-  }
+getCyberStarInfo(staffId as string).then(res => {
+  userInfo.value = res.data as {};
 });
 
 function goBack() {

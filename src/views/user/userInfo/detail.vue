@@ -59,7 +59,7 @@
   </div>
 </template>
 
-<script setup name="userInfoDetail">
+<script setup lang="tsx" name="userInfoDetail">
 import { useRouter, useRoute } from "vue-router";
 import { getStaffUserInfo } from "@/api/user/index";
 import { ref } from "vue";
@@ -68,13 +68,11 @@ const router = useRouter();
 
 const staffId = route.query.uid || "google_4423fd45d28c455a9498cec5b";
 
-const userInfo = ref({});
+const userInfo = ref<{ [key: string]: any }>({});
 
 // 获取用户信息
-getStaffUserInfo(staffId).then(res => {
-  if (res.code == 200) {
-    userInfo.value = res.data;
-  }
+getStaffUserInfo(staffId as string).then(res => {
+  userInfo.value = res.data as {};
 });
 
 function goBack() {
