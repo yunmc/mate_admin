@@ -27,7 +27,7 @@ const previewParams = (params: DrawerProps) => {
     initialIndex.value = params.index;
     srcList.value = params.row.posters;
   }
-
+  console.log("----", srcList.value);
   showViewer.value = true;
 };
 
