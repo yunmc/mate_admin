@@ -169,16 +169,22 @@ const columns: ColumnProps[] = [
   },
   {
     prop: "tags",
-    width: "120",
+    width: "160",
     label: "AI标签",
     render: scope => {
       return (
         <>
-          {scope.row.tags.length > 1
-            ? scope.row.tags.map((item: any, index: any) => {
-                return <el-tag class="mx-1">{{ item }}</el-tag>;
-              })
-            : ""}
+          <p style="white-space: wrap">
+            {scope.row.tags.length > 1
+              ? scope.row.tags.map((item: any, index: any) => {
+                  return (
+                    <el-tag class="mx-1" style="margin: 2px 4px;">
+                      {item}
+                    </el-tag>
+                  );
+                })
+              : ""}
+          </p>
         </>
       );
     }
