@@ -16,7 +16,7 @@
     </ProTable>
 
     <!-- 编辑抽屉 -->
-    <CyberStarDialog ref="dialogRef" />
+    <CyberStarDrawer ref="drawerRef" />
   </div>
 </template>
 
@@ -25,7 +25,7 @@ import { ref, reactive } from "vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { useRouter } from "vue-router";
 
-import CyberStarDialog from "./components/CyberStarDialog.vue";
+import CyberStarDrawer from "./components/CyberStarDrawer.vue";
 import { getCyberStarList } from "@/api/user/cyberStar";
 
 const router = useRouter();
@@ -115,14 +115,14 @@ const columns: ColumnProps[] = [
   { prop: "operation", label: "操作", fixed: "right", width: 100 }
 ];
 
-const dialogRef = ref<InstanceType<typeof CyberStarDialog> | null>(null);
+const drawerRef = ref<InstanceType<typeof CyberStarDrawer> | null>(null);
 //添加
 const onEdit = (row: { [key: string]: any }) => {
   const params = {
     row: { ...row },
     getTableList: proTable.value?.getTableList
   };
-  dialogRef.value?.initDialog(params);
+  drawerRef.value?.initDrawer(params);
 };
 
 //查看详情
@@ -132,10 +132,13 @@ const goDetail = (row: { uid: string }) => {
 </script>
 
 <style lang="scss" scoped>
-:deep(.el-dialog__header) {
+:deep(.el-overlay) {
+  z-index: 999 !important;
+}
+:deep(.el-drawer__header) {
   display: none;
 }
-:deep(.el-dialog__body) {
+:deep(.el-drawer__body) {
   padding-top: 0;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="showDialog" width="600px" center :show-close="false" custom-class="my-dialog">
+  <el-drawer v-model="showDrawer" :destroy-on-close="true" :show-close="false" size="760px">
     <h3>账户信息</h3>
     <el-form>
       <el-form-item label="用户账号：">
@@ -34,7 +34,8 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="合作个人信息：">
-        <el-input type="textarea" v-model="form.coop_info" placeholder="请输入合作个人信息" />
+        <WangEditor v-model:value="form.coop_info" height="300px" />
+        <!-- <el-input type="textarea" v-model="form.coop_info" placeholder="请输入合作个人信息" /> -->
       </el-form-item>
       <el-form-item label="合同上传：">
         <UploadFile v-model:image-url="form.contract_file" v-model:file-url="form.contract_file"></UploadFile>
@@ -42,25 +43,24 @@
     </el-form>
 
     <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="showDialog = false"> 取消 </el-button>
-        <el-button type="primary" @click="handelEdit"> 确认 </el-button>
-      </span>
+      <el-button @click="showDrawer = false"> 取消 </el-button>
+      <el-button type="primary" @click="handelEdit"> 确认 </el-button>
     </template>
-  </el-dialog>
+  </el-drawer>
 </template>
 
-<script setup lang="ts" name="CyberStarDialog">
+<script setup lang="ts" name="UserDrawer">
 import { ref, reactive, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { ElMessage, FormInstance } from "element-plus";
 import UploadFile from "@/components/Upload/File.vue";
+import WangEditor from "@/components/WangEditor/index.vue";
 
 import { postCyberStarInfo, getCyberStarInfo } from "@/api/user/cyberStar";
 
 const route = useRoute();
 
-const showDialog = ref(false);
+const showDrawer = ref(false);
 const form = ref({
   user_account: "", // 用户账号
   real_name: "", // 真实姓名
@@ -85,12 +85,12 @@ const drawerProps = ref<DrawerProps>({
 });
 
 // 初始化对话框;
-const initDialog = (params: any) => {
+const initDrawer = (params: any) => {
   const { row, getTableList } = params;
   form.value.user_account = row.user_account;
   getInfo(row.uid);
   drawerProps.value.getTableList = getTableList;
-  showDialog.value = true;
+  showDrawer.value = true;
 };
 
 // 获取用户信息
@@ -127,7 +127,7 @@ const handelEdit = () => {
       if (res.code == "200") {
         ElMessage.success({ message: "保存成功" });
         drawerProps.value.getTableList!();
-        showDialog.value = false;
+        showDrawer.value = false;
       } else {
         ElMessage.warning({ message: res.msg });
       }
@@ -150,11 +150,11 @@ const handlerBeforeClose = () => {
   timeRanges.value = [new Date(), new Date()];
 };
 watchEffect(() => {
-  if (!showDialog.value) handlerBeforeClose();
+  if (!showDrawer.value) handlerBeforeClose();
 });
 
 defineExpose({
-  initDialog
+  initDrawer
 });
 </script>
 
