@@ -47,10 +47,12 @@
         <td>
           <el-descriptions :column="3" style="width: 100%">
             <el-descriptions-item label="注册IP：" width="33%">{{ userInfo.register_ip }}</el-descriptions-item>
-            <el-descriptions-item label="IP属地：" width="33%">暂无数据</el-descriptions-item>
+            <el-descriptions-item label="IP属地：" width="33%">{{ userInfo.register_location }}</el-descriptions-item>
             <el-descriptions-item label="注册设备：" width="33%">暂无数据</el-descriptions-item>
             <el-descriptions-item label="最后一次登录IP：" width="33%">{{ userInfo.last_login_ip }}</el-descriptions-item>
-            <el-descriptions-item label="最后一次登录IP属地：" width="33%">暂无数据</el-descriptions-item>
+            <el-descriptions-item label="最后一次登录IP属地：" width="33%">{{
+              userInfo.last_login_location
+            }}</el-descriptions-item>
             <el-descriptions-item label="最后一次登录设备" width="33%">暂无数据</el-descriptions-item>
           </el-descriptions>
         </td>
@@ -72,7 +74,9 @@ const userInfo = ref<{ [key: string]: any }>({});
 
 // 获取用户信息
 getStaffUserInfo(staffId as string).then(res => {
-  userInfo.value = res.data as {};
+  if (res.code == "200") {
+    userInfo.value = res.data as {};
+  }
 });
 
 function goBack() {

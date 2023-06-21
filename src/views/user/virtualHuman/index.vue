@@ -211,7 +211,7 @@ const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 const showImages = (row: any, index: number) => {
   const params = {
     index: index,
-    row: { ...row, posters: row.homePhoth }
+    row: { ...row }
   };
   previewRef.value?.previewParams(params);
 };

@@ -260,7 +260,7 @@ const handleSubmit = () => {
         tags: tags.value
       };
       const res = await drawerProps.value.api!(params);
-      if (res.code == 200) {
+      if (res.code == "200") {
         ElMessage.success({ message: `${drawerProps.value.title}成功！` });
         drawerProps.value.getTableList!();
         drawerVisible.value = false;
