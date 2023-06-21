@@ -129,3 +129,12 @@ const goDetail = (row: { uid: string }) => {
   router.push("/user/cyber-star/detail?uid=" + row.uid);
 };
 </script>
+
+<style lang="scss" scoped>
+:deep(.el-dialog__header) {
+  display: none;
+}
+:deep(.el-dialog__body) {
+  padding-top: 0;
+}
+</style>

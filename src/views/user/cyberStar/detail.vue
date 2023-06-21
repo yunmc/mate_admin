@@ -18,7 +18,7 @@
             <el-descriptions-item label="用户状态：" width="33%">{{
               userInfo.is_deleted ? "已注销" : "正常"
             }}</el-descriptions-item>
-            <el-descriptions-item label="虚拟人ID：" width="33%">{{ userInfo.role }}</el-descriptions-item>
+            <el-descriptions-item label="虚拟人ID：" width="33%">{{ userInfo.ai_uid }}</el-descriptions-item>
           </el-descriptions>
         </td>
       </tr>
@@ -47,14 +47,13 @@
       <tr>
         <td>
           <el-descriptions :column="3" style="width: 100%">
-            <el-descriptions-item label="真实姓名：" width="33%">{{ userInfo.coins_balance }}</el-descriptions-item>
-            <el-descriptions-item label="合作合同：" width="33%">{{ userInfo.diamond_balance }}</el-descriptions-item>
-            <el-descriptions-item label="分成比例：" width="33%">{{ userInfo.consume_points }}</el-descriptions-item>
-            <el-descriptions-item label="合作有效期：" :span="3">{{ userInfo.diamond_points }}</el-descriptions-item>
-            <el-descriptions-item label="合作个人信息：" :span="3">{{
-              userInfo.recharge_points ||
-              "二二额外热污染额外任务二i金额为容积率而为二二额外热污染额外任务二i金额为容积率而为二二额外热污染额外任务二i金额为容积率而为"
-            }}</el-descriptions-item>
+            <el-descriptions-item label="真实姓名：" width="33%">{{ userInfo.real_name }}</el-descriptions-item>
+            <el-descriptions-item label="合作合同：" width="33%">
+              <a :href="userInfo.contract_file">合作合同.PDF</a>
+            </el-descriptions-item>
+            <el-descriptions-item label="分成比例：" width="33%">{{ userInfo.diamond_ratio }}%</el-descriptions-item>
+            <el-descriptions-item label="合作有效期：" :span="3">{{ userInfo.coop_etm }}</el-descriptions-item>
+            <el-descriptions-item label="合作个人信息：" :span="3">{{ userInfo.coop_info }}</el-descriptions-item>
           </el-descriptions>
         </td>
       </tr>
@@ -67,10 +66,12 @@
         <td>
           <el-descriptions :column="3" style="width: 100%">
             <el-descriptions-item label="注册IP：" width="33%">{{ userInfo.register_ip }}</el-descriptions-item>
-            <el-descriptions-item label="IP属地：" width="33%">暂无数据</el-descriptions-item>
+            <el-descriptions-item label="IP属地：" width="33%">{{ userInfo.register_location }}</el-descriptions-item>
             <el-descriptions-item label="注册设备：" width="33%">暂无数据</el-descriptions-item>
             <el-descriptions-item label="最后一次登录IP：" width="33%">{{ userInfo.last_login_ip }}</el-descriptions-item>
-            <el-descriptions-item label="最后一次登录IP属地：" width="33%">暂无数据</el-descriptions-item>
+            <el-descriptions-item label="最后一次登录IP属地：" width="33%">{{
+              userInfo.last_login_location
+            }}</el-descriptions-item>
             <el-descriptions-item label="最后一次登录设备" width="33%">暂无数据</el-descriptions-item>
           </el-descriptions>
         </td>
@@ -92,7 +93,9 @@ const userInfo = ref<{ [key: string]: any }>({});
 
 // 获取用户信息
 getCyberStarInfo(staffId as string).then(res => {
-  userInfo.value = res.data as {};
+  if (res.code == "200") {
+    userInfo.value = res.data as {};
+  }
 });
 
 function goBack() {
