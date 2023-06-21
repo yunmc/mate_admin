@@ -107,7 +107,8 @@ const columns: ColumnProps[] = [
   },
   {
     prop: "user_state",
-    label: "账户状态",
+    label: "账号状态",
+    width: 100,
     enum: getStateStatus(),
     fieldNames: { label: "stateLabel", value: "stateValue" }
   },
