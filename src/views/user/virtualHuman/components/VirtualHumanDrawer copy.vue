@@ -222,7 +222,7 @@ defineExpose({
 
 <style lang="scss" scoped>
 .el-tag {
-  cursor: pointer;
   margin-right: 10px;
+  cursor: pointer;
 }
 </style>

@@ -160,8 +160,8 @@ defineExpose({
 
 <style lang="scss" scoped>
 h3 {
-  width: 100%;
   display: block;
+  width: 100%;
   padding: 12px 25px;
   margin-top: 0;
   margin-left: -25px;

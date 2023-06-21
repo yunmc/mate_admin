@@ -107,37 +107,35 @@ a {
   color: #409eff;
 }
 .main-table {
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
   .table-header {
     background: #f7f7f7;
   }
   td {
-    border: 1px solid #ebeef5;
     padding: 14px 16px;
+    border: 1px solid #ebeef5;
   }
   tr {
     height: fit-content;
     min-height: 55px;
   }
 }
-
 h3 {
-  font-size: 17px;
   margin: 0 60px 0 0;
+  font-size: 17px;
 }
-
 .td-baseinfo {
   display: flex;
   align-items: center;
   .avatar {
+    display: block;
     width: 100px;
     min-width: 100px;
     height: 100px;
-    border-radius: 50%;
-    display: block;
-    object-fit: cover;
     margin-right: 30px;
+    border-radius: 50%;
+    object-fit: cover;
   }
   tr:first-of-type {
     background: #dedfe0;
