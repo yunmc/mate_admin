@@ -33,6 +33,8 @@ import pinia from "@/stores";
 // errorHandler
 import errorHandler from "@/utils/errorHandler";
 
+import ProTable from "@/components/ProTable/index.vue";
+
 const app = createApp(App);
 
 app.config.errorHandler = errorHandler;
@@ -42,4 +44,5 @@ Object.keys(Icons).forEach(key => {
   app.component(key, Icons[key as keyof typeof Icons]);
 });
 
+app.component("ProTable", ProTable);
 app.use(ElementPlus).use(directives).use(router).use(I18n).use(pinia).mount("#app");

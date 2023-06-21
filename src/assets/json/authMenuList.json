@@ -30,6 +30,92 @@
           }
         }
       ]
+    },
+    {
+      "path": "/user",
+      "name": "user",
+      "redirect": "/user/user-info",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "用户管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/user/user-info",
+          "name": "userInfo",
+          "component": "/user/userInfo/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "用户信息",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": true,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/user/user-info/detail",
+          "name": "userInfoDetail",
+          "component": "/user/userInfo/detail",
+          "meta": {
+            "icon": "Menu",
+            "title": "用户详情",
+            "isLink": "",
+            "isHide": true,
+            "isFull": false,
+            "isAffix": true,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/user/virtual-human",
+          "name": "virtualHuman",
+          "component": "/user/virtualHuman/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "虚拟人管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": true,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/user/cyber-star",
+          "name": "cyberStar",
+          "component": "/user/cyberStar/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "网红管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": true,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/user/cyber-star/detail",
+          "name": "cyberStarDetail",
+          "component": "/user/cyberStar/detail",
+          "meta": {
+            "icon": "Menu",
+            "title": "网红详情",
+            "isLink": "",
+            "isHide": true,
+            "isFull": false,
+            "isAffix": true,
+            "isKeepAlive": true
+          }
+        }
+      ]
     }
   ],
   "msg": "成功"
