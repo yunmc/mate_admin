@@ -23,7 +23,7 @@
           type="datetimerange"
           v-model="timeRanges"
           :teleported="false"
-          format="YYYY/MM/DD HH:mm:ss"
+          format="YYYY-MM-DD HH:mm:ss"
           value-format="YYYY-MM-DD HH:mm:ss"
           range-separator="至"
           start-placeholder="开始时间"
@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts" name="CyberStarDialog">
-import { ref, reactive } from "vue";
+import { ref, reactive, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { ElMessage, FormInstance } from "element-plus";
 import UploadFile from "@/components/Upload/File.vue";
@@ -105,13 +105,13 @@ const getInfo = (uid: string) => {
       form.value.contract_file = contract_file;
       form.value.coop_stm = coop_stm;
       form.value.coop_etm = coop_etm;
-      timeRanges.value = [new Date(coop_stm), new Date(coop_etm)];
+      timeRanges.value = [coop_stm, coop_etm];
     }
   });
 };
 
 //时间范围
-const timeRanges = ref<[Date, Date]>([new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 10, 10, 10)]);
+const timeRanges = ref<[Date, Date]>([new Date(), new Date()]);
 const changeDatePicker = (value: string[]) => {
   form.value.coop_stm = value[0];
   form.value.coop_etm = value[1];
@@ -136,6 +136,22 @@ const handelEdit = () => {
     }
   });
 };
+
+//关闭前清空表单
+const handlerBeforeClose = () => {
+  form.value.user_account = "";
+  form.value.real_name = "";
+  form.value.screen_name = "";
+  form.value.coin2diamond = "";
+  form.value.coop_info = "";
+  form.value.contract_file = "";
+  form.value.coop_stm = "";
+  form.value.coop_etm = "";
+  timeRanges.value = [new Date(), new Date()];
+};
+watchEffect(() => {
+  if (!showDialog.value) handlerBeforeClose();
+});
 
 defineExpose({
   initDialog
