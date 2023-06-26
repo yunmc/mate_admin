@@ -48,7 +48,7 @@
       </el-form-item>
 
       <el-form-item label="Sexual 0relationship" prop="sexual_orientation">
-        <el-input v-model="drawerProps.row!.sexual_orientation" placeholder="sexual_orientation" clearable></el-input>
+        <el-input v-model="drawerProps.row!.sexual_orientation" placeholder="sexual_orelationship" clearable></el-input>
       </el-form-item>
 
       <el-form-item label="avatar" prop="Avatar:">

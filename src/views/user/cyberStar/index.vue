@@ -8,6 +8,9 @@
       :init-param="initParam"
       :data-callback="dataCallback"
     >
+      <template #tableHeader="scope">
+        <el-button type="primary" :icon="CirclePlus" @click="onAdd(scope.row)"> 添加 </el-button>
+      </template>
       <!-- 表格操作 -->
       <template #operation="scope">
         <el-button type="primary" link @click="onEdit(scope.row)"> 编辑 </el-button>
@@ -24,7 +27,7 @@
 import { ref, reactive } from "vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { useRouter } from "vue-router";
-
+import { CirclePlus } from "@element-plus/icons-vue";
 import CyberStarDrawer from "./components/CyberStarDrawer.vue";
 import { getCyberStarList } from "@/api/user/cyberStar";
 
@@ -112,11 +115,11 @@ const columns: ColumnProps[] = [
     enum: getStateStatus(),
     fieldNames: { label: "stateLabel", value: "stateValue" }
   },
-  { prop: "operation", label: "操作", fixed: "right", width: 100 }
+  { prop: "operation", label: "操作", fixed: "right" }
 ];
 
 const drawerRef = ref<InstanceType<typeof CyberStarDrawer> | null>(null);
-//添加
+//编辑
 const onEdit = (row: { [key: string]: any }) => {
   const params = {
     row: { ...row },
@@ -124,7 +127,14 @@ const onEdit = (row: { [key: string]: any }) => {
   };
   drawerRef.value?.initDrawer(params);
 };
-
+//添加
+const onAdd = (row: { [key: string]: any }) => {
+  const params = {
+    row: { ...row },
+    getTableList: proTable.value?.getTableList
+  };
+  drawerRef.value?.initAdd(params);
+};
 //查看详情
 const goDetail = (row: { uid: string }) => {
   router.push("/user/cyber-star/detail?uid=" + row.uid);
