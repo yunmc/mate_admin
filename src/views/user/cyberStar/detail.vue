@@ -49,7 +49,8 @@
           <el-descriptions :column="3" style="width: 100%">
             <el-descriptions-item label="真实姓名：" width="33%">{{ userInfo.real_name }}</el-descriptions-item>
             <el-descriptions-item label="合作合同：" width="33%">
-              <a :href="userInfo.contract_file" target="_blank">合作合同.PDF</a>
+              <a v-if="userInfo.contract_file != ''" :href="userInfo.contract_file" target="_blank">合作合同.PDF</a>
+              <a v-else href="javascript:;">暂无</a>
             </el-descriptions-item>
             <el-descriptions-item label="分成比例：" width="33%">{{ userInfo.diamond_ratio }}%</el-descriptions-item>
             <el-descriptions-item label="合作有效期：" :span="3">{{ userInfo.coop_etm }}</el-descriptions-item>

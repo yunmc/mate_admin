@@ -3,7 +3,7 @@
     <h3>账户信息</h3>
     <el-form>
       <el-form-item label="用户账号：">
-        <span>{{ form.user_account }}</span>
+        <el-input :disabled="disabled" v-model="form.user_account" placeholder="用户账号：" />
       </el-form-item>
     </el-form>
 
@@ -61,6 +61,7 @@ import { postCyberStarInfo, getCyberStarInfo } from "@/api/user/cyberStar";
 const route = useRoute();
 
 const showDrawer = ref(false);
+const disabled = ref(true);
 const form = ref({
   user_account: "", // 用户账号
   real_name: "", // 真实姓名
@@ -87,10 +88,16 @@ const drawerProps = ref<DrawerProps>({
 // 初始化对话框;
 const initDrawer = (params: any) => {
   const { row, getTableList } = params;
+  console.log(row, getTableList);
   form.value.user_account = row.user_account;
   getInfo(row.uid);
   drawerProps.value.getTableList = getTableList;
   showDrawer.value = true;
+};
+
+const initAdd = (params: any) => {
+  showDrawer.value = true;
+  disabled.value = false;
 };
 
 // 获取用户信息
@@ -125,7 +132,11 @@ const handelEdit = () => {
     try {
       const res = await postCyberStarInfo(form.value);
       if (res.code == "200") {
-        ElMessage.success({ message: "保存成功" });
+        if (disabled.value) {
+          ElMessage.success({ message: "编辑成功" });
+        } else {
+          ElMessage.success({ message: "添加成功" });
+        }
         drawerProps.value.getTableList!();
         showDrawer.value = false;
       } else {
@@ -147,6 +158,7 @@ const handlerBeforeClose = () => {
   form.value.contract_file = "";
   form.value.coop_stm = "";
   form.value.coop_etm = "";
+  disabled.value = true;
   timeRanges.value = [new Date(), new Date()];
 };
 watchEffect(() => {
@@ -154,7 +166,8 @@ watchEffect(() => {
 });
 
 defineExpose({
-  initDrawer
+  initDrawer,
+  initAdd
 });
 </script>
 
@@ -163,8 +176,6 @@ h3 {
   display: block;
   width: 100%;
   padding: 12px 25px;
-  margin-top: 0;
-  margin-left: -25px;
   background: #dedfe0;
 }
 :deep(.el-picker__popper) {
