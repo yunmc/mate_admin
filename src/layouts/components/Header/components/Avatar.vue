@@ -46,6 +46,7 @@ const logout = () => {
     // 1.执行退出登录接口
     await logoutApi();
 
+    localStorage.clear();
     // 2.清除 Token
     userStore.setToken("");
 
