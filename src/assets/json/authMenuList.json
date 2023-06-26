@@ -55,7 +55,7 @@
             "isLink": "",
             "isHide": false,
             "isFull": false,
-            "isAffix": true,
+            "isAffix": false,
             "isKeepAlive": true
           }
         },
@@ -69,7 +69,7 @@
             "isLink": "",
             "isHide": true,
             "isFull": false,
-            "isAffix": true,
+            "isAffix": false,
             "isKeepAlive": true
           }
         },
@@ -83,7 +83,7 @@
             "isLink": "",
             "isHide": false,
             "isFull": false,
-            "isAffix": true,
+            "isAffix": false,
             "isKeepAlive": true
           }
         },
@@ -97,7 +97,7 @@
             "isLink": "",
             "isHide": false,
             "isFull": false,
-            "isAffix": true,
+            "isAffix": false,
             "isKeepAlive": true
           }
         },
@@ -111,7 +111,7 @@
             "isLink": "",
             "isHide": true,
             "isFull": false,
-            "isAffix": true,
+            "isAffix": false,
             "isKeepAlive": true
           }
         }

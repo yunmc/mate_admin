@@ -10,8 +10,12 @@
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="">
-        <el-button type="primary" icon="Plus" @click="onAdd('虚拟人添加')"> 添加 </el-button>
+        <el-button type="primary" icon="CirclePlus" @click="onAdd('虚拟人添加')"> 添加 </el-button>
       </template>
+
+      <!-- <template #tableHeader="scope">
+        <el-button type="primary" :icon="CirclePlus" @click="onAdd(scope.row)"> 添加 </el-button>
+      </template> -->
 
       <!-- 表格操作 -->
       <template #operation="scope">
@@ -98,7 +102,7 @@ const columns: ColumnProps[] = [
   {
     prop: "ai_desc",
     label: "自我介绍",
-    width: "150"
+    width: "250"
   },
   {
     prop: "avatar",
@@ -140,41 +144,35 @@ const columns: ColumnProps[] = [
   {
     prop: "ai_state",
     label: "上线状态",
-    width: "80",
     search: { el: "tree-select", props: { filterable: true }, key: "state" },
     enum: getOnlineStatus(),
     fieldNames: { label: "stateLabel", value: "stateValue" }
   },
   {
     prop: "open_state",
-    width: "80",
     label: "公开状态",
     enum: getOpenStatus(),
     fieldNames: { label: "stateLabel", value: "stateValue" }
   },
   {
     prop: "weight",
-    width: "80",
     label: "Weight"
   },
   {
     prop: "uid",
-    width: "120",
     label: "用户ID"
   },
   {
     prop: "alias",
-    width: "120",
     label: "用户名称"
   },
   {
     prop: "tags",
-    width: "160",
     label: "AI标签",
     render: scope => {
       return (
         <>
-          <p style="white-space: wrap">
+          <p>
             {scope.row.tags.length > 1
               ? scope.row.tags.map((item: any, index: any) => {
                   return (
@@ -189,7 +187,7 @@ const columns: ColumnProps[] = [
       );
     }
   },
-  { prop: "operation", label: "操作", fixed: "right", width: 140 }
+  { prop: "operation", label: "操作", fixed: "right" }
 ];
 
 //修改上线状态
