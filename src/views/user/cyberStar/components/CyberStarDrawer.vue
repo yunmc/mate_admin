@@ -15,21 +15,25 @@
       <el-form-item label="社交媒体网名：">
         <el-input v-model="form.screen_name" placeholder="请输入社交媒体网名" />
       </el-form-item>
-      <el-form-item label="分成比例：">
-        <el-input v-model="form.coin2diamond" placeholder="请输入整数单位为%" />
-      </el-form-item>
-      <el-form-item label="合作有效期：">
+      <el-form-item label="分成比例："> <el-input v-model="form.coin2diamond" placeholder="请输入整数单位为%" /> </el-form-item>
+      <br />
+      <el-form-item label="开始时间：">
         <el-date-picker
-          type="datetimerange"
-          v-model="timeRanges"
-          :teleported="false"
-          format="YYYY-MM-DD HH:mm:ss"
+          v-model="form.coop_stm"
+          type="date"
           value-format="YYYY-MM-DD HH:mm:ss"
-          range-separator="至"
-          start-placeholder="开始时间"
-          end-placeholder="结束时间"
-          align="right"
-          @change="changeDatePicker"
+          format="YYYY-MM-DD HH:mm:ss"
+          placeholder="选择日期"
+        >
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="结束时间：">
+        <el-date-picker
+          v-model="form.coop_etm"
+          type="date"
+          value-format="YYYY-MM-DD HH:mm:ss"
+          format="YYYY-MM-DD HH:mm:ss"
+          placeholder="选择日期"
         >
         </el-date-picker>
       </el-form-item>
@@ -72,7 +76,6 @@ const form = ref({
   coop_stm: "", // 合作开始时间, 使用 Y-m-d H:i:s格式
   coop_etm: "" //合作有效时间
 });
-
 const rules = reactive({
   user_account: [{ required: true, message: "请输入用户账号" }]
 });
