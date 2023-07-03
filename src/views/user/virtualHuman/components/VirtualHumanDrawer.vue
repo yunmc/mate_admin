@@ -122,9 +122,9 @@
           <el-option v-for="item in optionOpenState" :key="item.value" :label="item.label" :value="item.value"> </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="用户ID" prop="user_account">
+      <!-- <el-form-item label="用户ID" prop="user_account">
         <el-input v-model="drawerProps.row!.user_account" placeholder="请输入要绑定的用户账号"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="虚拟人标签" prop="tags">
         <el-tag
           class="mx-1"
@@ -137,9 +137,21 @@
           {{ tag }}
         </el-tag>
         <template v-if="!drawerProps.isView">
+          <el-input v-model="tagtxt" placeholder="请输入标签名" style="width: 120px; margin-right: 10px" />
           <el-tag class="mx-1" @click="onAddTag">添加标签</el-tag>
-          <el-input v-model="tagtxt" placeholder="请输入标签名" style="width: 120px" />
         </template>
+      </el-form-item>
+      <el-form-item label="关联网红账号" prop="bind_celebrity_account">
+        <el-input v-model="drawerProps.row!.bind_celebrity_account" placeholder="请输入网红账号" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="开场白" prop="open_remark">
+        <el-input
+          v-model="drawerProps.row!.open_remark"
+          type="textarea"
+          :rows="3"
+          placeholder="请输入开场白"
+          clearable
+        ></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
