@@ -61,6 +61,13 @@ const getTableList = (option: any) => {
   return getCyberStarList(params);
 };
 
+const getSignedStatus = () => {
+  return [
+    { stateLabel: "待签约", stateValue: 0 },
+    { stateLabel: "已签约", stateValue: 1 }
+  ];
+};
+
 const getStateStatus = () => {
   return [
     { stateLabel: "正常", stateValue: 1 },
@@ -103,6 +110,12 @@ const columns: ColumnProps[] = [
   {
     prop: "ai_uid",
     label: "虚拟人ID"
+  },
+  {
+    prop: "signed_status",
+    label: "签约状态",
+    enum: getSignedStatus(),
+    fieldNames: { label: "stateLabel", value: "stateValue" }
   },
   {
     prop: "diamond_ratio",

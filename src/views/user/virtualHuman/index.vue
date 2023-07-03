@@ -13,9 +13,11 @@
         <el-button type="primary" icon="CirclePlus" @click="onAdd('虚拟人添加')"> 添加 </el-button>
       </template>
 
-      <!-- <template #tableHeader="scope">
-        <el-button type="primary" :icon="CirclePlus" @click="onAdd(scope.row)"> 添加 </el-button>
-      </template> -->
+      <template #tags="scope">
+        <div style="white-space: initial">
+          <el-tag class="mx-1" v-for="item in scope.row.tags" :key="item" style="margin: 2px 4px"> {{ item }} </el-tag>
+        </div>
+      </template>
 
       <!-- 表格操作 -->
       <template #operation="scope">
@@ -159,6 +161,10 @@ const columns: ColumnProps[] = [
     label: "Weight"
   },
   {
+    prop: "bind_celebrity_account",
+    label: "网红账号"
+  },
+  {
     prop: "uid",
     label: "用户ID"
   },
@@ -168,24 +174,22 @@ const columns: ColumnProps[] = [
   },
   {
     prop: "tags",
-    label: "AI标签",
-    render: scope => {
-      return (
-        <>
-          <p>
-            {scope.row.tags.length > 1
-              ? scope.row.tags.map((item: any, index: any) => {
-                  return (
-                    <el-tag class="mx-1" style="margin: 2px 4px;">
-                      {item}
-                    </el-tag>
-                  );
-                })
-              : ""}
-          </p>
-        </>
-      );
-    }
+    label: "AI标签"
+    // render: scope => {
+    //   return (
+    //     <>
+    //       {scope.row.tags.length > 1
+    //         ? scope.row.tags.map((item: any, index: any) => {
+    //             return (
+    //               <el-tag class="mx-1" style="margin: 2px 4px;">
+    //                 {item}
+    //               </el-tag>
+    //             );
+    //           })
+    //         : ""}
+    //     </>
+    //   );
+    // }
   },
   { prop: "operation", label: "操作", fixed: "right" }
 ];
