@@ -1,34 +1,34 @@
 <template>
   <div class="upload-box">
     <el-upload
+      v-model:file-list="fileList"
       ref="upload"
       :id="uuid"
       action="#"
-      :disabled="self_disabled"
       :limit="1"
       :http-request="handleHttpUpload"
       :before-upload="beforeUpload"
       :on-success="uploadSuccess"
       :on-exceed="handleExceed"
       :on-error="uploadError"
+      :on-change="uploadChange"
+      :before-remove="removeList"
       :accept="fileType.join(',')"
     >
       <el-button type="primary">点击上传</el-button>
     </el-upload>
-
     <div class="el-upload__tip">
       <slot name="tip"></slot>
     </div>
-    <el-image-viewer v-if="imgViewVisible" :url-list="[fileUrl]" @close="imgViewVisible = false" />
   </div>
 </template>
 
 <script setup lang="ts" name="UploadImg">
-import { ref, computed, inject } from "vue";
+import { ref, computed, inject, watch } from "vue";
 import { generateUUID } from "@/utils";
 import { uploadImg } from "@/api/modules/upload";
 import { ElNotification, formContextKey, formItemContextKey, genFileId } from "element-plus";
-import type { UploadProps, UploadRequestOptions, UploadInstance, UploadRawFile } from "element-plus";
+import type { UploadProps, UploadRequestOptions, UploadInstance, UploadRawFile, UploadUserFile, UploadFile } from "element-plus";
 
 type PdfType = "application/pdf";
 interface UploadFileProps {
@@ -46,7 +46,34 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
   fileSize: 50,
   fileType: () => ["application/pdf"]
 });
+const fileList = ref<UploadUserFile[]>([]);
+watch(
+  () => props.fileUrl,
+  value => {
+    if (props.fileUrl != "") {
+      fileList.value = [];
+      fileList.value.push({
+        name: props.fileUrl.substr(-30),
+        url: props.fileUrl
+      });
+    }
+  }
+);
 
+/**
+ * @description 图片上传成功
+ * */
+const uploadChange = () => {
+  submitUpload();
+};
+const submitUpload = () => {
+  upload.value!.submit();
+};
+
+const removeList = (fileList: UploadUserFile) => {
+  emit("update:fileUrl", "");
+  return true;
+};
 // 生成组件唯一id
 const uuid = ref("id-" + generateUUID());
 
@@ -70,6 +97,7 @@ interface UploadEmits {
 }
 const emit = defineEmits<UploadEmits>();
 const handleHttpUpload = async (options: UploadRequestOptions) => {
+  console.log("options", options);
   let formData = new FormData();
   formData.append("file", options.file);
   formData.append("file_type", "image");
@@ -92,7 +120,6 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
  * */
 const beforeUpload: UploadProps["beforeUpload"] = rawFile => {
   const imgSize = rawFile.size / 1024 / 1024 < props.fileSize;
-  console.log("rawFile.type", rawFile.type);
   const imgType = props.fileType.includes(rawFile.type as PdfType);
   if (!imgType)
     ElNotification({
@@ -144,8 +171,8 @@ const uploadError = () => {
 
 <style scoped lang="scss">
 .upload-box {
-  border: none;
   width: fit-content;
   height: fit-content;
+  border: none;
 }
 </style>
