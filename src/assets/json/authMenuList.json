@@ -2,34 +2,18 @@
   "code": 200,
   "data": [
     {
-      "path": "/config",
-      "name": "config",
-      "redirect": "/config/character",
+      "path": "/config/character",
+      "name": "character",
+      "component": "/config/character/index",
       "meta": {
-        "icon": "MessageBox",
-        "title": "配置",
+        "icon": "Menu",
+        "title": "人物配置",
         "isLink": "",
         "isHide": false,
         "isFull": false,
-        "isAffix": false,
+        "isAffix": true,
         "isKeepAlive": true
-      },
-      "children": [
-        {
-          "path": "/config/character",
-          "name": "character",
-          "component": "/config/character/index",
-          "meta": {
-            "icon": "Menu",
-            "title": "人物配置",
-            "isLink": "",
-            "isHide": false,
-            "isFull": false,
-            "isAffix": true,
-            "isKeepAlive": true
-          }
-        }
-      ]
+      }
     },
     {
       "path": "/user",
@@ -51,7 +35,7 @@
           "component": "/user/userInfo/index",
           "meta": {
             "icon": "Menu",
-            "title": "用户信息",
+            "title": "用户中心",
             "isLink": "",
             "isHide": false,
             "isFull": false,
@@ -74,26 +58,12 @@
           }
         },
         {
-          "path": "/user/virtual-human",
-          "name": "virtualHuman",
-          "component": "/user/virtualHuman/index",
-          "meta": {
-            "icon": "Menu",
-            "title": "虚拟人管理",
-            "isLink": "",
-            "isHide": false,
-            "isFull": false,
-            "isAffix": false,
-            "isKeepAlive": true
-          }
-        },
-        {
           "path": "/user/cyber-star",
           "name": "cyberStar",
           "component": "/user/cyberStar/index",
           "meta": {
             "icon": "Menu",
-            "title": "网红管理",
+            "title": "网红中心",
             "isLink": "",
             "isHide": false,
             "isFull": false,
@@ -110,6 +80,80 @@
             "title": "网红详情",
             "isLink": "",
             "isHide": true,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/user/virtual-human",
+      "name": "virtualHuman",
+      "redirect": "/user/virtual-human",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "AI管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/user/virtual-human",
+          "name": "virtualHuman",
+          "component": "/user/virtualHuman/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "虚拟人管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/apply",
+      "name": "apply",
+      "redirect": "/apply/website",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "网红授权申请",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/apply/website",
+          "name": "website",
+          "component": "/apply/website/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "官网申请",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/apply/app",
+          "name": "app",
+          "component": "/apply/app/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "APP申请",
+            "isLink": "",
+            "isHide": false,
             "isFull": false,
             "isAffix": false,
             "isKeepAlive": true

@@ -35,6 +35,8 @@ import errorHandler from "@/utils/errorHandler";
 
 import ProTable from "@/components/ProTable/index.vue";
 
+import "default-passive-events";
+
 const app = createApp(App);
 
 app.config.errorHandler = errorHandler;
