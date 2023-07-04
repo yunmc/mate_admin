@@ -84,7 +84,7 @@
 <script setup lang="ts" name="UserDrawer">
 import { ref, reactive, watchEffect } from "vue";
 import { useRoute } from "vue-router";
-import { ElMessage, FormInstance } from "element-plus";
+import { ElMessage, FormInstance, UploadUserFile } from "element-plus";
 import UploadFile from "@/components/Upload/File.vue";
 import WangEditor from "@/components/WangEditor/index.vue";
 
@@ -115,6 +115,17 @@ const form = ref({
 const rules = reactive({
   user_account: [{ required: true, message: "请输入用户账号" }]
 });
+
+const fileList = ref<UploadUserFile[]>([
+  {
+    name: "food.jpeg",
+    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+  },
+  {
+    name: "food2.jpeg",
+    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+  }
+]);
 
 interface DrawerProps {
   getTableList?: () => void;
