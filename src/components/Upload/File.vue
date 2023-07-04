@@ -72,6 +72,7 @@ const submitUpload = () => {
 
 const removeList = (fileList: UploadUserFile) => {
   emit("update:fileUrl", "");
+  return true;
 };
 // 生成组件唯一id
 const uuid = ref("id-" + generateUUID());
