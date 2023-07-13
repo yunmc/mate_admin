@@ -10,22 +10,31 @@
     <h3>合作信息</h3>
     <el-form :inline="true" :rules="rules" :model="form" class="demo-form-inline" ref="ruleFormRef">
       <el-form-item label="网红姓名：" class="max-width">
-        <el-input v-model="form.screen_name" placeholder="请输入网红姓名" />
+        <el-input v-model="form.real_name" placeholder="请输入网红姓名" />
       </el-form-item>
       <el-form-item label="合作信息备注：" class="max-width">
         <WangEditor v-model:value="form.coop_info" placeholder="请输入合作信息备注" height="300px" />
       </el-form-item>
       <el-form-item label="合同上传：" class="max-width">
-        <UploadFile v-model:image-url="form.contract_file" v-model:file-url="form.contract_file"></UploadFile>
+        <UploadFile
+          v-model:disabled="isDisabled"
+          v-model:image-url="form.contract_file"
+          v-model:file-url="form.contract_file"
+        ></UploadFile>
       </el-form-item>
       <el-form-item label="补充合同：" class="max-width">
-        <UploadFile v-model:image-url="form.extra_contract_file" v-model:file-url="form.extra_contract_file"></UploadFile>
+        <UploadFile
+          v-model:disabled="isDisabled"
+          v-model:image-url="form.extra_contract_file"
+          v-model:file-url="form.extra_contract_file"
+        ></UploadFile>
       </el-form-item>
       <br />
       <el-form-item label="开始时间：">
         <el-date-picker
           v-model="form.coop_stm"
           type="date"
+          :disabled="isDisabled"
           value-format="YYYY-MM-DD HH:mm:ss"
           format="YYYY-MM-DD HH:mm:ss"
           placeholder="选择日期"
@@ -36,6 +45,7 @@
         <el-date-picker
           v-model="form.coop_etm"
           type="date"
+          :disabled="isDisabled"
           value-format="YYYY-MM-DD HH:mm:ss"
           format="YYYY-MM-DD HH:mm:ss"
           placeholder="选择日期"
@@ -47,7 +57,7 @@
     <el-form :inline="true" :rules="rules" class="demo-form-inline">
       <div class="form-list" v-for="(item, index) in form.diamond_ratios" :key="index">
         <el-form-item label="分成比例：" style="width: 300px">
-          <el-input-number v-model="item.ratio" :min="0" :max="100" />
+          <el-input-number :disabled="isDisabled" v-model="item.ratio" :min="0" :max="100" />
         </el-form-item>
         <el-text class="mx-1" v-if="form.diamond_ratios.length > 1" @click="delDiamondRatios(item)" type="danger">删除</el-text>
         <br />
@@ -55,6 +65,7 @@
           <el-date-picker
             v-model="item.stm"
             type="date"
+            :disabled="isDisabled"
             value-format="YYYY-MM-DD HH:mm:ss"
             format="YYYY-MM-DD HH:mm:ss"
             placeholder="选择日期"
@@ -65,6 +76,7 @@
           <el-date-picker
             v-model="item.etm"
             type="date"
+            :disabled="isDisabled"
             value-format="YYYY-MM-DD HH:mm:ss"
             format="YYYY-MM-DD HH:mm:ss"
             placeholder="选择日期"
@@ -73,7 +85,7 @@
         </el-form-item>
       </div>
     </el-form>
-    <el-button type="primary" @click="addDiamondRatios()">新增</el-button>
+    <el-button type="primary" @click="addDiamondRatios()" :disabled="isDisabled">新增</el-button>
     <template #footer>
       <el-button @click="showDrawer = false"> 取消 </el-button>
       <el-button type="primary" @click="handelEdit"> 确认 </el-button>
@@ -135,10 +147,12 @@ const drawerProps = ref<DrawerProps>({
   getTableList: () => {}
 });
 
+let isDisabled = ref<boolean>(false);
+
 // 初始化对话框;
 const initDrawer = (params: any) => {
-  const { row, getTableList } = params;
-  console.log(row, getTableList);
+  const { row, getTableList, routeType } = params;
+  isDisabled.value = routeType;
   form.value.user_account = row.user_account;
   getInfo(row.uid);
   drawerProps.value.getTableList = getTableList;
@@ -167,7 +181,7 @@ const getInfo = (uid: string) => {
     if (res.code == "200") {
       const {
         real_name,
-        alias,
+        screen_name,
         diamond_ratio,
         coop_info,
         contract_file,
@@ -177,7 +191,7 @@ const getInfo = (uid: string) => {
         diamond_ratios
       } = res.data as any;
       form.value.real_name = real_name;
-      form.value.screen_name = alias;
+      form.value.screen_name = screen_name;
       form.value.coin2diamond = diamond_ratio;
       form.value.coop_info = coop_info;
       form.value.contract_file = contract_file;

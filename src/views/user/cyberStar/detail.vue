@@ -5,7 +5,7 @@
     <table class="main-table">
       <tr class="table-header">
         <td>
-          <h3>基本信息</h3>
+          <h3>账户信息</h3>
         </td>
       </tr>
       <tr>
@@ -27,7 +27,7 @@
       </tr>
       <tr class="table-header">
         <td>
-          <h3>账户信息</h3>
+          <h3>钱包信息</h3>
         </td>
       </tr>
       <tr>
@@ -44,14 +44,14 @@
       </tr>
       <tr class="table-header">
         <td>
-          <h3>合作信息</h3>
+          <h3>签约信息</h3>
         </td>
       </tr>
       <tr>
         <td>
-          <el-descriptions :column="3" style="width: 100%">
-            <el-descriptions-item label="网红姓名：" width="33%">{{ userInfo.real_name }}</el-descriptions-item>
-            <el-descriptions-item label="合作合同：" width="33%">
+          <el-descriptions :column="1" style="width: 100%">
+            <!-- <el-descriptions-item label="网红姓名：" width="33%">{{ userInfo.real_name }}</el-descriptions-item> -->
+            <el-descriptions-item label="合同：">
               <a v-if="userInfo.contract_file != ''" :href="userInfo.contract_file" target="_blank">合作合同.PDF</a>
               <a v-else href="javascript:;">暂无</a>
             </el-descriptions-item>
@@ -60,15 +60,14 @@
               <a v-else href="javascript:;">暂无</a>
             </el-descriptions-item>
             <el-descriptions-item label="合作时间：" :span="3">
-              <span>{{ userInfo.coop_stm }} --- </span><span> {{ userInfo.coop_etm }}</span>
+              <span>{{ userInfo.coop_stm }} — </span><span> {{ userInfo.coop_etm }}</span>
             </el-descriptions-item>
-            <el-descriptions-item label="合作个人信息：" :span="3">{{ userInfo.coop_info }}</el-descriptions-item>
-            <br />
-            <el-descriptions-item label="合作分成" :span="12"></el-descriptions-item>
+            <!-- <el-descriptions-item label="合作个人信息：" :span="3">{{ userInfo.coop_info }}</el-descriptions-item> -->
+            <!-- <el-descriptions-item label="合作分成" :span="12"></el-descriptions-item> -->
             <div v-for="item in userInfo.diamond_ratios" :key="item.diamond_ratio">
-              <el-descriptions-item label="分成比例：" width="33%">{{ item.diamond_ratio }}</el-descriptions-item>
-              <el-descriptions-item label="生效时间：" :span="6">
-                <span>{{ item.created_time }} --- </span><span> {{ item.updated_time }}</span>
+              <el-descriptions-item label="分成比例：" width="33%">
+                {{ item.diamond_ratio }}
+                <span style="margin-left: 30px">生效时间：{{ item.created_time }} — {{ item.updated_time }}</span>
               </el-descriptions-item>
             </div>
             <!-- <el-descriptions-item label="真实姓名：" width="33%">{{ userInfo.real_name }}</el-descriptions-item>
@@ -79,6 +78,21 @@
             <el-descriptions-item label="分成比例：" width="33%">{{ userInfo.diamond_ratio }}%</el-descriptions-item>
             <el-descriptions-item label="合作有效期：" :span="3">{{ userInfo.coop_etm }}</el-descriptions-item>
             <el-descriptions-item label="合作个人信息：" :span="3">{{ userInfo.coop_info }}</el-descriptions-item> -->
+          </el-descriptions>
+        </td>
+      </tr>
+      <tr class="table-header">
+        <td>
+          <h3>备注信息</h3>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <el-descriptions :column="1" style="width: 100%">
+            <el-descriptions-item label="网红姓名" width="100%">{{ userInfo.real_name }}</el-descriptions-item>
+            <el-descriptions-item label="合作信息备注" width="33%">
+              <div v-html="userInfo.coop_info"></div>
+            </el-descriptions-item>
           </el-descriptions>
         </td>
       </tr>
