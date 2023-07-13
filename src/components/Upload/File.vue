@@ -6,6 +6,8 @@
       :id="uuid"
       action="#"
       :limit="1"
+      :class="['upload', self_disabled ? 'disabled' : '']"
+      :disabled="self_disabled"
       :http-request="handleHttpUpload"
       :before-upload="beforeUpload"
       :on-success="uploadSuccess"
@@ -15,7 +17,7 @@
       :before-remove="removeList"
       :accept="fileType.join(',')"
     >
-      <el-button type="primary">点击上传</el-button>
+      <el-button type="primary" :disabled="self_disabled">点击上传</el-button>
     </el-upload>
     <div class="el-upload__tip">
       <slot name="tip"></slot>
@@ -51,6 +53,7 @@ watch(
   () => props.fileUrl,
   value => {
     if (props.fileUrl != "") {
+      console.log("props", props);
       fileList.value = [];
       fileList.value.push({
         name: props.fileUrl.substr(-30),
@@ -85,6 +88,7 @@ const formContext = inject(formContextKey, void 0);
 const formItemContext = inject(formItemContextKey, void 0);
 // 判断是否禁用上传和删除
 const self_disabled = computed(() => {
+  console.log(props.disabled || formContext?.disabled);
   return props.disabled || formContext?.disabled;
 });
 
@@ -170,6 +174,17 @@ const uploadError = () => {
 </script>
 
 <style scoped lang="scss">
+:deep(.disabled) {
+  .el-upload--picture-card,
+  .el-upload-dragger {
+    cursor: not-allowed;
+    background: var(--el-disabled-bg-color) !important;
+    border: 1px dashed var(--el-border-color-darker);
+    &:hover {
+      border-color: var(--el-border-color-darker) !important;
+    }
+  }
+}
 .upload-box {
   width: fit-content;
   height: fit-content;

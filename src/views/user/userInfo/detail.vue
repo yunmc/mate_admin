@@ -5,7 +5,7 @@
     <table class="main-table">
       <tr class="table-header">
         <td>
-          <h3>基本信息</h3>
+          <h3>账户信息</h3>
         </td>
       </tr>
       <tr>
@@ -23,7 +23,7 @@
       </tr>
       <tr class="table-header">
         <td>
-          <h3>账户信息</h3>
+          <h3>钱包信息</h3>
         </td>
       </tr>
       <tr>

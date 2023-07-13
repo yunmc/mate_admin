@@ -9,7 +9,7 @@
       :data-callback="dataCallback"
     >
       <template #tableHeader="scope">
-        <el-button type="primary" :icon="CirclePlus" @click="onAdd(scope.row)"> 添加 </el-button>
+        <el-button v-if="!routeType" type="primary" :icon="CirclePlus" @click="onAdd(scope.row)"> 添加 </el-button>
       </template>
       <!-- 表格操作 -->
       <template #operation="scope">
@@ -26,13 +26,14 @@
 <script setup lang="tsx" name="cyberStar">
 import { ref, reactive } from "vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { CirclePlus } from "@element-plus/icons-vue";
 import CyberStarDrawer from "./components/CyberStarDrawer.vue";
 import { getCyberStarList } from "@/api/user/cyberStar";
 
 const router = useRouter();
-
+const route = useRoute();
+const routeType = !(route.name == "signing");
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref<ProTableInstance>();
 
@@ -98,45 +99,55 @@ const columns: ColumnProps[] = [
   {
     prop: "role",
     label: "角色"
-  },
-  {
-    prop: "coins_balance",
-    label: "账户余额(币)"
-  },
-  {
-    prop: "diamond_balance",
-    label: "可提现余额(钻石)"
-  },
-  {
-    prop: "ai_uid",
-    label: "虚拟人ID"
-  },
-  {
-    prop: "signed_status",
-    label: "签约状态",
-    enum: getSignedStatus(),
-    fieldNames: { label: "stateLabel", value: "stateValue" }
-  },
-  {
-    prop: "diamond_ratio",
-    label: "分成比例(%)"
-  },
-  {
-    prop: "user_state",
-    label: "账号状态",
-    width: 100,
-    enum: getStateStatus(),
-    fieldNames: { label: "stateLabel", value: "stateValue" }
-  },
-  { prop: "operation", label: "操作", fixed: "right" }
+  }
 ];
+if (routeType == true) {
+  columns.push(
+    {
+      prop: "coin_balance",
+      label: "金币金额"
+    },
+    {
+      prop: "diamond_balance",
+      label: "钻石余额"
+    },
+    {
+      prop: "diamond_points",
+      label: "累计钻石收益"
+    },
+    {
+      prop: "ai_uid",
+      label: "关联虚拟人ID"
+    },
+    { prop: "operation", label: "操作", fixed: "right" }
+  );
+} else {
+  columns.push(
+    {
+      prop: "real_name",
+      label: "网红姓名"
+    },
+    {
+      prop: "coop_info",
+      label: "合作信息备注"
+    },
+    {
+      prop: "signed_status",
+      label: "签约状态",
+      enum: getSignedStatus(),
+      fieldNames: { label: "stateLabel", value: "stateValue" }
+    },
+    { prop: "operation", label: "操作", fixed: "right" }
+  );
+}
 
 const drawerRef = ref<InstanceType<typeof CyberStarDrawer> | null>(null);
 //编辑
 const onEdit = (row: { [key: string]: any }) => {
   const params = {
     row: { ...row },
-    getTableList: proTable.value?.getTableList
+    getTableList: proTable.value?.getTableList,
+    routeType: routeType
   };
   drawerRef.value?.initDrawer(params);
 };

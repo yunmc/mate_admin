@@ -158,6 +158,20 @@
             "isAffix": false,
             "isKeepAlive": true
           }
+        },
+        {
+          "path": "/apply/signing",
+          "name": "signing",
+          "component": "/user/cyberStar/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "网红签约",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
         }
       ]
     }
