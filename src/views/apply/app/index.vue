@@ -16,16 +16,14 @@
         </el-switch>
       </template>
       <template #operation="scope">
-        <el-popconfirm v-if="scope.row.check_state == 1" title="确定用户通过?" @confirm="passApply({ id: scope.row.id })">
+        <el-button @click="dialogSHow(scope.row, true)" type="text">通过</el-button>
+        <el-button type="text" @click="dialogSHow(scope.row, false)" style="color: #f56c6c">不通过</el-button>
+        <!-- <el-popconfirm v-if="scope.row.check_state == 1" title="确定不通过?" @confirm="rejectApply({ id: scope.row.id })">
           <template #reference>
-            <el-button type="text">通过</el-button>
-          </template>
-        </el-popconfirm>
-        <el-popconfirm v-if="scope.row.check_state == 1" title="确定不通过?" @confirm="rejectApply({ id: scope.row.id })">
-          <template #reference>
+             <el-button type="text" @click="getPassApply({ id: scope.row.id })" style="color: #f56c6c">不通过</el-button>
             <el-button type="text" style="color: #f56c6c">不通过</el-button>
           </template>
-        </el-popconfirm>
+        </el-popconfirm> -->
       </template>
     </ProTable>
     <UserDrawer ref="drawerRef" />
@@ -35,6 +33,50 @@
     <!-- <div class="el-image-viewer__mask" v-if="previewList">
       <el-image style="width: 100px; height: 100px" :initial-index="imageIndex" :preview-src-list="previewList"> </el-image>
     </div> -->
+
+    <el-dialog
+      v-model="dialogVisible"
+      :align-center="true"
+      modal-class="apply_dialog"
+      title="Tips"
+      :width="dialogDate?.type ? '580px' : '400px'"
+    >
+      <div>
+        <div class="title" v-if="dialogDate.type">
+          请确认是否通过该用户(<span>{{ dialogDate.alias }} </span>)的申请并确认签约信息是否无误？
+        </div>
+        <div class="title" v-else>
+          请确认是否不通过该用户(<span>{{ dialogDate.alias }} </span>)的申请？
+        </div>
+        <div v-if="dialogDate.type" class="userInfo">
+          <el-descriptions :column="1" style="width: 100%">
+            <el-descriptions-item label="合同：">
+              <a v-if="userInfo.contract_file != ''" :href="userInfo.contract_file" target="_blank">合作合同.PDF</a>
+              <a v-else href="javascript:;">暂无</a>
+            </el-descriptions-item>
+            <el-descriptions-item label="补充合同：" width="33%">
+              <a v-if="userInfo.extra_contract_file != ''" :href="userInfo.extra_contract_file" target="_blank">补充合同.PDF</a>
+              <a v-else href="javascript:;">暂无</a>
+            </el-descriptions-item>
+            <el-descriptions-item label="合作时间：" :span="3">
+              <span>{{ userInfo.coop_stm }} — </span><span> {{ userInfo.coop_etm }}</span>
+            </el-descriptions-item>
+            <div v-for="item in userInfo.diamond_ratios" :key="item.diamond_ratio">
+              <el-descriptions-item label="分成比例：" width="33%">
+                {{ item.diamond_ratio }}
+                <span style="margin-left: 30px">生效时间：{{ item.created_time }} — {{ item.updated_time }}</span>
+              </el-descriptions-item>
+            </div>
+          </el-descriptions>
+        </div>
+      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="dialogHide()"> 确认 </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,16 +88,13 @@ import UserDrawer from "@/views/proTable/components/UserDrawer.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { getAppList, markAppApply, passApply, rejectApply } from "@/api/apply";
-
-// const router = useRouter();
-
-// 跳转详情页
-// const toDetail = () => {
-//   router.push(`/proTable/useProTable/detail/${Math.random().toFixed(3)}?params=detail-page`);
-// };
+import { getCyberStarInfo } from "@/api/user/cyberStar";
 
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref<ProTableInstance>();
+
+const dialogVisible = ref(false);
+const dialogDate = ref();
 
 // 如果表格需要初始化请求参数，直接定义传给 ProTable(之后每次请求都会自动带上该参数，此参数更改之后也会一直带上，改变此参数会自动刷新表格数据)
 // const initParam = reactive({ mark_state: 1 });
@@ -80,9 +119,38 @@ const getTableList = (params: any) => {
     newParams.e_date = newParams.created_time[1];
   }
   delete newParams.created_time;
-  console.log("params", newParams);
-
   return getAppList(newParams);
+};
+
+const dialogHide = async () => {
+  if (dialogDate.value.type) {
+    passApply({ id: dialogDate.value.id }).then(res => {
+      proTable.value?.getTableList();
+    });
+  } else {
+    rejectApply({ id: dialogDate.value.id }).then(res => {
+      proTable.value?.getTableList();
+    });
+  }
+  dialogVisible.value = false;
+};
+
+const userInfo = ref<{ [key: string]: any }>({});
+const dialogSHow = async (item: any, type: boolean) => {
+  if (type) {
+    // 获取用户信息
+    getCyberStarInfo(item.uid).then(res => {
+      if (res.code == "200") {
+        dialogVisible.value = true;
+        userInfo.value = res.data as {};
+      }
+    });
+  } else {
+    dialogVisible.value = true;
+  }
+
+  dialogDate.value = item;
+  dialogDate.value.type = type;
 };
 
 const maskState = async (params: any) => {
@@ -187,3 +255,28 @@ const showImages = (row: User.ResUserList, index: number) => {
 //   dialogRef.value?.acceptParams(params);
 // };
 </script>
+<style lang="scss">
+.apply_dialog {
+  margin: 0 auto;
+  .el-dialog__header {
+    display: none !important;
+  }
+  .dialog-footer {
+    text-align: center !important;
+  }
+  .el-button {
+    width: 100px !important;
+    margin: 0 20px !important;
+  }
+  .title {
+    font-size: 14px;
+    text-align: center;
+    span {
+      color: rgb(245 108 108) !important;
+    }
+  }
+  .userInfo {
+    margin-top: 30px !important;
+  }
+}
+</style>
