@@ -9,6 +9,7 @@
       :model="drawerProps.row"
       :hide-required-asterisk="drawerProps.isView"
     >
+      <div class="title">AI信息(Prompt)</div>
       <el-form-item label="Name" prop="ai_name">
         <el-input v-model="drawerProps.row!.ai_name" placeholder="Name" clearable></el-input>
       </el-form-item>
@@ -51,6 +52,31 @@
         <el-input v-model="drawerProps.row!.sexual_orientation" placeholder="sexual_orientation" clearable></el-input>
       </el-form-item>
 
+      <el-form-item label="Add" prop="add">
+        <el-input v-model="drawerProps.row!.add" type="textarea" :rows="3" placeholder="add" clearable></el-input>
+      </el-form-item>
+
+      <div class="title">声音信息</div>
+      <el-form-item label="Clone_voice" prop="clone_voice">
+        <el-input v-model="drawerProps.row!.clone_voice" placeholder="clone_voice" clearable></el-input>
+      </el-form-item>
+
+      <!-- <el-form-item label="Voice_introduct" prop="voice_introduct">
+        <el-input v-model="drawerProps.row!.voice_introduct" placeholder="voice_introduct" clearable></el-input>
+      </el-form-item> -->
+
+      <el-form-item label="Voice_introduct" prop="voice_introduct">
+        <UploadVoice v-model:image-url="drawerProps.row!.voice_introduct" height="140px" width="540px" :file-size="10">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传音频文件</span>
+          </template>
+          <template #tip> 音频大小不能超过 10M </template>
+        </UploadVoice>
+      </el-form-item>
+
+      <div class="title">展示信息</div>
+
       <el-form-item label="avatar" prop="Avatar:">
         <UploadImg v-model:image-url="drawerProps.row!.avatar" width="135px" height="135px" :file-size="3">
           <template #empty>
@@ -85,46 +111,6 @@
         <el-input v-model="drawerProps.row!.ai_desc" type="textarea" :rows="3" placeholder="ai_desc" clearable></el-input>
       </el-form-item>
 
-      <el-form-item label="Add" prop="add">
-        <el-input v-model="drawerProps.row!.add" type="textarea" :rows="3" placeholder="add" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="Clone_voice" prop="clone_voice">
-        <el-input v-model="drawerProps.row!.clone_voice" placeholder="clone_voice" clearable></el-input>
-      </el-form-item>
-
-      <!-- <el-form-item label="Voice_introduct" prop="voice_introduct">
-        <el-input v-model="drawerProps.row!.voice_introduct" placeholder="voice_introduct" clearable></el-input>
-      </el-form-item> -->
-
-      <el-form-item label="Voice_introduct" prop="voice_introduct">
-        <UploadVoice v-model:image-url="drawerProps.row!.voice_introduct" height="140px" width="540px" :file-size="10">
-          <template #empty>
-            <el-icon><Picture /></el-icon>
-            <span>请上传音频文件</span>
-          </template>
-          <template #tip> 音频大小不能超过 10M </template>
-        </UploadVoice>
-      </el-form-item>
-
-      <el-form-item label="Weight" prop="weight">
-        <el-input v-model="drawerProps.row!.weight" placeholder="weight" clearable></el-input>
-      </el-form-item>
-
-      <!-- <el-form-item label="State" prop="ai_state">
-        <el-select v-model="drawerProps.row!.ai_state" placeholder="请选择">
-          <el-option v-for="item in optionsState" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-        </el-select>
-      </el-form-item> -->
-
-      <el-form-item label="公开状态" prop="open_state">
-        <el-select v-model="drawerProps.row!.open_state" placeholder="请选择">
-          <el-option v-for="item in optionOpenState" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-        </el-select>
-      </el-form-item>
-      <!-- <el-form-item label="用户ID" prop="user_account">
-        <el-input v-model="drawerProps.row!.user_account" placeholder="请输入要绑定的用户账号"></el-input>
-      </el-form-item> -->
       <el-form-item label="虚拟人标签" prop="tags">
         <el-tag
           class="mx-1"
@@ -141,9 +127,8 @@
           <el-tag class="mx-1" @click="onAddTag">添加标签</el-tag>
         </template>
       </el-form-item>
-      <el-form-item label="关联网红账号" prop="bind_celebrity_account">
-        <el-input v-model="drawerProps.row!.bind_celebrity_account" placeholder="请输入网红账号" clearable></el-input>
-      </el-form-item>
+
+      <div class="title">对话设置</div>
       <el-form-item label="开场白" prop="open_remark">
         <el-input
           v-model="drawerProps.row!.open_remark"
@@ -152,6 +137,21 @@
           placeholder="请输入开场白"
           clearable
         ></el-input>
+      </el-form-item>
+      <el-form-item label="心动模式" prop="open_remark">
+        <el-switch v-model="drawerProps.row!.set_chat_mode_permission" />
+      </el-form-item>
+      <div class="title">AI设置</div>
+      <el-form-item label="关联网红账号" prop="bind_celebrity_account">
+        <el-input v-model="drawerProps.row!.bind_celebrity_account" placeholder="请输入网红账号" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="公开状态" prop="open_state">
+        <el-select v-model="drawerProps.row!.open_state" placeholder="请选择">
+          <el-option v-for="item in optionOpenState" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Weight" prop="weight">
+        <el-input v-model="drawerProps.row!.weight" placeholder="weight" clearable></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -294,5 +294,11 @@ defineExpose({
 .el-tag {
   margin-right: 10px;
   cursor: pointer;
+}
+.title {
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid var(--el-border-color-lighter);
 }
 </style>
