@@ -11,6 +11,10 @@
       <template #tableHeader="scope">
         <el-button v-if="!routeType" type="primary" :icon="CirclePlus" @click="onAdd(scope.row)"> 添加 </el-button>
       </template>
+      <template #coopInfo="scope">
+        <div style="max-height: 60px" v-html="scope.row.coop_info"></div>
+      </template>
+
       <!-- 表格操作 -->
       <template #operation="scope">
         <el-button type="primary" link @click="onEdit(scope.row)"> 编辑 </el-button>
@@ -128,7 +132,7 @@ if (routeType == true) {
       label: "网红姓名"
     },
     {
-      prop: "coop_info",
+      prop: "coopInfo",
       label: "合作信息备注"
     },
     {
