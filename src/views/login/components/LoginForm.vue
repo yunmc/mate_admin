@@ -1,24 +1,5 @@
 <template>
-  <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
-    <el-form-item prop="username">
-      <el-input v-model="loginForm.username" placeholder="用户名：admin / user">
-        <template #prefix>
-          <el-icon class="el-input__icon">
-            <user />
-          </el-icon>
-        </template>
-      </el-input>
-    </el-form-item>
-    <el-form-item prop="password">
-      <el-input v-model="loginForm.password" type="password" placeholder="密码：123456" show-password autocomplete="new-password">
-        <template #prefix>
-          <el-icon class="el-input__icon">
-            <lock />
-          </el-icon>
-        </template>
-      </el-input>
-    </el-form-item>
-  </el-form>
+  <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large"> <div id="code" class="code"></div></el-form>
   <div class="login-btn">
     <el-button :icon="CircleClose" round size="large" @click="resetForm(loginFormRef)"> 重置 </el-button>
     <el-button :icon="UserFilled" round size="large" type="primary" :loading="loading" @click="login(loginFormRef)">
@@ -61,6 +42,38 @@ const loginForm = reactive<Login.ReqLoginForm>({
   password: "123456"
 });
 
+const fsLogin = () => {
+  const goto =
+    "https://passport.feishu.cn/suite/passport/oauth/authorize?client_id=" +
+    "cli_a16c9d1a4479d00e" +
+    "&redirect_uri=" +
+    "https://test-api.matelink.com/admin/user/login_redirect" +
+    "&response_type=code&state=STATE";
+  console.log("goto", goto);
+  let QRLoginObj = QRLogin({
+    id: "login_container",
+    goto: goto,
+    width: "500",
+    height: "500",
+    style: "width:200px;height:200px" //可选的，二维码html标签的style属性
+  });
+  console.log("QRLoginObj", QRLoginObj);
+  let handleMessage = function (event: any) {
+    let origin = event.origin;
+    // 使用 matchOrigin 方法来判断 message 来自页面的url是否合法
+    if (QRLoginObj.matchOrigin(origin)) {
+      let loginTmpCode = event.data;
+      // 在授权页面地址上拼接上参数 tmp_code，并跳转
+      window.location.href = `${goto}&tmp_code=${loginTmpCode}`;
+    }
+  };
+  if (typeof window.addEventListener != "undefined") {
+    window.addEventListener("message", handleMessage, false);
+  } else if (typeof window!.attachEvent != "undefined") {
+    window!.attachEvent("onmessage", handleMessage);
+  }
+};
+fsLogin();
 // login
 const login = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
@@ -113,4 +126,12 @@ onMounted(() => {
 
 <style scoped lang="scss">
 @import "../index.scss";
+.code {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+.login-logo {
+  margin-bottom: 0 !important;
+}
 </style>
