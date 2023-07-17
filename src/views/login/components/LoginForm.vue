@@ -41,7 +41,7 @@ const loginForm = reactive<Login.ReqLoginForm>({
   username: "admin",
   password: "123456"
 });
-
+/* tslint:disable */
 const fsLogin = () => {
   const goto =
     "https://passport.feishu.cn/suite/passport/oauth/authorize?client_id=" +
@@ -50,28 +50,29 @@ const fsLogin = () => {
     "https://test-api.matelink.com/admin/user/login_redirect" +
     "&response_type=code&state=STATE";
   console.log("goto", goto);
-  let QRLoginObj = QRLogin({
-    id: "login_container",
-    goto: goto,
-    width: "500",
-    height: "500",
-    style: "width:200px;height:200px" //可选的，二维码html标签的style属性
-  });
-  console.log("QRLoginObj", QRLoginObj);
-  let handleMessage = function (event: any) {
-    let origin = event.origin;
-    // 使用 matchOrigin 方法来判断 message 来自页面的url是否合法
-    if (QRLoginObj.matchOrigin(origin)) {
-      let loginTmpCode = event.data;
-      // 在授权页面地址上拼接上参数 tmp_code，并跳转
-      window.location.href = `${goto}&tmp_code=${loginTmpCode}`;
+  try {
+    // @ts-expect-error 222
+    let QRLoginObj = QRLogin({
+      id: "login_container",
+      goto: goto,
+      width: "500",
+      height: "500",
+      style: "width:200px;height:200px" //可选的，二维码html标签的style属性
+    });
+    console.log("QRLoginObj", QRLoginObj);
+    let handleMessage = function (event: any) {
+      let origin = event.origin;
+      // 使用 matchOrigin 方法来判断 message 来自页面的url是否合法
+      if (QRLoginObj.matchOrigin(origin)) {
+        let loginTmpCode = event.data;
+        // 在授权页面地址上拼接上参数 tmp_code，并跳转
+        window.location.href = `${goto}&tmp_code=${loginTmpCode}`;
+      }
+    };
+    if (typeof window.addEventListener != "undefined") {
+      window.addEventListener("message", handleMessage, false);
     }
-  };
-  if (typeof window.addEventListener != "undefined") {
-    window.addEventListener("message", handleMessage, false);
-  } else if (typeof window!.attachEvent != "undefined") {
-    window!.attachEvent("onmessage", handleMessage);
-  }
+  } catch (error) {}
 };
 fsLogin();
 // login
