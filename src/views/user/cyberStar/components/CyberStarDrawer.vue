@@ -202,11 +202,11 @@ const getInfo = (uid: string) => {
       if (diamond_ratios.length > 0) {
         form.value.diamond_ratios = [];
       }
-      diamond_ratios.forEach((element: { diamond_ratio: any; created_time: any; updated_time: any }) => {
+      diamond_ratios.forEach((element: { diamond_ratio: any; effect_stm: any; effect_etm: any }) => {
         form.value.diamond_ratios.push({
           ratio: element.diamond_ratio, //分成比例
-          stm: element.created_time, // 生效开始日期
-          etm: element.updated_time // 生效结束日期
+          stm: element.effect_stm, // 生效开始日期
+          etm: element.effect_etm // 生效结束日期
         });
       });
       timeRanges.value = [coop_stm, coop_etm];
