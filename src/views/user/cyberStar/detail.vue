@@ -67,7 +67,7 @@
             <div v-for="item in userInfo.diamond_ratios" :key="item.diamond_ratio">
               <el-descriptions-item label="分成比例：" width="33%">
                 {{ item.diamond_ratio }}
-                <span style="margin-left: 30px">生效时间：{{ item.created_time }} — {{ item.updated_time }}</span>
+                <span style="margin-left: 30px">生效时间：{{ item.effect_stm }} — {{ item.effect_etm }}</span>
               </el-descriptions-item>
             </div>
             <!-- <el-descriptions-item label="真实姓名：" width="33%">{{ userInfo.real_name }}</el-descriptions-item>
