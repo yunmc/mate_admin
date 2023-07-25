@@ -75,6 +75,16 @@
         </UploadVoice>
       </el-form-item>
 
+      <el-form-item label="voice_orginal_url" prop="voice_orginal_url">
+        <UploadVoice v-model:image-url="drawerProps.row!.voice_orginal_url" height="140px" width="540px" :file-size="10">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传音频文件</span>
+          </template>
+          <template #tip> 音频大小不能超过 10M </template>
+        </UploadVoice>
+      </el-form-item>
+
       <div class="title">展示信息</div>
 
       <el-form-item label="avatar" prop="Avatar:">
