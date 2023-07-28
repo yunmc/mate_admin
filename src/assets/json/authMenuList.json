@@ -9,7 +9,7 @@
         "icon": "Menu",
         "title": "人物配置",
         "isLink": "",
-        "isHide": false,
+        "isHide": true,
         "isFull": false,
         "isAffix": true,
         "isKeepAlive": true

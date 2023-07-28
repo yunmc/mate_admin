@@ -5,6 +5,7 @@ interface getCyberStarListType {
   page: number;
   pageSize: number;
   search?: string;
+  is_cele?: number;
 }
 // 获取网红列表
 export const getCyberStarList = (params: getCyberStarListType) => {
