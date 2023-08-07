@@ -57,6 +57,19 @@
       </el-form-item>
 
       <div class="title">声音信息</div>
+
+      <el-form-item label="voice_speed" prop="voice_speed">
+        <!-- <el-input v-model="drawerProps.row!.voice_speed" placeholder="voice_speed" clearable></el-input> -->
+        <el-slider
+          :show-input="true"
+          :show-input-controls="false"
+          style="width: 100% !important; margin-left: 2%"
+          :min="0"
+          :max="10"
+          v-model="drawerProps.row!.voice_speed"
+        />
+      </el-form-item>
+
       <el-form-item label="Clone_voice" prop="clone_voice">
         <el-input v-model="drawerProps.row!.clone_voice" placeholder="clone_voice" clearable></el-input>
       </el-form-item>
