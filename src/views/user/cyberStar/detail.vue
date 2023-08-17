@@ -149,11 +149,11 @@ a {
   width: 100%;
   border-collapse: collapse;
   .table-header {
-    background: #f7f7f7;
+    // background: #f7f7f7;
   }
   td {
     padding: 14px 16px;
-    border: 1px solid #ebeef5;
+    border-bottom: 1px solid var(--el-border-color-light);
   }
   tr {
     height: fit-content;
