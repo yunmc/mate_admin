@@ -174,6 +174,50 @@
           }
         }
       ]
+    },
+    {
+      "path": "/app",
+      "name": "/app",
+      "redirect": "/app/updata",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "APP发版管理",
+        "isLink": "",
+        "isHide": true,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/app/updata",
+          "name": "updata",
+          "component": "/app/updata/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "APP版本更新",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/app/examine",
+          "name": "examine",
+          "component": "/app/examine/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "APP审核管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
     }
   ],
   "msg": "成功"
