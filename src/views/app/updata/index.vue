@@ -10,7 +10,7 @@
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="">
-        <el-button type="primary" :icon="CirclePlus" @click="openDrawer('新增')"> 添加 </el-button>
+        <el-button type="primary" :icon="CirclePlus" @click="openDrawer('新增', data)"> 添加 </el-button>
       </template>
 
       <!-- Expand -->
@@ -49,7 +49,7 @@
 
 <script setup lang="tsx" name="updata">
 import { ref, reactive } from "vue";
-import { User } from "@/api/interface";
+import { App } from "@/api/interface";
 // import { useHandleData } from "@/hooks/useHandleData";
 // import { useDownload } from "@/hooks/useDownload";
 // import { useAuthButtons } from "@/hooks/useAuthButtons";
@@ -60,7 +60,8 @@ import UserDrawer from "@/views/proTable/components/appSetVersion.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import { CirclePlus, EditPen, View } from "@element-plus/icons-vue";
-import { getUserList, editUser, addUser } from "@/api/modules/user";
+import { editUser } from "@/api/modules/user";
+import { getUpgradeVersion, saveUpgradeVersion } from "@/api/app";
 
 // const router = useRouter();
 
@@ -90,20 +91,20 @@ const dataCallback = (data: any) => {
 // 如果你想在请求之前对当前请求参数做一些操作，可以自定义如下函数：params 为当前所有的请求参数（包括分页），最后返回请求列表接口
 // 默认不做操作就直接在 ProTable 组件上绑定	:requestApi="getUserList"
 const getTableList = (params: any) => {
-  let newParams = JSON.parse(JSON.stringify(params));
+  let newParams: any = JSON.parse(JSON.stringify(params));
   // newParams.createTime && (newParams.startTime = newParams.createTime[0]);
   // newParams.createTime && (newParams.endTime = newParams.createTime[1]);
   delete newParams.createTime;
   console.log("params", newParams);
 
-  return getUserList(newParams);
+  return getUpgradeVersion();
 };
 
 const getStateStatus = () => {
   return [
     // { stateLabel: "初始化", stateValue: 1 },
-    { stateLabel: "上线", stateValue: 2 },
-    { stateLabel: "下线", stateValue: 3 }
+    { stateLabel: "推荐更新", stateValue: "1" },
+    { stateLabel: "强制更新", stateValue: "2" }
   ];
 };
 
@@ -111,70 +112,52 @@ const getStateStatus = () => {
 // const { BUTTONS } = useAuthButtons();
 
 // 表格配置项
-const columns: ColumnProps<User.ResUserList>[] = [
-  { type: "selection", fixed: "left", width: 80 },
+const columns: ColumnProps<App.ResConfig>[] = [
+  // { type: "selection", fixed: "left", width: 80 },
   { type: "index", label: "#", width: 80 },
   // { type: "expand", label: "Expand", width: 100 },
   {
-    prop: "ai_name",
+    prop: "client_type",
     label: "类型"
   },
   {
-    prop: "ai_desc",
+    prop: "upgrade_version",
     label: "最新版本号"
   },
   {
-    prop: "weight",
+    prop: "upgrade_content",
     label: "更新内容"
   },
   {
-    prop: "weight",
+    prop: "upgrade_type",
+    enum: getStateStatus(),
+    fieldNames: { label: "stateLabel", value: "stateValue" },
     label: "更新方式"
   },
   {
-    prop: "weight",
+    prop: "created_time",
     label: "操作时间"
   },
   { prop: "operation", label: "操作", fixed: "right", width: 160 }
 ];
 
 const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
-// const imageIndex = ref(0);
-const showImages = (row: User.ResUserList, index: number) => {
-  const params = {
-    index: index,
-    row: { ...row }
-  };
-  previewRef.value?.previewParams(params);
+
+const data: Partial<App.ResConfig> = {
+  client_type: "ios", // 客户端类型
+  upgrade_content: "", // 更新信息
+  upgrade_version: "", // 最新版本
+  upgrade_type: "1" // 更新类型
 };
-
-// // 导出用户列表
-// const downloadFile = async () => {
-//   ElMessageBox.confirm("确认导出用户数据?", "温馨提示", { type: "warning" }).then(() =>
-//     useDownload(exportUserInfo, "用户列表", proTable.value?.searchParam)
-//   );
-// };
-
-// // 批量添加用户
-// const dialogRef = ref<InstanceType<typeof ImportExcel> | null>(null);
-// const batchAdd = () => {
-//   const params = {
-//     title: "用户",
-//     tempApi: exportUserInfo,
-//     importApi: BatchAddUser,
-//     getTableList: proTable.value?.getTableList
-//   };
-//   dialogRef.value?.acceptParams(params);
-// };
-
 // 打开 drawer(新增、查看、编辑)
 const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
-const openDrawer = (title: string, row: Partial<User.ResUserList> = {}) => {
+const openDrawer = (title: string, row: Partial<App.ResConfig> = {}) => {
+  console.log("row", row);
   const params = {
     title,
     isView: title === "查看",
     row: { ...row },
-    api: title === "新增" ? addUser : title === "编辑" ? editUser : undefined,
+    api: title === "新增" ? saveUpgradeVersion : title === "编辑" ? editUser : undefined,
     getTableList: proTable.value?.getTableList
   };
   drawerRef.value?.acceptParams(params);

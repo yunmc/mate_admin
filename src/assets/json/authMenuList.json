@@ -183,7 +183,7 @@
         "icon": "MessageBox",
         "title": "APP发版管理",
         "isLink": "",
-        "isHide": true,
+        "isHide": false,
         "isFull": false,
         "isAffix": false,
         "isKeepAlive": true
@@ -211,7 +211,7 @@
             "icon": "Menu",
             "title": "APP审核管理",
             "isLink": "",
-            "isHide": false,
+            "isHide": true,
             "isFull": false,
             "isAffix": false,
             "isKeepAlive": true
