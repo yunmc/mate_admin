@@ -125,10 +125,15 @@ const beforeUpload: UploadProps["beforeUpload"] = rawFile => {
 const handleHttpUpload = async (options: UploadRequestOptions) => {
   let formData = new FormData();
   formData.append("file", options.file);
+  formData.append("file_type", "image");
+  formData.append("file_source", "avatar");
+  formData.append("ext", options.file.name.split(".")[1]);
   try {
     const api = props.api ?? uploadImg;
     const { data } = await api(formData);
-    options.onSuccess(data);
+    options.onSuccess({
+      fileUrl: data[0]
+    });
   } catch (error) {
     options.onError(error as any);
   }
@@ -144,6 +149,7 @@ interface UploadEmits {
 }
 const emit = defineEmits<UploadEmits>();
 const uploadSuccess = (response: { fileUrl: string } | undefined, uploadFile: UploadFile) => {
+  console.log("response", response);
   if (!response) return;
   uploadFile.url = response.fileUrl;
   emit("update:fileList", _fileList.value);
