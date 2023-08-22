@@ -118,7 +118,7 @@ const handleSubmit = () => {
     if (!valid) return;
     try {
       await drawerProps.value.api!(drawerProps.value.row);
-      ElMessage.success({ message: `${drawerProps.value.title}用户成功！` });
+      ElMessage.success({ message: `${drawerProps.value.title}版本成功！` });
       drawerProps.value.getTableList!();
       drawerVisible.value = false;
     } catch (error) {
