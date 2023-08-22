@@ -157,7 +157,7 @@ const openDrawer = (title: string, row: Partial<App.ResConfig> = {}) => {
     title,
     isView: title === "查看",
     row: { ...row },
-    api: title === "新增" ? saveUpgradeVersion : title === "编辑" ? editUser : undefined,
+    api: title === "新增" ? saveUpgradeVersion : title === "编辑" ? saveUpgradeVersion : undefined,
     getTableList: proTable.value?.getTableList
   };
   drawerRef.value?.acceptParams(params);
