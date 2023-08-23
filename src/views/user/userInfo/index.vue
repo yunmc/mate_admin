@@ -49,7 +49,8 @@ const getTableList = (option: any) => {
   const params = {
     page: option.page,
     pageSize: option.pageSize,
-    search: option.search
+    search: option.search,
+    coinSearch: option.coinSearch
   };
   return getUserList(params);
 };
@@ -86,7 +87,8 @@ const columns: ColumnProps[] = [
   },
   {
     prop: "coins_balance",
-    label: "金币余额"
+    label: "金币余额",
+    search: { el: "input", key: "coinSearch", label: "按账户金币/余额查询" }
   },
   {
     prop: "diamond_balance",

@@ -5,6 +5,7 @@ interface getUserListType {
   page: number;
   pageSize: number;
   search?: string;
+  coinSearch?: string;
 }
 // 获取用户列表
 export const getUserList = (params: getUserListType) => {

@@ -280,15 +280,15 @@ const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
   console.log("drawerProps", drawerProps.value.row.posters);
   drawerProps.value.row.images = [];
-  drawerProps.value.row.posters.forEach((element: any) => {
-    drawerProps.value.row.images.push({
-      name: "1",
-      url: element
+  if (drawerProps.value.row.posters) {
+    drawerProps.value.row.posters.forEach((element: any) => {
+      drawerProps.value.row.images.push({
+        name: "1",
+        url: element
+      });
     });
-    // drawerProps.value.row.images.push{
-    //   name:element,
-    // }
-  });
+  }
+
   // name: string;
   //   percentage?: number;
   //   status: UploadStatus;
@@ -321,10 +321,12 @@ const handleSubmit = () => {
   drawerProps.value.row.name = drawerProps.value.row.ai_name;
   drawerProps.value.row.desc = drawerProps.value.row.ai_desc;
   drawerProps.value.row.posters = [];
+  // console.log("drawerProps.value.row.images", drawerProps.value.row.images != undefined);
   drawerProps.value.row.images.forEach((element: { url: any }) => {
+    console.log(element, element.url);
     drawerProps.value.row.posters.push(element.url);
   });
-
+  console.log(drawerProps.value);
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
     try {
