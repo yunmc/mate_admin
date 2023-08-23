@@ -63,7 +63,8 @@ const getTableList = (option: any) => {
     page: option.page,
     pageSize: option.pageSize,
     search: option.search,
-    is_cele: option.is_cele
+    is_cele: option.is_cele,
+    ai_uid: option.ai_uid
   };
   if (routeType) {
     params.is_cele = 1;
@@ -126,7 +127,8 @@ if (routeType == true) {
     },
     {
       prop: "ai_uid",
-      label: "关联虚拟人ID"
+      label: "关联虚拟人ID",
+      search: { el: "input", key: "ai_uid", label: "按关联虚拟人ID查询" }
     },
     { prop: "operation", label: "操作", fixed: "right" }
   );

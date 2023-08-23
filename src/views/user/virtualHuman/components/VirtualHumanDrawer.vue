@@ -20,7 +20,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="Mbti" prop="mbti">
+      <el-form-item label="MBTI" prop="mbti">
         <el-input v-model="drawerProps.row!.mbti" placeholder="mbti" clearable></el-input>
       </el-form-item>
 
@@ -48,7 +48,7 @@
         <el-input v-model="drawerProps.row!.relationship" placeholder="relationship" clearable></el-input>
       </el-form-item>
 
-      <el-form-item label="Sexual 0relationship" prop="sexual_orientation">
+      <el-form-item label="Sexual" prop="sexual_orientation">
         <el-input v-model="drawerProps.row!.sexual_orientation" placeholder="sexual_orientation" clearable></el-input>
       </el-form-item>
 
@@ -120,14 +120,21 @@
         </UploadImg>
       </el-form-item>
 
-      <el-form-item label="index_image" prop="index_image">
-        <UploadImg v-model:image-url="drawerProps.row!.index_image" height="140px" width="140px" :file-size="5">
+      <el-form-item label="posters" prop="images">
+        <!-- <UploadImg v-model:image-url="drawerProps.row!.posters" :limit="3" height="140px" width="140px" :file-size="5">
           <template #empty>
             <el-icon><Picture /></el-icon>
             <span>请上传照片</span>
           </template>
           <template #tip> 照片大小不能超过 5M </template>
-        </UploadImg>
+        </UploadImg> -->
+        <UploadImgs v-model:file-list="drawerProps.row!.images" :limit="9" height="140px" width="140px">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+          <template #tip> 最多上传 9 张照片 </template>
+        </UploadImgs>
       </el-form-item>
 
       <el-form-item label="Description" prop="ai_desc">
@@ -142,12 +149,19 @@
           v-for="(tag, index) in tags"
           :key="tag"
           @close="onDelTag(index)"
+          style="margin-top: 10px"
         >
           {{ tag }}
         </el-tag>
         <template v-if="!drawerProps.isView">
-          <el-input v-model="tagtxt" placeholder="请输入标签名" style="width: 120px; margin-right: 10px" />
-          <el-tag class="mx-1" @click="onAddTag">添加标签</el-tag>
+          <el-input
+            v-model="tagtxt"
+            v-if="tags.length < 6"
+            placeholder="请输入标签名"
+            maxlength="20"
+            style="width: 120px; margin-top: 10px; margin-right: 10px"
+          />
+          <el-tag class="mx-1" style="margin-top: 10px" v-if="tags.length < 6" @click="onAddTag">添加标签</el-tag>
         </template>
       </el-form-item>
 
@@ -191,7 +205,7 @@ import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
 import UploadImg from "@/components/Upload/Img.vue";
 import UploadVoice from "@/components/Upload/voice.vue";
-// import UploadImgs from "@/components/Upload/Imgs.vue";
+import UploadImgs from "@/components/Upload/Imgs.vue";
 
 const rules = reactive({
   ai_name: [{ required: true, message: "请输入用户名" }]
@@ -264,6 +278,25 @@ const drawerProps = ref<DrawerProps>({
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
+  console.log("drawerProps", drawerProps.value.row.posters);
+  drawerProps.value.row.images = [];
+  if (drawerProps.value.row.posters) {
+    drawerProps.value.row.posters.forEach((element: any) => {
+      drawerProps.value.row.images.push({
+        name: "1",
+        url: element
+      });
+    });
+  }
+
+  // name: string;
+  //   percentage?: number;
+  //   status: UploadStatus;
+  //   size?: number;
+  //   response?: unknown;
+  //   uid: number;
+  //   url?: string;
+  //   raw?: UploadRawFile;
   tags.value = params.row.tags || [];
   drawerVisible.value = true;
 };
@@ -287,6 +320,13 @@ const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
   drawerProps.value.row.name = drawerProps.value.row.ai_name;
   drawerProps.value.row.desc = drawerProps.value.row.ai_desc;
+  drawerProps.value.row.posters = [];
+  // console.log("drawerProps.value.row.images", drawerProps.value.row.images != undefined);
+  drawerProps.value.row.images.forEach((element: { url: any }) => {
+    console.log(element, element.url);
+    drawerProps.value.row.posters.push(element.url);
+  });
+  console.log(drawerProps.value);
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
     try {

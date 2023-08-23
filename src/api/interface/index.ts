@@ -91,3 +91,12 @@ export namespace User {
     children?: ResDepartment[];
   }
 }
+
+export namespace App {
+  export interface ResConfig extends ReqPage {
+    client_type: string; // 客户端类型
+    upgrade_content: string; // 更新信息
+    upgrade_version: string; // 最新版本
+    upgrade_type: string; // 更新类型
+  }
+}

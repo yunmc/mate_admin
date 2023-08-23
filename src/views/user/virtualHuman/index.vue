@@ -102,11 +102,6 @@ const columns: ColumnProps[] = [
     search: { el: "input", key: "name" }
   },
   {
-    prop: "ai_desc",
-    label: "自我介绍",
-    width: "250"
-  },
-  {
     prop: "avatar",
     label: "头像",
     width: "100",
@@ -121,27 +116,8 @@ const columns: ColumnProps[] = [
     }
   },
   {
-    prop: "posters",
-    label: "个人主页照片",
-    width: 350,
-    render: scope => {
-      return (
-        <>
-          {scope.row.posters.length > 1
-            ? scope.row.posters.map((item: any, index: any) => {
-                return (
-                  <el-image
-                    initial-index="20000"
-                    style="z-index:100;width:80px;height:80px;margin: 0 10px;cursor: pointer;"
-                    src={item}
-                    onClick={() => showImages(scope.row, index)}
-                  ></el-image>
-                );
-              })
-            : ""}
-        </>
-      );
-    }
+    prop: "tags",
+    label: "AI标签"
   },
   {
     prop: "ai_state",
@@ -164,33 +140,43 @@ const columns: ColumnProps[] = [
     prop: "bind_celebrity_account",
     label: "网红账号"
   },
-  {
-    prop: "uid",
-    label: "用户ID"
-  },
-  {
-    prop: "alias",
-    label: "用户名称"
-  },
-  {
-    prop: "tags",
-    label: "AI标签"
-    // render: scope => {
-    //   return (
-    //     <>
-    //       {scope.row.tags.length > 1
-    //         ? scope.row.tags.map((item: any, index: any) => {
-    //             return (
-    //               <el-tag class="mx-1" style="margin: 2px 4px;">
-    //                 {item}
-    //               </el-tag>
-    //             );
-    //           })
-    //         : ""}
-    //     </>
-    //   );
-    // }
-  },
+  // {
+  //   prop: "ai_desc",
+  //   label: "自我介绍",
+  //   width: "250"
+  // },
+  // {
+  //   prop: "posters",
+  //   label: "个人主页照片",
+  //   width: 350,
+  //   render: scope => {
+  //     return (
+  //       <>
+  //         {scope.row.posters.length > 1
+  //           ? scope.row.posters.map((item: any, index: any) => {
+  //               return (
+  //                 <el-image
+  //                   initial-index="20000"
+  //                   style="z-index:100;width:80px;height:80px;margin: 0 10px;cursor: pointer;"
+  //                   src={item}
+  //                   onClick={() => showImages(scope.row, index)}
+  //                 ></el-image>
+  //               );
+  //             })
+  //           : ""}
+  //       </>
+  //     );
+  //   }
+  // },
+  // {
+  //   prop: "uid",
+  //   label: "用户ID"
+  // },
+  // {
+  //   prop: "alias",
+  //   label: "用户名称"
+  // },
+
   { prop: "operation", label: "操作", fixed: "right" }
 ];
 
