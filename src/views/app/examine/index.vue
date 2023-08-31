@@ -117,7 +117,8 @@ const columns: ColumnProps<App.ResConfig>[] = [
 const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 
 const data: Partial<App.ResConfig> = {
-  client_type: "ios" // 客户端类型
+  client_type: "ios", // 客户端类型
+  version: ""
 };
 // 打开 drawer(新增、查看、编辑)
 const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);

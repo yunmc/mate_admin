@@ -89,7 +89,6 @@ const drawerProps = ref<DrawerProps>({
 
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
-  console.log("params", params);
   drawerProps.value = params;
   drawerVisible.value = true;
 };
