@@ -295,3 +295,11 @@ export function findItemNested(enumData: any, callValue: any, value: string, chi
     if (current[children]) return findItemNested(current[children], callValue, value, children);
   }, null);
 }
+
+export function deepClone(target: object) {
+  if (typeof target === "object" && target !== null) {
+    return JSON.parse(JSON.stringify(target));
+  } else {
+    return target;
+  }
+}

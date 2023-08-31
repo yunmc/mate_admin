@@ -2,9 +2,9 @@ import http from "@/api";
 
 interface getAPPType {
   client_type: string; // 客户端类型
-  upgrade_content: string; // 更新信息
-  upgrade_version: string; // 最新版本
-  upgrade_type: number; // 更新类型
+  upgrade_content?: string; // 更新信息
+  upgrade_version?: string; // 最新版本
+  upgrade_type?: number; // 更新类型
 }
 // 获取app版本更新
 export const getUpgradeVersion = () => {
@@ -17,11 +17,16 @@ export const saveUpgradeVersion = (params: getAPPType) => {
 };
 
 // 设置审核版本
-export const setCheckVersion = () => {
-  return http.post(`/admin/system/set_check_version`);
+export const setCheckVersion = (params: getAPPType) => {
+  return http.post(`/admin/system/set_check_version`, params);
 };
 
 // 删除审核版本
 export const delCheckVersion = (params: getAPPType) => {
   return http.post(`/admin/system/del_check_version`, params);
+};
+
+// 审核版本列表
+export const getCheckVersions = () => {
+  return http.get(`/admin/system/get_check_versions`);
 };

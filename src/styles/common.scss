@@ -1,8 +1,21 @@
 /* flex */
+.flex {
+  display: flex;
+}
 .flx-center {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.flx-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.flx-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 .flx-justify-between {
   display: flex;

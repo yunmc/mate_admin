@@ -10,31 +10,21 @@
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="">
-        <el-button type="primary" :icon="CirclePlus" @click="openDrawer('新增', data)"> 添加 </el-button>
+        <el-button type="primary" :icon="CirclePlus" @click="openDrawer('添加', data)"> 添加 </el-button>
       </template>
 
       <!-- Expand -->
       <template #expand="scope">
         {{ scope.row }}
       </template>
-      <!-- usernameHeader -->
-      <template #usernameHeader="scope">
-        <el-button type="primary" @click="ElMessage.success('我是通过作用域插槽渲染的表头')">
-          {{ scope.column.label }}
-        </el-button>
-      </template>
-      <!-- createTime -->
-      <template #createTime="scope">
-        <el-button type="primary" link @click="ElMessage.success('我是通过作用域插槽渲染的内容')">
-          {{ scope.row.createTime }}
-        </el-button>
-      </template>
+
       <!-- 表格操作 -->
       <template #operation="scope">
-        <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)"> 编辑 </el-button>
-        <el-button type="primary" link :icon="View" @click="openDrawer('查看', scope.row)"> 下线 </el-button>
-        <!-- <el-button type="primary" link :icon="Refresh" @click="resetPass(scope.row)"> 重置密码 </el-button> -->
-        <!-- <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)"> 删除 </el-button> -->
+        <el-popconfirm title="确定要删除?" @confirm="Offline(scope.row)">
+          <template #reference>
+            <el-button type="danger" link> 删除</el-button>
+          </template>
+        </el-popconfirm>
       </template>
     </ProTable>
     <UserDrawer ref="drawerRef" />
@@ -56,19 +46,17 @@ import { App } from "@/api/interface";
 import { ElMessage } from "element-plus";
 import ProTable from "@/components/ProTable/index.vue";
 // import ImportExcel from "@/components/ImportExcel/index.vue";
-import UserDrawer from "@/views/proTable/components/appSetVersion.vue";
+import UserDrawer from "./compoents/appSetVersion.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
-import { CirclePlus, EditPen, View } from "@element-plus/icons-vue";
-import { editUser } from "@/api/modules/user";
-import { setCheckVersion, saveUpgradeVersion } from "@/api/app";
-
-// const router = useRouter();
-
-// 跳转详情页
-// const toDetail = () => {
-//   router.push(`/proTable/useProTable/detail/${Math.random().toFixed(3)}?params=detail-page`);
-// };
+import { CirclePlus } from "@element-plus/icons-vue";
+import { setCheckVersion, delCheckVersion, getCheckVersions } from "@/api/app";
+// 删除
+const Offline = (item: { client_type: any }) => {
+  delCheckVersion({ client_type: item.client_type }).then(res => {
+    proTable.value?.getTableList();
+  });
+};
 
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref<ProTableInstance>();
@@ -79,7 +67,6 @@ const initParam = reactive({ type: 1 });
 // dataCallback 是对于返回的表格数据做处理，如果你后台返回的数据不是 list && total && page && pageSize 这些字段，那么你可以在这里进行处理成这些字段
 // 或者直接去 hooks/useTable.ts 文件中把字段改为你后端对应的就行
 const dataCallback = (data: any) => {
-  console.log("data", data);
   return {
     list: data.list,
     total: data.total,
@@ -97,7 +84,7 @@ const getTableList = (params: any) => {
   delete newParams.createTime;
   console.log("params", newParams);
 
-  return setCheckVersion();
+  return getCheckVersions();
 };
 
 const getStateStatus = () => {
@@ -121,22 +108,8 @@ const columns: ColumnProps<App.ResConfig>[] = [
     label: "类型"
   },
   {
-    prop: "upgrade_version",
+    prop: "version",
     label: "最新版本号"
-  },
-  {
-    prop: "upgrade_content",
-    label: "更新内容"
-  },
-  {
-    prop: "upgrade_type",
-    enum: getStateStatus(),
-    fieldNames: { label: "stateLabel", value: "stateValue" },
-    label: "更新方式"
-  },
-  {
-    prop: "created_time",
-    label: "操作时间"
   },
   { prop: "operation", label: "操作", fixed: "right", width: 160 }
 ];
@@ -144,10 +117,7 @@ const columns: ColumnProps<App.ResConfig>[] = [
 const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 
 const data: Partial<App.ResConfig> = {
-  client_type: "ios", // 客户端类型
-  upgrade_content: "", // 更新信息
-  upgrade_version: "", // 最新版本
-  upgrade_type: "1" // 更新类型
+  client_type: "ios" // 客户端类型
 };
 // 打开 drawer(新增、查看、编辑)
 const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
@@ -155,9 +125,9 @@ const openDrawer = (title: string, row: Partial<App.ResConfig> = {}) => {
   console.log("row", row);
   const params = {
     title,
-    isView: title === "查看",
+    isView: title === "编辑",
     row: { ...row },
-    api: title === "新增" ? saveUpgradeVersion : title === "编辑" ? editUser : undefined,
+    api: title === "添加" ? setCheckVersion : title === "编辑" ? setCheckVersion : undefined,
     getTableList: proTable.value?.getTableList
   };
   drawerRef.value?.acceptParams(params);

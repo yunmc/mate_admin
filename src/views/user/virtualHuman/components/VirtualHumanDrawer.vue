@@ -9,18 +9,40 @@
       :model="drawerProps.row"
       :hide-required-asterisk="drawerProps.isView"
     >
-      <div class="title">AI信息(Prompt)</div>
-      <el-form-item label="Name" prop="ai_name">
-        <el-input v-model="drawerProps.row!.ai_name" placeholder="Name" clearable></el-input>
-      </el-form-item>
+      <div class="title flex">
+        AI信息(Prompt)
+        <div>
+          <el-select
+            v-model="newDataIndex"
+            multiple
+            collapse-tags
+            collapse-tags-tooltip
+            placeholder="新增参数"
+            @change="changeData()"
+            style="width: 240px"
+          >
+            <el-option v-for="item in trendsData" :key="item.value" :label="item.label" :value="item.index" />
+          </el-select>
+        </div>
+      </div>
 
-      <el-form-item label="Sex" prop="sex">
-        <el-select v-model="drawerProps.row!.sex" placeholder="请选择">
-          <el-option v-for="item in optionsSex" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-        </el-select>
-      </el-form-item>
+      <template v-for="item in drawerProps.row!.prompt" :key="item">
+        <el-form-item :label="item.label" :prop="item.prop">
+          <el-select v-if="item.type == 'select'" v-model="item.value" placeholder="请选择">
+            <el-option v-for="item in optionsSex" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+          </el-select>
+          <el-input v-else-if="item.type == 'input'" v-model="item.value" :placeholder="item.label" clearable></el-input>
+          <el-input v-else v-model="item.value" :rows="3" type="textarea" :placeholder="item.label" />
+        </el-form-item>
+      </template>
 
-      <el-form-item label="MBTI" prop="mbti">
+      <!-- <template v-for="item in trendsData" :key="item">
+        <el-form-item v-if="item.hide" :label="item.label" :prop="item.prop">
+          <el-input v-if="item.type == 'input'" v-model="item.value" :placeholder="item.label" clearable></el-input>
+          <el-input v-else v-model="item.value" @input="onInput()" :rows="3" type="textarea" :placeholder="item.label" />
+        </el-form-item>
+      </template> -->
+      <!-- <el-form-item label="MBTI" prop="mbti">
         <el-input v-model="drawerProps.row!.mbti" placeholder="mbti" clearable></el-input>
       </el-form-item>
 
@@ -54,7 +76,7 @@
 
       <el-form-item label="Add" prop="add">
         <el-input v-model="drawerProps.row!.add" type="textarea" :rows="3" placeholder="add" clearable></el-input>
-      </el-form-item>
+      </el-form-item> -->
 
       <div class="title">声音信息</div>
 
@@ -175,7 +197,14 @@
           clearable
         ></el-input>
       </el-form-item>
-      <el-form-item label="心动模式" prop="open_remark">
+      <el-form-item label="默认对话模式" prop="default_chat_mode">
+        <el-radio-group v-model="drawerProps.row!.default_chat_mode" @change="drawerProps.row!.set_chat_mode_permission = 0">
+          <el-radio :label="2">心动模式</el-radio>
+          <el-radio :label="1">普通模式</el-radio>
+        </el-radio-group>
+        <!-- <el-switch v-model="drawerProps.row!.default_chat_mode" /> -->
+      </el-form-item>
+      <el-form-item v-if="drawerProps.row!.default_chat_mode == 1" label="是否可切换" prop="open_remark">
         <el-switch v-model="drawerProps.row!.set_chat_mode_permission" />
       </el-form-item>
       <div class="title">AI设置</div>
@@ -199,24 +228,18 @@
 </template>
 
 <script setup lang="ts" name="UserDrawer">
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from "vue";
 // import { genderType } from "@/utils/serviceDict";
 import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
 import UploadImg from "@/components/Upload/Img.vue";
 import UploadVoice from "@/components/Upload/voice.vue";
 import UploadImgs from "@/components/Upload/Imgs.vue";
+import { number } from "echarts";
 
 const rules = reactive({
-  ai_name: [{ required: true, message: "请输入用户名" }]
-  // ai_state: [{ required: true, message: "请选择状态" }]
-  // avatar: [{ required: true, message: "请上传用户头像" }],
-  // photo: [{ required: true, message: "请上传用户照片" }],
-  // username: [{ required: true, message: "请填写用户姓名" }],
-  // gender: [{ required: true, message: "请选择性别" }],
-  // idCard: [{ required: true, message: "请填写身份证号" }],
-  // email: [{ required: true, message: "请填写邮箱" }],
-  // address: [{ required: true, message: "请填写居住地址" }]
+  name: [{ required: true, message: "请输入用户名" }],
+  sex: [{ required: true, message: "请选择性别" }]
 });
 
 interface DrawerProps {
@@ -227,6 +250,75 @@ interface DrawerProps {
   getTableList?: () => void;
 }
 
+const drawerVisible = ref(false);
+const drawerProps = ref<DrawerProps>({
+  isView: false,
+  title: "",
+  row: {}
+});
+
+const newDataIndex = ref([]);
+watch(
+  () => drawerVisible,
+  value => {
+    if (!drawerVisible.value) {
+      newDataIndex.value = [];
+    }
+  },
+  { deep: true }
+);
+
+const trendsData = [
+  {
+    value: "",
+    label: "relationship",
+    prop: "relationship",
+    type: "input",
+    index: 3
+  },
+  {
+    value: "",
+    label: "ai_information_normal",
+    prop: "ai_information_normal",
+    type: "input",
+    index: 4
+  },
+  {
+    value: "",
+    label: "ai_background_normal",
+    prop: "ai_background_normal",
+    type: "textarea",
+    index: 5
+  },
+  {
+    value: "",
+    label: "ai_rules_normal",
+    prop: "ai_rules_normal",
+    type: "input",
+    index: 6
+  },
+  {
+    value: "",
+    label: "ai_information_crush",
+    prop: "ai_information_crush",
+    type: "input",
+    index: 7
+  },
+  {
+    value: "",
+    label: "ai_background_crush",
+    prop: "ai_background_crush",
+    type: "input",
+    index: 8
+  },
+  {
+    value: "",
+    label: "ai_rules_crush",
+    prop: "ai_rules_crush",
+    type: "textarea",
+    index: 9
+  }
+];
 const optionsSex = [
   {
     value: "Male",
@@ -243,10 +335,6 @@ const optionsSex = [
 ];
 
 const optionsState = [
-  // {
-  //   value: 1,
-  //   label: "上线中"
-  // },
   {
     value: 2,
     label: "上线"
@@ -268,17 +356,43 @@ const optionOpenState = [
   }
 ];
 
-const drawerVisible = ref(false);
-const drawerProps = ref<DrawerProps>({
-  isView: false,
-  title: "",
-  row: {}
-});
+const changeData = () => {
+  drawerProps.value.row!.prompt.splice(2, drawerProps.value.row!.prompt.length - 1);
+  newDataIndex.value.forEach(element => {
+    drawerProps.value.row!.prompt.push(trendsData[element - 3]);
+  });
+};
 
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
-  console.log("drawerProps", drawerProps.value.row.posters);
+  if (drawerProps.value.row.prompt.length < 2) {
+    drawerProps.value.row.prompt = [
+      {
+        label: "Name",
+        value: "haha",
+        prop: "name",
+        type: "input",
+        index: 1
+      },
+      {
+        label: "Sex",
+        value: "Male",
+        prop: "sex",
+        type: "select",
+        index: 2
+      }
+    ];
+  }
+
+  drawerProps.value.row.prompt.forEach((element: any) => {
+    if (element.index > 2) {
+      // @ts-expect-error：xx
+      newDataIndex.value.push(Number(element.index));
+      trendsData[element.index - 3].value = element.value;
+    }
+  });
+
   drawerProps.value.row.images = [];
   if (drawerProps.value.row.posters) {
     drawerProps.value.row.posters.forEach((element: any) => {
@@ -288,15 +402,6 @@ const acceptParams = (params: DrawerProps) => {
       });
     });
   }
-
-  // name: string;
-  //   percentage?: number;
-  //   status: UploadStatus;
-  //   size?: number;
-  //   response?: unknown;
-  //   uid: number;
-  //   url?: string;
-  //   raw?: UploadRawFile;
   tags.value = params.row.tags || [];
   drawerVisible.value = true;
 };
@@ -318,15 +423,15 @@ const onDelTag = (index: number) => {
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
-  drawerProps.value.row.name = drawerProps.value.row.ai_name;
-  drawerProps.value.row.desc = drawerProps.value.row.ai_desc;
+  console.log(drawerProps.value.row);
+  drawerProps.value.row.name = drawerProps.value.row.prompt[0].value;
+  drawerProps.value.row.sex = drawerProps.value.row.prompt[1].value;
   drawerProps.value.row.posters = [];
   // console.log("drawerProps.value.row.images", drawerProps.value.row.images != undefined);
   drawerProps.value.row.images.forEach((element: { url: any }) => {
     console.log(element, element.url);
     drawerProps.value.row.posters.push(element.url);
   });
-  console.log(drawerProps.value);
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
     try {
@@ -359,6 +464,9 @@ defineExpose({
   cursor: pointer;
 }
 .title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding-bottom: 15px;
   margin-bottom: 20px;
   font-weight: bold;

@@ -23,7 +23,8 @@
         </slot>
       </div>
       <template #file="{ file }">
-        <img :src="file.url" class="upload-image" />
+        <img v-if="file.url.pic_source_url" :src="file.url.pic_source_url" class="upload-image" />
+        <img v-else :src="file.url" class="upload-image" />
         <div class="upload-handle" @click.stop>
           <div class="handle-icon" @click="handlePictureCardPreview(file)">
             <el-icon><ZoomIn /></el-icon>
@@ -152,6 +153,7 @@ const uploadSuccess = (response: { fileUrl: string } | undefined, uploadFile: Up
   console.log("response", response);
   if (!response) return;
   uploadFile.url = response.fileUrl;
+  console.log("_fileList.value", _fileList.value);
   emit("update:fileList", _fileList.value);
   // 调用 el-form 内部的校验方法（可自动校验）
   formItemContext?.prop && formContext?.validateField([formItemContext.prop as string]);

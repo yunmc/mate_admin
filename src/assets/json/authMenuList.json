@@ -114,6 +114,20 @@
             "isAffix": false,
             "isKeepAlive": true
           }
+        },
+        {
+          "path": "/user/gallery",
+          "name": "gallery",
+          "component": "/user/gallery/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "虚拟人图库",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
         }
       ]
     },
@@ -211,7 +225,7 @@
             "icon": "Menu",
             "title": "APP审核管理",
             "isLink": "",
-            "isHide": true,
+            "isHide": false,
             "isFull": false,
             "isAffix": false,
             "isKeepAlive": true
