@@ -11,12 +11,12 @@
         :hide-required-asterisk="drawerProps.isView"
       >
         <el-form-item label="posters" prop="images">
-          <UploadImgs v-model:file-list="saveParams.images" :api="uploadFile" height="140px" width="140px">
+          <UploadImgs v-model:file-list="saveParams.images" :api="uploadFile" :limit="10" height="140px" width="140px">
             <template #empty>
               <el-icon><Picture /></el-icon>
               <span>请上传照片</span>
             </template>
-            <!-- <template #tip> 最多上传 9 张照片 </template> -->
+            <template #tip> 最多上传 10 张照片 </template>
           </UploadImgs>
         </el-form-item>
         <el-form-item label="关联AI" prop="client_type">

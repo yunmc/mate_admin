@@ -38,7 +38,7 @@
             <el-option v-for="item in optionsSex" :key="item.value" :label="item.label" :value="item.value"> </el-option>
           </el-select>
           <el-input v-else-if="item.type == 'input'" v-model="item.value" :placeholder="item.label" clearable></el-input>
-          <el-input v-else v-model="item.value" :rows="3" type="textarea" :placeholder="item.label" />
+          <el-input v-else v-model="item.value" :rows="2" type="textarea" :placeholder="item.label" />
         </el-form-item>
       </template>
       <div class="title">声音信息</div>
@@ -253,7 +253,7 @@ const trendsData = [
     value: "",
     label: "ai_information_normal",
     prop: "ai_information_normal",
-    type: "input",
+    type: "textarea",
     index: 4
   },
   {
@@ -267,21 +267,21 @@ const trendsData = [
     value: "",
     label: "ai_rules_normal",
     prop: "ai_rules_normal",
-    type: "input",
+    type: "textarea",
     index: 6
   },
   {
     value: "",
     label: "ai_information_crush",
     prop: "ai_information_crush",
-    type: "input",
+    type: "textarea",
     index: 7
   },
   {
     value: "",
     label: "ai_background_crush",
     prop: "ai_background_crush",
-    type: "input",
+    type: "textarea",
     index: 8
   },
   {
