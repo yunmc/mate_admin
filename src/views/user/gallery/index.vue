@@ -120,7 +120,7 @@ const user = ref({
 });
 const pagination = ref({
   page: 1,
-  pageSize: 10
+  pageSize: 50
 });
 const handleSizeChange = (val: number) => {
   pagination.value.page = 1;
