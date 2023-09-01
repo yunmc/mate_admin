@@ -1,8 +1,14 @@
 <template>
-  <el-drawer v-model="drawerVisible" :destroy-on-close="true" size="760px" :title="`${drawerProps.title}`">
+  <el-drawer
+    v-model="drawerVisible"
+    :destroy-on-close="true"
+    @before-close="handleClose"
+    size="760px"
+    :title="`${drawerProps.title}`"
+  >
     <el-form
       ref="ruleFormRef"
-      label-width="170px"
+      label-width="178px"
       label-suffix=" :"
       :rules="rules"
       :disabled="drawerProps.isView"
@@ -35,49 +41,6 @@
           <el-input v-else v-model="item.value" :rows="3" type="textarea" :placeholder="item.label" />
         </el-form-item>
       </template>
-
-      <!-- <template v-for="item in trendsData" :key="item">
-        <el-form-item v-if="item.hide" :label="item.label" :prop="item.prop">
-          <el-input v-if="item.type == 'input'" v-model="item.value" :placeholder="item.label" clearable></el-input>
-          <el-input v-else v-model="item.value" @input="onInput()" :rows="3" type="textarea" :placeholder="item.label" />
-        </el-form-item>
-      </template> -->
-      <!-- <el-form-item label="MBTI" prop="mbti">
-        <el-input v-model="drawerProps.row!.mbti" placeholder="mbti" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="Create By" prop="create_by">
-        <el-input v-model="drawerProps.row!.create_by" placeholder="create_by" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="Birthday" prop="birthdate">
-        <el-input v-model="drawerProps.row!.birthdate" placeholder="birthdate" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="Expression_mode" prop="expression_mode">
-        <el-input v-model="drawerProps.row!.expression_mode" placeholder="expression_mode" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="Occupation" prop="expression_mode">
-        <el-input v-model="drawerProps.row!.occupation" placeholder="occupation" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="Nickname" prop="nick_name">
-        <el-input v-model="drawerProps.row!.nick_name" placeholder="nick_name" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="Relationship" prop="relationship">
-        <el-input v-model="drawerProps.row!.relationship" placeholder="relationship" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="Sexual" prop="sexual_orientation">
-        <el-input v-model="drawerProps.row!.sexual_orientation" placeholder="sexual_orientation" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="Add" prop="add">
-        <el-input v-model="drawerProps.row!.add" type="textarea" :rows="3" placeholder="add" clearable></el-input>
-      </el-form-item> -->
-
       <div class="title">声音信息</div>
 
       <el-form-item label="voice_speed" prop="voice_speed">
@@ -235,11 +198,10 @@ import { User } from "@/api/interface";
 import UploadImg from "@/components/Upload/Img.vue";
 import UploadVoice from "@/components/Upload/voice.vue";
 import UploadImgs from "@/components/Upload/Imgs.vue";
-import { number } from "echarts";
 
 const rules = reactive({
-  name: [{ required: true, message: "请输入用户名" }],
-  sex: [{ required: true, message: "请选择性别" }]
+  // name: [{ required: true, message: "请输入用户名" }],
+  // sex: [{ required: true, message: "请选择性别" }]
 });
 
 interface DrawerProps {
@@ -263,10 +225,21 @@ watch(
   value => {
     if (!drawerVisible.value) {
       newDataIndex.value = [];
+      trendsData.forEach(element => {
+        element.value = "";
+      });
     }
   },
   { deep: true }
 );
+
+const handleClose = (params: DrawerProps) => {
+  drawerProps.value.isView = false;
+  drawerProps.value.title = "";
+  drawerProps.value.row = {};
+  console.log("drawerProps", drawerProps);
+  drawerVisible.value = false;
+};
 
 const trendsData = [
   {
@@ -366,18 +339,19 @@ const changeData = () => {
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
-  if (drawerProps.value.row.prompt.length < 2) {
+  console.log("drawerProps", drawerProps.value);
+  if (drawerProps.value.title == "虚拟人添加" || drawerProps.value.row.prompt.length < 2) {
     drawerProps.value.row.prompt = [
       {
         label: "Name",
-        value: "haha",
+        value: "",
         prop: "name",
         type: "input",
         index: 1
       },
       {
         label: "Sex",
-        value: "Male",
+        value: "",
         prop: "sex",
         type: "select",
         index: 2
@@ -423,13 +397,19 @@ const onDelTag = (index: number) => {
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
-  console.log(drawerProps.value.row);
   drawerProps.value.row.name = drawerProps.value.row.prompt[0].value;
   drawerProps.value.row.sex = drawerProps.value.row.prompt[1].value;
+  if (drawerProps.value.row.name == "") {
+    ElMessage.error("请输入姓名");
+    return false;
+  }
+  if (drawerProps.value.row.sex == "") {
+    ElMessage.error("请选择性别");
+    return false;
+  }
   drawerProps.value.row.posters = [];
   // console.log("drawerProps.value.row.images", drawerProps.value.row.images != undefined);
   drawerProps.value.row.images.forEach((element: { url: any }) => {
-    console.log(element, element.url);
     drawerProps.value.row.posters.push(element.url);
   });
   ruleFormRef.value!.validate(async valid => {

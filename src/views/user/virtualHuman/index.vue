@@ -43,6 +43,7 @@ import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import VirtualHumanDrawer from "./components/VirtualHumanDrawer.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { getVirtualHumanList, addVirtualHuman, postOfflineAi } from "@/api/user/virtualHuman";
+import { deepClone } from "@/utils/index";
 
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref<ProTableInstance>();
@@ -197,7 +198,9 @@ const onAdd = (title: string, row?: {}) => {
     api: addVirtualHuman,
     getTableList: proTable.value?.getTableList
   };
-  drawerRef.value?.acceptParams(params);
+  const params2 = deepClone(params);
+  console.log("params", params.row);
+  drawerRef.value?.acceptParams(params2);
 };
 
 const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);

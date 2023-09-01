@@ -4,7 +4,11 @@
       <div class="flx-start">
         <div class="label flex">
           <p>虚拟人昵称 :</p>
-          <div class="el-input"><el-input v-model="user.ai_uid" placeholder="请输入" /></div>
+          <div class="el-input">
+            <el-select style="width: 100%" v-model="user.ai_uid" placeholder="请选择">
+              <el-option v-for="item in aiUsers" :key="item.ai_uid" :label="item.ai_name" :value="item.ai_uid" />
+            </el-select>
+          </div>
         </div>
         <div class="label flex">
           <p>虚拟人ID :</p>
@@ -63,7 +67,7 @@
         <el-pagination
           v-model:current-page="pagination.page"
           v-model:page-size="pagination.pageSize"
-          :page-sizes="[10, 50, 100, 200]"
+          :page-sizes="[50, 100, 200, 300]"
           :small="small"
           :disabled="disabled"
           :background="background"
@@ -89,7 +93,7 @@ const background = ref(true);
 const disabled = ref(false);
 const totals = ref(0);
 const list = ref();
-let aiUsers = ref([]);
+let aiUsers = ref([] as any);
 const checkList = ref();
 const options = [
   {

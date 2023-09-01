@@ -99,6 +99,10 @@ const acceptParams = (params: DrawerProps) => {
 };
 
 const handleClose = (params: DrawerProps) => {
+  saveParams.value.images = [];
+  saveParams.value.ai_uid = "";
+  saveParams.value.pic_level = "1";
+  // console.log("saveParams.value", saveParams.value);
   drawerVisible.value = false;
 };
 
@@ -117,7 +121,7 @@ const handleSubmit = () => {
   let imagesDeep = [];
   params.images.forEach((element: any) => {
     imagesDeep = deepClone(element);
-    element.pic_fuzzy_ur = imagesDeep.url.pic_fuzzy_url;
+    element.pic_fuzzy_url = imagesDeep.url.pic_fuzzy_url;
     element.pic_source_url = imagesDeep.url.pic_source_url;
     console.log("element", element);
   });
