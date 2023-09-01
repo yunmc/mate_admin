@@ -248,9 +248,9 @@
       },
       "children": [
         {
-          "path": "/other/upload",
+          "path": "/other/upload-images",
           "name": "upload",
-          "component": "/other/upload/index",
+          "component": "/other/upload-images/index",
           "meta": {
             "icon": "Menu",
             "title": "上传文件",

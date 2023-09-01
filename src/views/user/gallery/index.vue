@@ -132,7 +132,7 @@ const handleCurrentChange = (val: number) => {
   getTableList();
 };
 const AllDelPicItem = async () => {
-  console.log(checkList.value);
+  console.log(checkList.value == "");
   let params = {
     ids: [] as any
   };

@@ -95,17 +95,14 @@ const drawerProps = ref<DrawerProps>({
 const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
   drawerVisible.value = true;
-  saveParams.value.images = [];
-  saveParams.value.ai_uid = "";
-  saveParams.value.pic_level = "1";
   console.log("params", params);
 };
 
-const handleClose = () => {
+const handleClose = (params: DrawerProps) => {
   saveParams.value.images = [];
   saveParams.value.ai_uid = "";
   saveParams.value.pic_level = "1";
-  console.log("saveParams.value", saveParams.value);
+  // console.log("saveParams.value", saveParams.value);
   drawerVisible.value = false;
 };
 
@@ -134,7 +131,7 @@ const handleSubmit = () => {
       await drawerProps.value.api!(params);
       ElMessage.success({ message: `上传成功！` });
       drawerProps.value.getTableList!();
-      handleClose();
+      drawerVisible.value = false;
     } catch (error) {
       console.log(error);
     }
