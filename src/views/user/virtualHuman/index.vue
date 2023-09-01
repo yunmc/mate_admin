@@ -103,6 +103,10 @@ const columns: ColumnProps[] = [
     search: { el: "input", key: "name" }
   },
   {
+    prop: "ai_uid",
+    label: "虚拟人ID"
+  },
+  {
     prop: "avatar",
     label: "头像",
     width: "100",
