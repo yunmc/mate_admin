@@ -249,7 +249,7 @@
       "children": [
         {
           "path": "/other/upload-images",
-          "name": "upload",
+          "name": "upload-images",
           "component": "/other/upload-images/index",
           "meta": {
             "icon": "Menu",
@@ -263,7 +263,7 @@
         },
         {
           "path": "/other/upload-audio",
-          "name": "upload",
+          "name": "upload-audio",
           "component": "/other/upload-audio/index",
           "meta": {
             "icon": "Menu",

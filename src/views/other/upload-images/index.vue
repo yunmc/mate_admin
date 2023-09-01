@@ -25,7 +25,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="uploadFile">
+<script setup lang="ts" name="upload-images">
 import { ref } from "vue";
 import UploadImgs from "@/components/Upload/uploads.vue";
 
