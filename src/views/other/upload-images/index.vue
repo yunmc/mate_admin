@@ -1,17 +1,26 @@
 <template>
   <div class="main-box">
-    <div class="upload content-box flx-start">
+    <div class="upload flx-start">
       <!-- 多图上传 -->
       <div class="content flx-start">
-        <UploadImgs v-model:file-list="fileList1" width="350px">
+        <UploadImgs v-model:file-list="fileList1">
           <template #empty>
             <el-icon><Picture /></el-icon>
             <span>请上传照片</span>
           </template>
-          <template #tip> 长方形组件（可拖拽上传） </template>
         </UploadImgs>
       </div>
-      {{ fileList1 }}
+    </div>
+    <div class="tables">
+      <el-table :data="fileList1" style="width: 100%">
+        <el-table-column prop="url" label="Url"> </el-table-column>
+        <el-table-column prop="name" label="Name"> </el-table-column>
+        <el-table-column label="">
+          <template #default="scope">
+            <el-button v-copy="scope.row.url" type="primary"> 复制 </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
   </div>
 </template>
@@ -42,9 +51,8 @@ const fileList1 = ref([]);
     .el-upload-list {
       display: none;
     }
-    .content {
-      float: left;
-      width: 400px;
+    .tables {
+      display: block;
     }
   }
 }

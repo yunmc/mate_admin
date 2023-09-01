@@ -253,7 +253,21 @@
           "component": "/other/upload-images/index",
           "meta": {
             "icon": "Menu",
-            "title": "上传文件",
+            "title": "上传图片",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/other/upload-audio",
+          "name": "upload",
+          "component": "/other/upload-audio/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "上传音频",
             "isLink": "",
             "isHide": false,
             "isFull": false,
