@@ -22,25 +22,7 @@
           <!-- <span>请上传图片</span> -->
         </slot>
       </div>
-      <template #file="{ file }">
-        <img v-if="file.url.pic_source_url" :src="file.url.pic_source_url" class="upload-image" />
-        <img v-else :src="file.url" class="upload-image" />
-        <div class="upload-handle" @click.stop>
-          <div class="handle-icon" @click="handlePictureCardPreview(file)">
-            <el-icon><ZoomIn /></el-icon>
-            <span>查看</span>
-          </div>
-          <div v-if="!self_disabled" class="handle-icon" @click="handleRemove(file)">
-            <el-icon><Delete /></el-icon>
-            <span>删除</span>
-          </div>
-        </div>
-      </template>
     </el-upload>
-    <div class="el-upload__tip">
-      <slot name="tip"></slot>
-    </div>
-    <el-image-viewer v-if="imgViewVisible" :url-list="[viewImageUrl]" @close="imgViewVisible = false" />
   </div>
 </template>
 

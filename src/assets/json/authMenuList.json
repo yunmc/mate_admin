@@ -114,6 +114,20 @@
             "isAffix": false,
             "isKeepAlive": true
           }
+        },
+        {
+          "path": "/user/gallery",
+          "name": "gallery",
+          "component": "/user/gallery/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "虚拟人图库",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
         }
       ]
     },
@@ -211,7 +225,51 @@
             "icon": "Menu",
             "title": "APP审核管理",
             "isLink": "",
-            "isHide": true,
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/other",
+      "name": "/other",
+      "redirect": "/other/upload",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "其他功能",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/other/upload-images",
+          "name": "upload-images",
+          "component": "/other/upload-images/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "上传图片",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/other/upload-audio",
+          "name": "upload-audio",
+          "component": "/other/upload-audio/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "上传音频",
+            "isLink": "",
+            "isHide": false,
             "isFull": false,
             "isAffix": false,
             "isKeepAlive": true

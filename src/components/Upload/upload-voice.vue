@@ -22,25 +22,7 @@
           <!-- <span>请上传图片</span> -->
         </slot>
       </div>
-      <template #file="{ file }">
-        <img v-if="file.url.pic_source_url" :src="file.url.pic_source_url" class="upload-image" />
-        <img v-else :src="file.url" class="upload-image" />
-        <div class="upload-handle" @click.stop>
-          <div class="handle-icon" @click="handlePictureCardPreview(file)">
-            <el-icon><ZoomIn /></el-icon>
-            <span>查看</span>
-          </div>
-          <div v-if="!self_disabled" class="handle-icon" @click="handleRemove(file)">
-            <el-icon><Delete /></el-icon>
-            <span>删除</span>
-          </div>
-        </div>
-      </template>
     </el-upload>
-    <div class="el-upload__tip">
-      <slot name="tip"></slot>
-    </div>
-    <el-image-viewer v-if="imgViewVisible" :url-list="[viewImageUrl]" @close="imgViewVisible = false" />
   </div>
 </template>
 
@@ -58,7 +40,7 @@ interface UploadFileProps {
   disabled?: boolean; // 是否禁用上传组件 ==> 非必传（默认为 false）
   limit?: number; // 最大图片上传数 ==> 非必传（默认为 5张）
   fileSize?: number; // 图片大小限制 ==> 非必传（默认为 5M）
-  fileType?: File.ImageMimeType[]; // 图片类型限制 ==> 非必传（默认为 ["image/jpeg", "image/png", "image/gif"]）
+  fileType?: File.VoiceMimeType[]; // 图片类型限制 ==> 非必传（默认为 ["image/jpeg", "image/png", "image/gif"]）
   height?: string; // 组件高度 ==> 非必传（默认为 150px）
   width?: string; // 组件宽度 ==> 非必传（默认为 150px）
   borderRadius?: string; // 组件边框圆角 ==> 非必传（默认为 8px）
@@ -70,7 +52,7 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
   disabled: false,
   limit: 5,
   fileSize: 5,
-  fileType: () => ["image/jpeg", "image/png", "image/gif"],
+  fileType: () => ["audio/mpeg", "audio/mp4"],
   height: "150px",
   width: "150px",
   borderRadius: "8px"
@@ -101,22 +83,22 @@ watch(
  * */
 const beforeUpload: UploadProps["beforeUpload"] = rawFile => {
   const imgSize = rawFile.size / 1024 / 1024 < props.fileSize;
-  const imgType = props.fileType.includes(rawFile.type as File.ImageMimeType);
-  if (!imgType)
-    ElNotification({
-      title: "温馨提示",
-      message: "上传图片不符合所需的格式！",
-      type: "warning"
-    });
+  // const imgType = props.fileType.includes(rawFile.type as File.ImageMimeType);
+  // if (!imgType)
+  //   ElNotification({
+  //     title: "温馨提示",
+  //     message: "上传音频不符合所需的格式！",
+  //     type: "warning"
+  //   });
   if (!imgSize)
     setTimeout(() => {
       ElNotification({
         title: "温馨提示",
-        message: `上传图片大小不能超过 ${props.fileSize}M！`,
+        message: `上传音频大小不能超过 ${props.fileSize}M！`,
         type: "warning"
       });
     }, 0);
-  return imgType && imgSize;
+  return imgSize;
 };
 
 /**
@@ -128,7 +110,7 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
   formData.append("file", options.file);
   formData.append("file_type", "image");
   formData.append("file_source", "avatar");
-  formData.append("ext", options.file.name.split(".")[1]);
+  formData.append("ext", "mp3");
   try {
     const api = props.api ?? uploadImg;
     const { data } = await api(formData);
@@ -159,7 +141,7 @@ const uploadSuccess = (response: { fileUrl: string } | undefined, uploadFile: Up
   formItemContext?.prop && formContext?.validateField([formItemContext.prop as string]);
   ElNotification({
     title: "温馨提示",
-    message: "图片上传成功！",
+    message: "音频上传成功！",
     type: "success"
   });
 };
@@ -179,7 +161,7 @@ const handleRemove = (file: UploadFile) => {
 const uploadError = () => {
   ElNotification({
     title: "温馨提示",
-    message: "图片上传失败，请您重新上传！",
+    message: "音频上传失败，请您重新上传！",
     type: "error"
   });
 };
@@ -190,7 +172,7 @@ const uploadError = () => {
 const handleExceed = () => {
   ElNotification({
     title: "温馨提示",
-    message: `当前最多只能上传 ${props.limit} 张图片，请移除后上传！`,
+    message: `当前最多只能上传 ${props.limit} 音频，请移除后上传！`,
     type: "warning"
   });
 };
