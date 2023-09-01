@@ -399,14 +399,14 @@ const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
   drawerProps.value.row.name = drawerProps.value.row.prompt[0].value;
   drawerProps.value.row.sex = drawerProps.value.row.prompt[1].value;
-  if (drawerProps.value.row.name == "") {
-    ElMessage.error("请输入姓名");
-    return false;
-  }
-  if (drawerProps.value.row.sex == "") {
-    ElMessage.error("请选择性别");
-    return false;
-  }
+  // if (drawerProps.value.row.name == "") {
+  //   ElMessage.error("请输入姓名");
+  //   return false;
+  // }
+  // if (drawerProps.value.row.sex == "") {
+  //   ElMessage.error("请选择性别");
+  //   return false;
+  // }
   drawerProps.value.row.posters = [];
   // console.log("drawerProps.value.row.images", drawerProps.value.row.images != undefined);
   drawerProps.value.row.images.forEach((element: { url: any }) => {
