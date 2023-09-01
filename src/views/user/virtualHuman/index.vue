@@ -199,7 +199,8 @@ const onAdd = (title: string, row?: {}) => {
     getTableList: proTable.value?.getTableList
   };
   const params2 = deepClone(params);
-  console.log("params", params.row);
+  params2.api = addVirtualHuman;
+  params2.getTableList = proTable.value?.getTableList;
   drawerRef.value?.acceptParams(params2);
 };
 
