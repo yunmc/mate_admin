@@ -70,7 +70,7 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
   disabled: false,
   limit: 5,
   fileSize: 5,
-  fileType: () => ["image/jpeg", "image/png", "image/gif"],
+  fileType: () => ["image/jpeg", "image/png", "image/gif", "image/webp"],
   height: "150px",
   width: "150px",
   borderRadius: "8px"
