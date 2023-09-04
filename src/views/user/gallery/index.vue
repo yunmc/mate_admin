@@ -38,10 +38,11 @@
             <div class="flx-end"><el-checkbox :label="item.id" /></div>
             <div class="img">
               <el-image
-                style="width: 180px; height: 180px"
+                style="width: 160px; height: 180px"
+                hide-on-click-modal
                 :preview-src-list="[item.pic_source_url]"
                 :src="item.pic_source_url"
-                fit="fill"
+                fit="cover"
               />
             </div>
             <div class="footer flx-justify-between">
@@ -271,17 +272,18 @@ getTableList();
   }
   .list {
     float: left;
-    width: 180px;
+
+    // width: 180px;
     padding: 0 10px;
     margin: 5px 10px;
     border: 1px solid var(--el-border-color-light);
     border-radius: 6px;
     box-shadow: 0 0 12px rgb(0 0 0 / 5%);
     .img {
-      width: 180px;
+      width: 160px;
       height: 180px;
       img {
-        width: 180px;
+        width: 160px;
         height: 180px;
       }
     }
