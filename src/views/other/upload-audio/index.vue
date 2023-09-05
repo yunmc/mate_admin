@@ -3,7 +3,7 @@
     <div class="upload flx-start">
       <!-- 多图上传 -->
       <div class="content flx-start">
-        <UploadImgs v-model:file-list="fileList1">
+        <UploadImgs v-model:file-list="fileList1" :limit="50">
           <template #empty>
             <el-icon><Picture /></el-icon>
             <span>请上传音频</span>
