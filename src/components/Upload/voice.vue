@@ -77,7 +77,7 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
   drag: true,
   disabled: false,
   fileSize: 5,
-  fileType: () => ["audio/mpeg"],
+  fileType: () => ["audio/mpeg", "audio/wav"],
   height: "150px",
   width: "150px",
   borderRadius: "8px"

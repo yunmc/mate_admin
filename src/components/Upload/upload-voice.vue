@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
   disabled: false,
   limit: 5,
   fileSize: 5,
-  fileType: () => ["audio/mpeg", "audio/mp4"],
+  fileType: () => ["video/ogg", "audio/mpeg", "audio/mp4", "video/webm", "audio/wav", "wav"],
   height: "150px",
   width: "150px",
   borderRadius: "8px"
@@ -110,7 +110,7 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
   formData.append("file", options.file);
   formData.append("file_type", "image");
   formData.append("file_source", "avatar");
-  formData.append("ext", "mp3");
+  formData.append("ext", options.file.name.split(".")[1]);
   try {
     const api = props.api ?? uploadImg;
     const { data } = await api(formData);

@@ -36,7 +36,7 @@ declare namespace File {
 
   type ExcelMimeType = "application/vnd.ms-excel" | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-  type VoiceMimeType = "video/ogg" | "video/mp4" | "audio/mpeg" | "audio/mp4" | "video/webm";
+  type VoiceMimeType = "video/ogg" | "video/mp4" | "audio/mpeg" | "audio/mp4" | "video/webm" | "audio/wav" | "wav";
 
   type PdfType = "application/pdf";
 }
