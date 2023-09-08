@@ -48,7 +48,8 @@
             <div class="footer flx-justify-between">
               <span v-if="item.pic_level == 1">一级</span>
               <span v-else-if="item.pic_level == 2">二级</span>
-              <span v-else>三级</span>
+              <span v-else-if="item.pic_level == 3">三级</span>
+              <span v-else>四级</span>
               <el-dropdown>
                 <span class="el-dropdown-link">
                   <el-icon class="more"><MoreFilled /></el-icon>
@@ -112,6 +113,10 @@ const options = [
   {
     value: "3",
     label: "三级"
+  },
+  {
+    value: "4",
+    label: "四级"
   }
 ];
 const user = ref({
