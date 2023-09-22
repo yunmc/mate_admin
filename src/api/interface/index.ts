@@ -10,6 +10,7 @@ export interface ResultData<T = any> extends Result {
 }
 
 // 分页响应参数
+
 export interface ResPage<T> {
   list: T[];
   pageNum: number;
