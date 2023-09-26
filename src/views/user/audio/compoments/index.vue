@@ -54,7 +54,7 @@ import { App } from "@/api/user/audio";
 import UploadVoice from "@/components/Upload/voice.vue";
 
 const rules = reactive({
-  // upgrade_version: [{ required: true, message: "请输入版本号" }],
+  // voice_title: [{ required: true, message: "请输入音频名称" }]
   // upgrade_content: [{ required: true, message: "请输入更新内容" }]
 });
 
@@ -88,9 +88,22 @@ const handleClose = (params: DrawerProps) => {
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
-  console.log("drawerProps.value", drawerProps.value.row);
-  // drawerProps.value.row.name = drawerProps.value.row.ai_name;
-  // drawerProps.value.row.desc = drawerProps.value.row.ai_desc;
+  if (!drawerProps.value.row.voice_title || drawerProps.value.row.voice_title == "") {
+    ElMessage.error("请输入音频名称");
+    return false;
+  }
+  if (!drawerProps.value.row.source_url || drawerProps.value.row.source_url == "") {
+    ElMessage.error("请上传音频文件");
+    return false;
+  }
+  if (!drawerProps.value.row.voice_id || drawerProps.value.row.voice_id == "") {
+    ElMessage.error("请输入音频ID");
+    return false;
+  }
+  if (!drawerProps.value.row.weight || drawerProps.value.row.weight == "") {
+    ElMessage.error("请输入排序");
+    return false;
+  }
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
     try {

@@ -9,6 +9,10 @@
       :data-callback="dataCallback"
     >
       <!-- 表格 header 按钮 -->
+      <template #tableHeader="">
+        <el-button type="primary" icon="CirclePlus" @click="openDrawer('新增')"> 添加 </el-button>
+      </template>
+      <!-- 表格 header 按钮 -->
       <template #soure="scope">
         <audio controls :src="scope.row!.source_url"></audio>
       </template>
@@ -139,7 +143,8 @@ const data: Partial<App.ResConfig> = {
   voice_id: "", // 音频id
   source_url: "", // 音频url
   weight: "", // 最新版本
-  is_vip: "1" // 更新类型
+  is_vip: "1", // 更新类型
+  voice_title: ""
 };
 // 打开 drawer(新增、查看、编辑)
 const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
