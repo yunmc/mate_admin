@@ -170,7 +170,40 @@
       <el-form-item v-if="drawerProps.row!.default_chat_mode == 1" label="是否可切换" prop="open_remark">
         <el-switch v-model="drawerProps.row!.set_chat_mode_permission" />
       </el-form-item>
+      <el-form-item label="展示功能" prop="">
+        <el-checkbox
+          v-model="drawerProps.row!.private_date_btn"
+          :checked="drawerProps.row!.private_date_btn == 1"
+          label="私密约会"
+          size="large"
+        />
+        <el-checkbox
+          v-model="drawerProps.row!.role_play_btn"
+          :checked="drawerProps.row!.role_play_btn == 1"
+          label="角色扮演"
+          size="large"
+        />
+        <el-checkbox
+          v-model="drawerProps.row!.generate_photo_btn"
+          :checked="drawerProps.row!.generate_photo_btn == 1"
+          label="AI合照"
+          size="large"
+        />
+        <el-checkbox
+          v-model="drawerProps.row!.selfie_btn_show"
+          :checked="drawerProps.row!.selfie_btn_show == 1"
+          label="自拍照"
+          size="large"
+        />
+        <!-- <el-switch v-model="drawerProps.row!.default_chat_mode" /> -->
+      </el-form-item>
       <div class="title">AI设置</div>
+      <el-form-item label="是否会员" prop="vip_exclusive">
+        <el-radio-group v-model="drawerProps.row!.vip_exclusive">
+          <el-radio :label="1">是</el-radio>
+          <el-radio :label="0">否</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="关联网红账号" prop="bind_celebrity_account">
         <el-input v-model="drawerProps.row!.bind_celebrity_account" placeholder="请输入网红账号" clearable></el-input>
       </el-form-item>
@@ -203,6 +236,8 @@ const rules = reactive({
   // name: [{ required: true, message: "请输入用户名" }],
   // sex: [{ required: true, message: "请选择性别" }]
 });
+const checkedCities = ref(["Shanghai", "Beijing"]);
+const cities = ["Shanghai", "Beijing", "Guangzhou", "Shenzhen"];
 
 interface DrawerProps {
   title: string;
@@ -339,7 +374,6 @@ const changeData = () => {
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
-  console.log("drawerProps", drawerProps.value);
   if (drawerProps.value.title == "虚拟人添加" || drawerProps.value.row.prompt.length < 2) {
     drawerProps.value.row.prompt = [
       {
@@ -377,6 +411,10 @@ const acceptParams = (params: DrawerProps) => {
     });
   }
   tags.value = params.row.tags || [];
+  drawerProps.value.row.private_date_btn = drawerProps.value.row.private_date_btn == "1" ? true : false;
+  drawerProps.value.row.role_play_btn = drawerProps.value.row.role_play_btn == "1" ? true : false;
+  drawerProps.value.row.generate_photo_btn = drawerProps.value.row.generate_photo_btn == "1" ? true : false;
+  drawerProps.value.row.selfie_btn_show = drawerProps.value.row.selfie_btn_show == "1" ? true : false;
   drawerVisible.value = true;
 };
 
@@ -407,6 +445,10 @@ const handleSubmit = () => {
     ElMessage.error("请选择性别");
     return false;
   }
+  drawerProps.value.row.private_date_btn = drawerProps.value.row.private_date_btn ? "1" : "0";
+  drawerProps.value.row.role_play_btn = drawerProps.value.row.role_play_btn ? "1" : "0";
+  drawerProps.value.row.generate_photo_btn = drawerProps.value.row.generate_photo_btn ? "1" : "0";
+  drawerProps.value.row.selfie_btn_show = drawerProps.value.row.selfie_btn_show ? "1" : "0";
   drawerProps.value.row.posters = [];
   // console.log("drawerProps.value.row.images", drawerProps.value.row.images != undefined);
   drawerProps.value.row.images.forEach((element: { url: any }) => {
