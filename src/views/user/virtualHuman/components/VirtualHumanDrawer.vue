@@ -167,9 +167,9 @@
         </el-radio-group>
         <!-- <el-switch v-model="drawerProps.row!.default_chat_mode" /> -->
       </el-form-item>
-      <el-form-item v-if="drawerProps.row!.default_chat_mode == 1" label="是否可切换" prop="open_remark">
+      <!-- <el-form-item v-if="drawerProps.row!.default_chat_mode == 1" label="是否可切换" prop="open_remark">
         <el-switch v-model="drawerProps.row!.set_chat_mode_permission" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="展示功能" prop="">
         <el-checkbox
           v-model="drawerProps.row!.private_date_btn"
