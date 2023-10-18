@@ -1,5 +1,7 @@
 <template>
-  <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large"> <div id="code" class="code"></div></el-form>
+  <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
+    <div id="login_container" class="code"></div>
+  </el-form>
   <div class="login-btn">
     <el-button :icon="CircleClose" round size="large" @click="resetForm(loginFormRef)"> 重置 </el-button>
     <el-button :icon="UserFilled" round size="large" type="primary" :loading="loading" @click="login(loginFormRef)">
@@ -72,7 +74,9 @@ const fsLogin = () => {
     if (typeof window.addEventListener != "undefined") {
       window.addEventListener("message", handleMessage, false);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 fsLogin();
 // login
