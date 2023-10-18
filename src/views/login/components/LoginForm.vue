@@ -38,8 +38,8 @@ const loginRules = reactive({
 
 const loading = ref(false);
 const loginForm = reactive<Login.ReqLoginForm>({
-  username: "admin",
-  password: "123456"
+  username: "",
+  password: ""
 });
 /* tslint:disable */
 const fsLogin = () => {
@@ -49,7 +49,7 @@ const fsLogin = () => {
     "&redirect_uri=" +
     "https://test-api.matelink.com/admin/user/login_redirect" +
     "&response_type=code&state=STATE";
-  console.log("goto", goto);
+  // window.location = goto;
   try {
     // @ts-expect-error 222
     let QRLoginObj = QRLogin({
