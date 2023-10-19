@@ -72,6 +72,7 @@ const fsLogin = () => {
 // login
 const login = async (code: string) => {
   // 1.执行登录接口
+  fsLogin();
   let data = await loginApi({ code: code });
   if (data.code == "200") {
     userStore.setToken(data.data.access_token);
