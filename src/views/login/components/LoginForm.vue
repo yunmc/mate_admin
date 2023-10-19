@@ -86,7 +86,7 @@ const login = async (code: string) => {
 
     // 4.跳转到首页
     // router.push(HOME_URL);
-    window.location.href = window.location.origin + "/#/" + HOME_URL;
+    window.location.href = window.location.origin + "/#" + HOME_URL;
     ElNotification({
       title: getTimeState(),
       message: "欢迎登录",
