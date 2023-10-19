@@ -16,6 +16,7 @@ import { useKeepAliveStore } from "@/stores/modules/keepAlive";
 import { initDynamicRouter } from "@/routers/modules/dynamicRouter";
 import { CircleClose, UserFilled } from "@element-plus/icons-vue";
 import type { ElForm } from "element-plus";
+import { getQueryString } from "@/utils/index";
 // import md5 from "js-md5";
 
 const router = useRouter();
@@ -70,7 +71,9 @@ const fsLogin = () => {
 // login
 const login = async (code: string) => {
   // 1.执行登录接口
+  fsLogin();
   let data = await loginApi({ code: code });
+  // console.log("data", datadatadata);
   if (data.code == "200") {
     userStore.setToken(data.data.access_token);
     userStore.setUserInfo(data.data.userInfo);
@@ -95,8 +98,9 @@ const login = async (code: string) => {
 };
 
 onMounted(() => {
-  if (route.query.code) {
-    login(route.query.code as string);
+  console.log("route", route.path);
+  if (getQueryString("code")) {
+    login(getQueryString("code") as string);
   } else {
     fsLogin();
   }
