@@ -25,7 +25,7 @@ import Fullscreen from "./components/Fullscreen.vue";
 import Avatar from "./components/Avatar.vue";
 
 const userStore = useUserStore();
-const username = computed(() => userStore.userInfo.name);
+const username = computed(() => userStore.userInfo.username);
 </script>
 
 <style scoped lang="scss">
@@ -33,7 +33,8 @@ const username = computed(() => userStore.userInfo.name);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-right: 25px;
+
+  // padding-right: 25px;
   .header-icon {
     display: flex;
     align-items: center;
