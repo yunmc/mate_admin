@@ -31,8 +31,7 @@ const loginFormRef = ref<FormInstance>();
 
 const loading = ref(false);
 /* tslint:disable */
-let url = encodeURIComponent("https://test-admin-matelink.flyai.com/#/login");
-console.log(url);
+let url = "https://test-admin-matelink.flyai.com/";
 const fsLogin = () => {
   const goto =
     "https://passport.feishu.cn/suite/passport/oauth/authorize?client_id=" +
@@ -85,7 +84,8 @@ const login = async (code: string) => {
     keepAliveStore.setKeepAliveName();
 
     // 4.跳转到首页
-    router.push(HOME_URL);
+    // router.push(HOME_URL);
+    window.location.href = window.location.origin + "/#/" + HOME_URL;
     ElNotification({
       title: getTimeState(),
       message: "欢迎登录",
@@ -98,8 +98,8 @@ const login = async (code: string) => {
 };
 
 onMounted(() => {
-  if (route.query.code) {
-    login(route.query.code as string);
+  if (getQueryString("code")) {
+    login(getQueryString("code") as string);
   } else {
     fsLogin();
   }
