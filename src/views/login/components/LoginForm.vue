@@ -31,7 +31,7 @@ const loginFormRef = ref<FormInstance>();
 
 const loading = ref(false);
 /* tslint:disable */
-let url = "https://test-admin-matelink.flyai.com/#/login";
+let url = encodeURIComponent("https://test-admin-matelink.flyai.com/#/login");
 console.log(url);
 const fsLogin = () => {
   const goto =
