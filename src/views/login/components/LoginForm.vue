@@ -85,7 +85,7 @@ const login = async (code: string) => {
     keepAliveStore.setKeepAliveName();
 
     // 4.跳转到首页
-    router.push(HOME_URL);
+    window.location.href = window.location.origin;
     ElNotification({
       title: getTimeState(),
       message: "欢迎登录",
