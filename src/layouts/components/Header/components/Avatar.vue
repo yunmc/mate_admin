@@ -36,7 +36,7 @@ import PasswordDialog from "./PasswordDialog.vue";
 const router = useRouter();
 const userStore = useUserStore();
 
-const avatar_middle = computed(() => userStore.userInfo.avatar_url);
+const avatar_middle = computed(() => userStore.userInfo!.avatar_url);
 console.log("avatar_middle", avatar_middle);
 // 退出登录
 const logout = () => {

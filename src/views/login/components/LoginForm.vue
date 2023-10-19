@@ -1,7 +1,5 @@
 <template>
-  <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
-    <div id="login_container" class="code"></div>
-  </el-form>
+  <div id="login_container" class="code"></div>
 </template>
 
 <script setup lang="ts">
@@ -70,11 +68,10 @@ const fsLogin = () => {
 //   fsLogin()
 // });
 // login
-const login = async code => {
+const login = async (code: string) => {
   // 1.执行登录接口
-  const data = await loginApi({ code: code });
-  console.log("data", data);
-  if (data.code == 200) {
+  let data = await loginApi({ code: code });
+  if (data.code == "200") {
     userStore.setToken(data.data.access_token);
     userStore.setUserInfo(data.data.userInfo);
     // 2.添加动态路由
@@ -99,7 +96,7 @@ const login = async code => {
 
 onMounted(() => {
   if (route.query.code) {
-    login(route.query.code);
+    login(route.query.code as string);
   } else {
     fsLogin();
   }
