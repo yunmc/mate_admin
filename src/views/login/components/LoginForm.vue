@@ -31,12 +31,14 @@ const loginFormRef = ref<FormInstance>();
 
 const loading = ref(false);
 /* tslint:disable */
+let url = "https://test-admin-matelink.flyai.com/#/login";
+console.log(url);
 const fsLogin = () => {
   const goto =
     "https://passport.feishu.cn/suite/passport/oauth/authorize?client_id=" +
     "cli_a16c9d1a4479d00e" +
     "&redirect_uri=" +
-    "https://test-admin-matelink.flyai.com" +
+    url +
     "&response_type=code&state=STATE";
   try {
     // @ts-expect-error 222
@@ -71,9 +73,7 @@ const fsLogin = () => {
 // login
 const login = async (code: string) => {
   // 1.执行登录接口
-  fsLogin();
   let data = await loginApi({ code: code });
-  // console.log("data", datadatadata);
   if (data.code == "200") {
     userStore.setToken(data.data.access_token);
     userStore.setUserInfo(data.data.userInfo);
@@ -85,7 +85,7 @@ const login = async (code: string) => {
     keepAliveStore.setKeepAliveName();
 
     // 4.跳转到首页
-    window.location.href = window.location.origin;
+    router.push(HOME_URL);
     ElNotification({
       title: getTimeState(),
       message: "欢迎登录",
@@ -98,9 +98,8 @@ const login = async (code: string) => {
 };
 
 onMounted(() => {
-  console.log("route", route.path);
-  if (getQueryString("code")) {
-    login(getQueryString("code") as string);
+  if (route.query.code) {
+    login(route.query.code as string);
   } else {
     fsLogin();
   }
