@@ -38,7 +38,8 @@ class RequestHttp {
         // 当前请求不需要显示 loading，在 api 服务中通过指定的第三个参数: { noLoading: true } 来控制
         config.noLoading || showFullScreenLoading();
         if (config.headers && typeof config.headers.set === "function") {
-          config.headers.set("x-access-token", userStore.token);
+          config.headers.set("token", userStore.token);
+          // config.url = config.url + "?token=" + userStore.token;
         }
         return config;
       },
@@ -69,6 +70,10 @@ class RequestHttp {
           return Promise.reject(data);
         }
         // 成功请求（在页面上除非特殊情况，否则不用处理失败逻辑）
+        // console.log("data", data);
+        if (data.access_token) {
+          userStore.setToken(data.access_token);
+        }
         return data;
       },
       async (error: AxiosError) => {
@@ -93,7 +98,7 @@ class RequestHttp {
     return this.service.get(url, { params, ..._object });
   }
   post<T>(url: string, params?: object | string, _object = {}): Promise<ResultData<T>> {
-    console.log("params+params+params", params);
+    // console.log("params+params+params", params);
     return this.service.post(url, params, _object);
   }
   put<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {

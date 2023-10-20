@@ -34,11 +34,12 @@ export namespace Upload {
 // 登录模块
 export namespace Login {
   export interface ReqLoginForm {
-    username: string;
-    password: string;
+    code: string;
   }
   export interface ResLogin {
     access_token: string;
+    code: string;
+    userInfo: any;
   }
   export interface ResAuthButtons {
     [key: string]: string[];
@@ -100,5 +101,12 @@ export namespace App {
     upgrade_version: string; // 最新版本
     upgrade_type: string; // 更新类型
     version?: string;
+  }
+
+  export interface rechargeConfig extends ReqPage {
+    amount: number | string;
+    user_account: number | string;
+    recharge_type: number | string; // 0 金币 1 会员
+    remark: string; // 备注
   }
 }
