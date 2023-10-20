@@ -102,4 +102,11 @@ export namespace App {
     upgrade_type: string; // 更新类型
     version?: string;
   }
+
+  export interface rechargeConfig extends ReqPage {
+    amount: number | string;
+    user_account: number | string;
+    recharge_type: number | string; // 0 金币 1 会员
+    remark: string; // 备注
+  }
 }

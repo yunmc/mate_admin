@@ -60,7 +60,7 @@ const rules = reactive({
 interface DrawerProps {
   title: string;
   isView: boolean;
-  row: Partial<App.ResConfig>;
+  row: Partial<App.rechargeConfig>;
   api?: (params: any) => Promise<any>;
   getTableList?: () => void;
 }
@@ -90,7 +90,9 @@ const drawerVisible = ref(false);
 const drawerProps = ref<DrawerProps>({
   isView: false,
   title: "",
-  row: {}
+  row: {
+    amount: 1
+  }
 });
 
 // 接收父组件传过来的参数
@@ -100,28 +102,29 @@ const acceptParams = (params: DrawerProps) => {
 };
 
 const handleClose = (params: DrawerProps) => {
+  drawerProps.value.row.amount = 1;
   drawerVisible.value = false;
 };
 
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
-  if (drawerProps.value.row.amount == "" || drawerProps.value.row.amount == 0) {
+  if (drawerProps.value.row.amount == "" || drawerProps.value.row?.amount == 0) {
     ElMessage.error("请输入数量");
     return false;
   }
-  if (drawerProps.value.row.recharge_type == 0) {
-    if (drawerProps.value.row.amount > 1000) {
+  if (drawerProps.value.row?.recharge_type == 0) {
+    if (Number(drawerProps.value.row!.amount!) > 1000) {
       ElMessage.error("单次充值MateCoins数量最大上限为1000");
       return false;
     }
   } else {
-    if (drawerProps.value.row.amount > 12) {
+    if (Number(drawerProps.value.row!.amount!) > 12) {
       ElMessage.error("最小数量为1，最大为12");
       return false;
     }
   }
-  if (drawerProps.value.row.user_account == "") {
+  if (drawerProps.value.row?.user_account == "") {
     ElMessage.error("请输入充值账号");
     return false;
   }

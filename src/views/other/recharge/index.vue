@@ -85,7 +85,7 @@ const getTableList = (params: any) => {
   delete newParams.createTime;
   console.log("params", newParams);
 
-  return getRechargeList();
+  return getRechargeList(newParams);
 };
 
 const getStateStatus = () => {
@@ -99,7 +99,7 @@ const getStateStatus = () => {
 // const { BUTTONS } = useAuthButtons();
 
 // 表格配置项
-const columns: ColumnProps<App.ResConfig>[] = [
+const columns: ColumnProps<App.rechargeConfig>[] = [
   // { type: "selection", fixed: "left", width: 80 },
   { type: "index", label: "#", width: 80 },
   // { type: "expand", label: "Expand", width: 100 },
@@ -121,12 +121,6 @@ const columns: ColumnProps<App.ResConfig>[] = [
     prop: "remark",
     label: "用途"
   },
-  // {
-  //   prop: "upgrade_type",
-  //   enum: getStateStatus(),
-  //   fieldNames: { label: "stateLabel", value: "stateValue" },
-  //   label: "更新方式"
-  // },
   {
     prop: "created_time",
     label: "操作时间"
@@ -139,7 +133,7 @@ const columns: ColumnProps<App.ResConfig>[] = [
 
 const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 
-const data: Partial<App.ResConfig> = {
+const data: Partial<App.rechargeConfig> = {
   amount: "1",
   user_account: "",
   recharge_type: "0",
@@ -147,7 +141,7 @@ const data: Partial<App.ResConfig> = {
 };
 // 打开 drawer(新增、查看、编辑)
 const drawerRef = ref<InstanceType<typeof UserDrawer> | null>(null);
-const openDrawer = (title: string, row: Partial<App.ResConfig> = {}) => {
+const openDrawer = (title: string, row: Partial<App.rechargeConfig> = {}) => {
   console.log("row", row);
   const params = {
     title,
