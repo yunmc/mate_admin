@@ -288,6 +288,20 @@
             "isAffix": false,
             "isKeepAlive": true
           }
+        },
+        {
+          "path": "/other/recharge",
+          "name": "recharge",
+          "component": "/other/recharge/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "金币充值/会员订阅",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
         }
       ]
     }

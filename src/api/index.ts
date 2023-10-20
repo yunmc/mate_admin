@@ -71,7 +71,9 @@ class RequestHttp {
         }
         // 成功请求（在页面上除非特殊情况，否则不用处理失败逻辑）
         // console.log("data", data);
-        userStore.setToken(data.access_token);
+        if (data.access_token) {
+          userStore.setToken(data.access_token);
+        }
         return data;
       },
       async (error: AxiosError) => {
@@ -96,7 +98,7 @@ class RequestHttp {
     return this.service.get(url, { params, ..._object });
   }
   post<T>(url: string, params?: object | string, _object = {}): Promise<ResultData<T>> {
-    console.log("params+params+params", params);
+    // console.log("params+params+params", params);
     return this.service.post(url, params, _object);
   }
   put<T>(url: string, params?: object, _object = {}): Promise<ResultData<T>> {
