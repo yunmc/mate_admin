@@ -32,6 +32,9 @@ const loginFormRef = ref<FormInstance>();
 const loading = ref(false);
 /* tslint:disable */
 let url = "https://test-admin-matelink.flyai.com/";
+if (window.location.origin == "https://admin-matelink.flyai.com") {
+  url = "https://admin-matelink.flyai.com/";
+}
 const fsLogin = () => {
   const goto =
     "https://passport.feishu.cn/suite/passport/oauth/authorize?client_id=" +
