@@ -84,6 +84,20 @@
             "isAffix": false,
             "isKeepAlive": true
           }
+        },
+        {
+          "path": "/user/user-ai",
+          "name": "userAi",
+          "component": "/user/userAi/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "用户AI",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
         }
       ]
     },
