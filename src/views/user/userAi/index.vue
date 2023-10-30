@@ -114,9 +114,11 @@ const getTableList = (option: any) => {
     uid: option.uid,
     ai_uid: option.ai_uid,
     state: option.state,
-    relationship: option.relationship
+    relationship: option.relationship,
+    stm: option.stm,
+    etm: option.etm
   };
-  if (option.created_time) {
+  if (option?.created_time) {
     params.stm = option?.created_time[0];
     params.etm = option?.created_time[1];
   }
