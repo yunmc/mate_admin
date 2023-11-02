@@ -169,16 +169,7 @@ const columns: ColumnProps[] = [
   {
     prop: "avatar",
     label: "头像",
-    width: "100",
-    render: scope => {
-      return (
-        <el-image
-          style="z-index:100;width:80px;height:80px;cursor: pointer;"
-          src={scope.row.avatar}
-          onClick={() => showImages(scope.row, 9)}
-        ></el-image>
-      );
-    }
+    width: "100"
   },
   {
     prop: "ai_name",
@@ -254,6 +245,14 @@ const columns: ColumnProps[] = [
 const goDetail = (row: { uid: string }) => {
   router.push("/user/user-info/detail?uid=" + row.uid);
 };
+//预览图片
+// const showImages = (row: any, index: number) => {
+//   const params = {
+//     index: index,
+//     row: { ...row }
+//   };
+//   previewRef.value?.previewParams(params);
+// };
 </script>
 <style scoped lang="scss">
 audio {
