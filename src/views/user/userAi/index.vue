@@ -169,7 +169,10 @@ const columns: ColumnProps[] = [
   {
     prop: "avatar",
     label: "头像",
-    width: "100"
+    width: "100",
+    render: scope => {
+      return <el-image style="z-index:100;width:80px;height:80px;cursor: pointer;" src={scope.row.avatar}></el-image>;
+    }
   },
   {
     prop: "ai_name",
