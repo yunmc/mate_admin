@@ -115,7 +115,7 @@ const handleSubmit = () => {
   }
   let re = /^[1-9]+[0-9]*]*$/;
 
-  if (!re.test(drawerProps.value.row!.amount!)) {
+  if (!re.test(String(drawerProps.value.row!.amount!))) {
     ElMessage.error("请输入正确数量");
     return false;
   }
