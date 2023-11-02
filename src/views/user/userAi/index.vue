@@ -8,6 +8,9 @@
       :init-param="initParam"
       :data-callback="dataCallback"
     >
+      <template #soure="scope">
+        <audio controls :src="scope.row!.voice_original_url"></audio>
+      </template>
       <!-- 表格操作 -->
       <template #operation="scope">
         <el-button type="primary" link @click="goDetail(scope.row)"> 查看详情 </el-button>
@@ -164,6 +167,20 @@ const getAiStatus = () => {
 // 表格配置项
 const columns: ColumnProps[] = [
   {
+    prop: "avatar",
+    label: "头像",
+    width: "100",
+    render: scope => {
+      return (
+        <el-image
+          style="z-index:100;width:80px;height:80px;cursor: pointer;"
+          src={scope.row.avatar}
+          onClick={() => showImages(scope.row, 9)}
+        ></el-image>
+      );
+    }
+  },
+  {
     prop: "ai_name",
     label: "虚拟人昵称",
     search: { el: "input", key: "uid", label: "用户ID" }
@@ -185,6 +202,18 @@ const columns: ColumnProps[] = [
   {
     prop: "tags",
     label: "Tags"
+  },
+  {
+    prop: "open_remark",
+    label: "开场白"
+  },
+  {
+    prop: "soure",
+    label: "音频"
+  },
+  {
+    prop: "dialogue_example",
+    label: "对话"
   },
   {
     prop: "description",
@@ -214,6 +243,10 @@ const columns: ColumnProps[] = [
       props: { type: "datetimerange", valueFormat: "x" }
       // defaultValue: ["2022-11-12 11:35:00", "2022-12-12 11:35:00"]
     }
+  },
+  {
+    prop: "updated_time",
+    label: "最近修改时间"
   }
 ];
 
@@ -222,3 +255,8 @@ const goDetail = (row: { uid: string }) => {
   router.push("/user/user-info/detail?uid=" + row.uid);
 };
 </script>
+<style scoped lang="scss">
+audio {
+  width: 100%;
+}
+</style>
