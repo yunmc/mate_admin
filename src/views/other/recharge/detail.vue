@@ -26,7 +26,7 @@
           <el-input v-model="drawerProps.row!.user_account" placeholder="请输入账号" clearable></el-input>
         </el-form-item>
 
-        <el-form-item label="用途备注：" prop="remark">
+        <el-form-item label="用途备注" prop="remark">
           <el-input
             v-model="drawerProps.row!.remark"
             :rows="3"
@@ -113,6 +113,12 @@ const handleSubmit = () => {
     ElMessage.error("请输入数量");
     return false;
   }
+  let re = /^[1-9]+[0-9]*]*$/;
+
+  if (!re.test(String(drawerProps.value.row!.amount!))) {
+    ElMessage.error("请输入正确数量");
+    return false;
+  }
   if (drawerProps.value.row?.recharge_type == 0) {
     if (Number(drawerProps.value.row!.amount!) > 1000) {
       ElMessage.error("单次充值MateCoins数量最大上限为1000");
@@ -128,11 +134,15 @@ const handleSubmit = () => {
     ElMessage.error("请输入充值账号");
     return false;
   }
+  if (drawerProps.value.row?.remark == "") {
+    ElMessage.error("请输入用途备注");
+    return false;
+  }
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
     try {
       await drawerProps.value.api!(drawerProps.value.row);
-      ElMessage.success({ message: `${drawerProps.value.title}版本成功！` });
+      ElMessage.success({ message: `添加成功！` });
       drawerProps.value.getTableList!();
       drawerVisible.value = false;
     } catch (error) {
