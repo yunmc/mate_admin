@@ -9,7 +9,7 @@
       :data-callback="dataCallback"
     >
       <template #soure="scope">
-        <p v-if="scope.row!.voice_original_url"></p>
+        <p v-if="scope.row!.voice_original_url == ''">--</p>
         <audio v-else controls :src="scope.row!.voice_original_url"></audio>
       </template>
       <!-- 表格操作 -->
