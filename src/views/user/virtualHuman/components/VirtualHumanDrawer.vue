@@ -15,32 +15,71 @@
       :model="drawerProps.row"
       :hide-required-asterisk="drawerProps.isView"
     >
-      <div class="title flex">
-        AI信息(Prompt)
-        <div>
-          <el-select
-            v-model="newDataIndex"
-            multiple
-            collapse-tags
-            collapse-tags-tooltip
-            placeholder="新增参数"
-            @change="changeData()"
-            style="width: 240px"
-          >
-            <el-option v-for="item in trendsData" :key="item.value" :label="item.label" :value="item.index" />
-          </el-select>
-        </div>
-      </div>
+      <!-- <div class="title flex">AI信息(Prompt)</div> -->
+      <div class="title">展示信息</div>
 
-      <template v-for="item in drawerProps.row!.prompt" :key="item">
-        <el-form-item :label="item.label" :prop="item.prop">
-          <el-select v-if="item.type == 'select'" v-model="item.value" placeholder="请选择">
-            <el-option v-for="item in optionsSex" :key="item.value" :label="item.label" :value="item.value"> </el-option>
-          </el-select>
-          <el-input v-else-if="item.type == 'input'" v-model="item.value" :placeholder="item.label" clearable></el-input>
-          <el-input v-else v-model="item.value" :rows="2" type="textarea" :placeholder="item.label" />
-        </el-form-item>
-      </template>
+      <el-form-item label="Name" prop="Name">
+        <el-input v-model="drawerProps.row!.ai_name" placeholder="name" clearable></el-input>
+      </el-form-item>
+
+      <el-form-item label="avatar" prop="Avatar:">
+        <UploadImg v-model:image-url="drawerProps.row!.avatar" width="135px" height="135px" :file-size="3">
+          <template #empty>
+            <el-icon><Avatar /></el-icon>
+            <span>请上传头像</span>
+          </template>
+          <template #tip> 头像大小不能超过 3M </template>
+        </UploadImg>
+      </el-form-item>
+
+      <el-form-item label="introduce_image" prop="introduce_image">
+        <UploadImg v-model:image-url="drawerProps.row!.introduce_image" height="140px" width="140px" :file-size="5">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+          <template #tip> 照片大小不能超过 5M </template>
+        </UploadImg>
+      </el-form-item>
+
+      <el-form-item label="posters" prop="images">
+        <UploadImgs v-model:file-list="drawerProps.row!.images" :limit="9" height="140px" width="140px">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+          <template #tip> 最多上传 9 张照片 </template>
+        </UploadImgs>
+      </el-form-item>
+
+      <el-form-item label="Description" prop="ai_desc">
+        <el-input v-model="drawerProps.row!.ai_desc" type="textarea" :rows="3" placeholder="ai_desc" clearable></el-input>
+      </el-form-item>
+
+      <el-form-item label="虚拟人标签" prop="tags">
+        <el-tag
+          class="mx-1"
+          :closable="!drawerProps.isView"
+          effect="dark"
+          v-for="(tag, index) in tags"
+          :key="tag"
+          @close="onDelTag(index)"
+          style="margin-top: 10px"
+        >
+          {{ tag }}
+        </el-tag>
+        <template v-if="!drawerProps.isView">
+          <el-input
+            v-model="tagtxt"
+            v-if="tags.length < 6"
+            placeholder="请输入标签名"
+            maxlength="20"
+            style="width: 120px; margin-top: 10px; margin-right: 10px"
+          />
+          <el-tag class="mx-1" style="margin-top: 10px" v-if="tags.length < 6" @click="onAddTag">添加标签</el-tag>
+        </template>
+      </el-form-item>
+
       <div class="title">声音信息</div>
 
       <el-form-item label="voice_speed" prop="voice_speed">
@@ -83,73 +122,6 @@
         </UploadVoice>
       </el-form-item>
 
-      <div class="title">展示信息</div>
-
-      <el-form-item label="avatar" prop="Avatar:">
-        <UploadImg v-model:image-url="drawerProps.row!.avatar" width="135px" height="135px" :file-size="3">
-          <template #empty>
-            <el-icon><Avatar /></el-icon>
-            <span>请上传头像</span>
-          </template>
-          <template #tip> 头像大小不能超过 3M </template>
-        </UploadImg>
-      </el-form-item>
-
-      <el-form-item label="introduce_image" prop="introduce_image">
-        <UploadImg v-model:image-url="drawerProps.row!.introduce_image" height="140px" width="140px" :file-size="5">
-          <template #empty>
-            <el-icon><Picture /></el-icon>
-            <span>请上传照片</span>
-          </template>
-          <template #tip> 照片大小不能超过 5M </template>
-        </UploadImg>
-      </el-form-item>
-
-      <el-form-item label="posters" prop="images">
-        <!-- <UploadImg v-model:image-url="drawerProps.row!.posters" :limit="3" height="140px" width="140px" :file-size="5">
-          <template #empty>
-            <el-icon><Picture /></el-icon>
-            <span>请上传照片</span>
-          </template>
-          <template #tip> 照片大小不能超过 5M </template>
-        </UploadImg> -->
-        <UploadImgs v-model:file-list="drawerProps.row!.images" :limit="9" height="140px" width="140px">
-          <template #empty>
-            <el-icon><Picture /></el-icon>
-            <span>请上传照片</span>
-          </template>
-          <template #tip> 最多上传 9 张照片 </template>
-        </UploadImgs>
-      </el-form-item>
-
-      <el-form-item label="Description" prop="ai_desc">
-        <el-input v-model="drawerProps.row!.ai_desc" type="textarea" :rows="3" placeholder="ai_desc" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="虚拟人标签" prop="tags">
-        <el-tag
-          class="mx-1"
-          :closable="!drawerProps.isView"
-          effect="dark"
-          v-for="(tag, index) in tags"
-          :key="tag"
-          @close="onDelTag(index)"
-          style="margin-top: 10px"
-        >
-          {{ tag }}
-        </el-tag>
-        <template v-if="!drawerProps.isView">
-          <el-input
-            v-model="tagtxt"
-            v-if="tags.length < 6"
-            placeholder="请输入标签名"
-            maxlength="20"
-            style="width: 120px; margin-top: 10px; margin-right: 10px"
-          />
-          <el-tag class="mx-1" style="margin-top: 10px" v-if="tags.length < 6" @click="onAddTag">添加标签</el-tag>
-        </template>
-      </el-form-item>
-
       <div class="title">对话设置</div>
       <el-form-item label="开场白" prop="open_remark">
         <el-input
@@ -160,16 +132,14 @@
           clearable
         ></el-input>
       </el-form-item>
-      <el-form-item label="默认对话模式" prop="default_chat_mode">
+
+      <!-- <el-form-item label="默认对话模式" prop="default_chat_mode">
         <el-radio-group v-model="drawerProps.row!.default_chat_mode" @change="drawerProps.row!.set_chat_mode_permission = 0">
           <el-radio :label="2">心动模式</el-radio>
           <el-radio :label="1">普通模式</el-radio>
         </el-radio-group>
-        <!-- <el-switch v-model="drawerProps.row!.default_chat_mode" /> -->
-      </el-form-item>
-      <!-- <el-form-item v-if="drawerProps.row!.default_chat_mode == 1" label="是否可切换" prop="open_remark">
-        <el-switch v-model="drawerProps.row!.set_chat_mode_permission" />
       </el-form-item> -->
+
       <el-form-item label="展示功能" prop="">
         <el-checkbox
           v-model="drawerProps.row!.private_date_btn"
@@ -197,6 +167,18 @@
         />
         <!-- <el-switch v-model="drawerProps.row!.default_chat_mode" /> -->
       </el-form-item>
+      <el-form-item label="AI合照类型" v-if="drawerProps.row!.generate_photo_btn == 1" prop="generatePhotModel">
+        <el-radio
+          v-model="drawerProps.row!.generate_photo_model"
+          v-for="item in drawerProps.row!.generatePhotModel"
+          :key="item"
+          :label="item.value"
+        >
+          {{ item.name }}
+        </el-radio>
+      </el-form-item>
+
+      <!-- params.generatePhotModel._value[0] -->
       <div class="title">AI设置</div>
       <el-form-item label="是否会员" prop="vip_exclusive">
         <el-radio-group v-model="drawerProps.row!.vip_exclusive">
@@ -228,6 +210,7 @@ import { ref, reactive, watch } from "vue";
 // import { genderType } from "@/utils/serviceDict";
 import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
+import { getRelationship } from "@/api/prompt";
 import UploadImg from "@/components/Upload/Img.vue";
 import UploadVoice from "@/components/Upload/voice.vue";
 import UploadImgs from "@/components/Upload/Imgs.vue";
@@ -245,6 +228,7 @@ interface DrawerProps {
   row: Partial<User.ResUserList>;
   api?: (params: any) => Promise<any>;
   getTableList?: () => void;
+  generatePhotModel: Array;
 }
 
 const drawerVisible = ref(false);
@@ -255,18 +239,6 @@ const drawerProps = ref<DrawerProps>({
 });
 
 const newDataIndex = ref([]);
-watch(
-  () => drawerVisible,
-  value => {
-    if (!drawerVisible.value) {
-      newDataIndex.value = [];
-      trendsData.forEach(element => {
-        element.value = "";
-      });
-    }
-  },
-  { deep: true }
-);
 
 const handleClose = (params: DrawerProps) => {
   drawerProps.value.isView = false;
@@ -276,57 +248,6 @@ const handleClose = (params: DrawerProps) => {
   drawerVisible.value = false;
 };
 
-const trendsData = [
-  {
-    value: "",
-    label: "relationship",
-    prop: "relationship",
-    type: "input",
-    index: 3
-  },
-  {
-    value: "",
-    label: "ai_information_normal",
-    prop: "ai_information_normal",
-    type: "textarea",
-    index: 4
-  },
-  {
-    value: "",
-    label: "ai_background_normal",
-    prop: "ai_background_normal",
-    type: "textarea",
-    index: 5
-  },
-  {
-    value: "",
-    label: "ai_rules_normal",
-    prop: "ai_rules_normal",
-    type: "textarea",
-    index: 6
-  },
-  {
-    value: "",
-    label: "ai_information_crush",
-    prop: "ai_information_crush",
-    type: "textarea",
-    index: 7
-  },
-  {
-    value: "",
-    label: "ai_background_crush",
-    prop: "ai_background_crush",
-    type: "textarea",
-    index: 8
-  },
-  {
-    value: "",
-    label: "ai_rules_crush",
-    prop: "ai_rules_crush",
-    type: "textarea",
-    index: 9
-  }
-];
 const optionsSex = [
   {
     value: "Male",
@@ -363,44 +284,10 @@ const optionOpenState = [
     label: "公开"
   }
 ];
-
-const changeData = () => {
-  drawerProps.value.row!.prompt.splice(2, drawerProps.value.row!.prompt.length - 1);
-  newDataIndex.value.forEach(element => {
-    drawerProps.value.row!.prompt.push(trendsData[element - 3]);
-  });
-};
-
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
-  if (drawerProps.value.title == "虚拟人添加" || drawerProps.value.row.prompt.length < 2) {
-    drawerProps.value.row.prompt = [
-      {
-        label: "Name",
-        value: "",
-        prop: "name",
-        type: "input",
-        index: 1
-      },
-      {
-        label: "Sex",
-        value: "",
-        prop: "sex",
-        type: "select",
-        index: 2
-      }
-    ];
-  }
-
-  drawerProps.value.row.prompt.forEach((element: any) => {
-    if (element.index > 2) {
-      // @ts-expect-error：xx
-      newDataIndex.value.push(Number(element.index));
-      trendsData[element.index - 3].value = element.value;
-    }
-  });
-
+  // console.log("drawerProps", params.generatePhotModel._value[0]);
   drawerProps.value.row.images = [];
   if (drawerProps.value.row.posters) {
     drawerProps.value.row.posters.forEach((element: any) => {
@@ -435,16 +322,11 @@ const onDelTag = (index: number) => {
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
-  drawerProps.value.row.name = drawerProps.value.row.prompt[0].value;
-  drawerProps.value.row.sex = drawerProps.value.row.prompt[1].value;
-  if (drawerProps.value.row.name == "") {
+  if (drawerProps.value.row.ai_name == "") {
     ElMessage.error("请输入姓名");
     return false;
   }
-  if (drawerProps.value.row.sex == "") {
-    ElMessage.error("请选择性别");
-    return false;
-  }
+  drawerProps.value.row.name = drawerProps.value.row.ai_name;
   drawerProps.value.row.private_date_btn = drawerProps.value.row.private_date_btn ? "1" : "0";
   drawerProps.value.row.role_play_btn = drawerProps.value.row.role_play_btn ? "1" : "0";
   drawerProps.value.row.generate_photo_btn = drawerProps.value.row.generate_photo_btn ? "1" : "0";

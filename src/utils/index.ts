@@ -312,3 +312,13 @@ export function getQueryString(name: string) {
   }
   return null;
 }
+
+export function isModelType(str: string) {
+  let str_1 = str.replace(/\s*/g, "");
+  let reg = /^[a-zA-Z]([_a-zA-Z0-9_]{4,31})*$/;
+  if (reg.test(str_1)) {
+    return true;
+  } else {
+    return false;
+  }
+}

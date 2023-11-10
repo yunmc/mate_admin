@@ -318,6 +318,50 @@
           }
         }
       ]
+    },
+    {
+      "path": "/prompt",
+      "name": "/prompt",
+      "redirect": "/prompt/variable",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "Prompt配置管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/prompt/variable",
+          "name": "variable",
+          "component": "/prompt/variable/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "自定义变量",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/prompt/template",
+          "name": "template",
+          "component": "/prompt/template/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "自定义模板",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
     }
   ],
   "msg": "成功"
