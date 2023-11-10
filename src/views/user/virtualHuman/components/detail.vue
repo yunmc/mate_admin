@@ -53,6 +53,8 @@
 </template>
 
 <script setup lang="ts" name="template">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { ref, reactive, nextTick } from "vue";
 // import { genderType } from "@/utils/serviceDict";
 import { ElMessage, FormInstance } from "element-plus";

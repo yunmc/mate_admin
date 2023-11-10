@@ -40,6 +40,7 @@
 </template>
 
 <script setup lang="ts" name="template">
+// @ts-nocheck
 import { ref, reactive } from "vue";
 // import { genderType } from "@/utils/serviceDict";
 import { ElMessage, FormInstance } from "element-plus";

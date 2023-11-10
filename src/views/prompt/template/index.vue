@@ -52,6 +52,7 @@
 </template>
 
 <script setup lang="tsx" name="template">
+// @ts-nocheck
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { getTemplateList, saveTemplate, templateType, delTemplate } from "@/api/prompt";

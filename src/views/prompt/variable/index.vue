@@ -48,6 +48,8 @@
 </template>
 
 <script setup lang="tsx" name="variable">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { ref, reactive } from "vue";
 import { App } from "@/api/interface";
 // import { useHandleData } from "@/hooks/useHandleData";

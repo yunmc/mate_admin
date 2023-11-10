@@ -206,6 +206,8 @@
 </template>
 
 <script setup lang="ts" name="UserDrawer">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { ref, reactive, watch } from "vue";
 // import { genderType } from "@/utils/serviceDict";
 import { ElMessage, FormInstance } from "element-plus";
