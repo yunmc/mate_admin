@@ -152,6 +152,10 @@ const columns: ColumnProps[] = [
     label: "Weight"
   },
   {
+    prop: "bind_celebrity_account",
+    label: "网红账号"
+  },
+  {
     prop: "prompt",
     label: "Prompt设置"
   },

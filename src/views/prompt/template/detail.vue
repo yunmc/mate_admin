@@ -1,6 +1,14 @@
 <template>
   <div class="template">
-    <el-dialog v-model="drawerVisible" :title="`${drawerProps.title}`" width="65%" @before-close="handleClose">
+    <el-dialog
+      v-model="drawerVisible"
+      :title="`${drawerProps.title}`"
+      width="65%"
+      @before-close="
+        handleClose();
+        resetForm(ruleFormRef);
+      "
+    >
       <div class="flex main">
         <el-form
           ref="ruleFormRef"
@@ -35,7 +43,13 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="handleSubmit"> 确定 </el-button>
-          <el-button @click="drawerVisible = false">取消</el-button>
+          <el-button
+            @click="
+              resetForm(ruleFormRef);
+              drawerVisible = false;
+            "
+            >取消</el-button
+          >
         </span>
       </template>
     </el-dialog>
@@ -44,7 +58,7 @@
 
 <script setup lang="ts" name="template">
 // @ts-nocheck
-import { ref, reactive } from "vue";
+import { ref, reactive, nextTick } from "vue";
 // import { genderType } from "@/utils/serviceDict";
 import { ElMessage, FormInstance } from "element-plus";
 import { templateType, getVariableList } from "@/api/prompt";
@@ -85,15 +99,20 @@ const variableList = ref();
 const getList = (row: Partial<templateType>) => {
   getVariableList({ page: 1, pageSize: 100 }).then((res: any) => {
     variableList.value = res.data.list;
-    // @ts-expect-error
-    document.getElementById("edit").innerHTML = "";
-    if (drawerProps.value.isView) {
-      promptInit();
-    }
+    // document.getElementById("edit").innerHTML = "";
+    nextTick(() => {
+      console.log("drawerProps.value.isView", drawerProps.value.isView);
+      if (drawerProps.value.isView) {
+        promptInit();
+      } else {
+        content.value = "";
+      }
+    });
   });
 };
 const promptInit = () => {
   let str_content = "";
+  console.log(" drawerProps.value.row!.template_vars", drawerProps.value.row!.template_vars);
   drawerProps.value.row!.template_vars.forEach((element: any) => {
     let obj = findInd(element);
     let str = "";
@@ -111,6 +130,7 @@ const promptInit = () => {
     "<span class='el-button el-button--default' contenteditable='false'>"
   );
   content.value = str2.replace(/}/g, "</span>\u200b");
+  console.log("content.value", content.value);
 };
 
 const findInd = (name: any) => {
@@ -233,6 +253,12 @@ const submitTemplate = (str, vars) => {
       console.log(error);
     }
   });
+};
+
+const resetForm = (formEl: FormInstance | undefined) => {
+  // document.getElementById("edit").innerHTML = "";
+  if (!formEl) return;
+  formEl.resetFields();
 };
 
 defineExpose({

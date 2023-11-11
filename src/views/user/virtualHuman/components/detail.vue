@@ -17,16 +17,29 @@
             </el-select>
           </el-form-item>
           <el-form-item label="模板选择" prop="template_name">
-            <el-select v-model="drawerProps.row!.prompt_template_id" @change="getTemplate()" placeholder="请选择">
+            <el-select
+              :class="{'template_select':drawerProps.row!.prompt_template_id == -1}"
+              v-model="drawerProps.row!.prompt_template_id"
+              @change="getTemplate()"
+              placeholder="请选择"
+            >
               <el-option v-for="item in templateList" :key="item.value" :label="item.template_name" :value="item.id"> </el-option>
             </el-select>
+            <el-button type="" link @click="stopTemplate">不用模版--自定义</el-button>
           </el-form-item>
           <el-form-item label="变量填写" prop="content">
-            <div class="list" v-for="item in template_check" :key="item.id">
-              <el-tag type="success">{{ item.variable_name }} | {{ item.variable_cname }}</el-tag>
-              <el-input v-model="item.value" placeholder="请输入" :disabled="dataError.disabled" clearable></el-input>
+            <div v-if="drawerProps.row!.prompt_template_id != -1">
+              <div class="list" v-for="item in template_check" :key="item.id">
+                <el-tag type="success">{{ item.variable_name }} | {{ item.variable_cname }}</el-tag>
+                <el-input v-model="item.value" placeholder="请输入" :disabled="dataError.disabled" clearable></el-input>
+              </div>
             </div>
-            <el-button v-if="template_check != '' && !dataError.disabled" @click="checkPrompt()" type="primary">
+            <el-input v-else v-model="promotData" :rows="10" type="textarea" placeholder="请输入Promot" />
+            <el-button
+              v-if="template_check != '' && !dataError.disabled && drawerProps.row!.prompt_template_id != -1"
+              @click="checkPrompt()"
+              type="primary"
+            >
               检测一下效果
             </el-button>
             <div class="error" v-if="dataError.disabled && drawerProps.row!.prompt_template_id != ''">
@@ -38,14 +51,24 @@
           <div class="title">
             Promot展示：<el-button v-if="textPrompt != ''" v-copy="textPrompt" type="primary"> 复制 </el-button>
           </div>
-          <div class="button" v-if="drawerProps.isView">{{ textPrompt ? textPrompt : "暂无Promot，请编辑" }}</div>
+          <div class="button" v-if="drawerProps.isView">
+            <p v-if="drawerProps.row!.prompt_template_id != -1">{{ textPrompt ? textPrompt : "暂无Promot，请编辑" }}</p>
+            <p v-else>{{ promotData }}</p>
+          </div>
           <div class="button" v-else>{{ textPrompt }}</div>
         </div>
       </div>
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" v-if="!dataError.disabled" @click="handleSubmit"> 确定 </el-button>
-          <el-button @click="drawerVisible = false">取消</el-button>
+          <el-button
+            @click="
+              resetForm(ruleFormRef);
+              drawerVisible = false;
+            "
+          >
+            取消
+          </el-button>
         </span>
       </template>
     </el-dialog>
@@ -61,8 +84,8 @@ import { ElMessage, FormInstance } from "element-plus";
 import { templateType, getTemplateList, getVariableList } from "@/api/prompt";
 import { isModelType } from "@/utils/index";
 const rules = reactive({
-  // template_name: [{ required: true, message: "请编辑一个名称" }],
-  // template_content: [{ required: true, message: "请填写Prompt" }]
+  template_name: [{ required: true, message: "请编辑一个名称" }],
+  template_content: [{ required: true, message: "请填写Prompt" }]
 });
 
 interface DrawerProps {
@@ -86,6 +109,7 @@ const drawerProps = ref<DrawerProps>({
   title: "",
   row: {}
 });
+const promotData = ref("");
 const templateList = ref();
 const getTempList = (row: Partial<variableType>) => {
   getTemplateList().then(res => {
@@ -106,7 +130,7 @@ const getList = (row: Partial<variableType>) => {
     if (res.code == 200) {
       variableList.value = res.data.list;
       nextTick(() => {
-        if (drawerProps.value.row!.prompt_template_id != "") {
+        if (drawerProps.value.row!.prompt_template_id != "" && drawerProps.value.row!.prompt_template_id != -1) {
           getTemplate();
           setTimeout(() => {
             assignment();
@@ -122,7 +146,13 @@ const acceptParams = async (params: DrawerProps) => {
   drawerProps.value = params;
   drawerVisible.value = true;
   await getTempList();
-  console.log(drawerProps.value.isView);
+  if (drawerProps.value.row!.prompt_template_id != -1) {
+    promotData.value = "";
+  } else {
+    promotData.value = drawerProps.value.row!.prompt_template;
+  }
+
+  // console.log(drawerProps.value.row!.prompt_template_id);
 };
 
 const dataError = ref({
@@ -175,6 +205,14 @@ const assignment = name => {
   checkPrompt();
 };
 
+const stopTemplate = () => {
+  drawerProps.value.row!.prompt_template_id = -1;
+  dataError.value.disabled = false;
+};
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.resetFields();
+};
 const checkPrompt = () => {
   console.log("template_check.value", template_check.value);
   for (let inx = 0; inx < template_check.value.length; inx++) {
@@ -196,6 +234,10 @@ const checkPrompt = () => {
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
+  if (drawerProps.value.row!.prompt_template_id == -1) {
+    stopTemParams();
+    return false;
+  }
   if (drawerProps.value.isView) {
     handleClose();
     return false;
@@ -218,6 +260,19 @@ const handleSubmit = () => {
   submitTemplate(params);
 };
 
+const stopTemParams = () => {
+  if (promotData.value == "") {
+    ElMessage.error({ message: `请输入Promot` });
+    return false;
+  }
+  const params = {
+    prompt_template: promotData.value,
+    prompt_vars: [],
+    ai_uid: drawerProps.value.row!.ai_uid,
+    prompt_template_id: drawerProps.value.row!.prompt_template_id
+  };
+  submitTemplate(params);
+};
 const submitTemplate = params => {
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
@@ -288,6 +343,11 @@ defineExpose({
   .error {
     font-size: 14px;
     color: red;
+  }
+  .template_select {
+    .el-input__inner {
+      opacity: 0;
+    }
   }
 }
 </style>

@@ -10,18 +10,35 @@
         label-width="120px"
         label-suffix=" :"
         :rules="rules"
-        :disabled="drawerProps.isView"
         :model="drawerProps.row"
         :hide-required-asterisk="drawerProps.isView"
       >
         <el-form-item label="变量英文名" prop="variable_name">
-          <el-input v-model="drawerProps.row!.variable_name" maxlength="30" placeholder="请输入变量英文名" clearable></el-input>
+          <el-input
+            v-model="drawerProps.row!.variable_name"
+            :disabled="drawerProps.isView"
+            maxlength="30"
+            placeholder="请输入变量英文名"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item label="变量中文名" prop="variable_cname">
-          <el-input v-model="drawerProps.row!.variable_cname" maxlength="30" placeholder="请输入变量中文名" clearable></el-input>
+          <el-input
+            v-model="drawerProps.row!.variable_cname"
+            :disabled="drawerProps.isView"
+            maxlength="30"
+            placeholder="请输入变量中文名"
+            clearable
+          ></el-input>
         </el-form-item>
         <el-form-item label="数据类型" prop="variable_type">
-          <el-select style="width: 100%" v-model="drawerProps.row!.variable_type" class="m-2" placeholder="Select">
+          <el-select
+            style="width: 100%"
+            v-model="drawerProps.row!.variable_type"
+            :disabled="drawerProps.isView"
+            class="m-2"
+            placeholder="Select"
+          >
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -33,7 +50,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="handleSubmit"> 确定 </el-button>
-          <el-button @click="drawerVisible = false">取消</el-button>
+          <el-button @click="drawerVisible = false">取消 </el-button>
         </span>
       </template>
     </el-dialog>
@@ -84,12 +101,17 @@ const drawerProps = ref<DrawerProps>({
 const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
   drawerVisible.value = true;
+  console.log("drawerProps.value", drawerProps.value);
 };
 
 const handleClose = (params: DrawerProps) => {
+  resetForm(ruleFormRef);
   drawerVisible.value = false;
 };
-
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.resetFields();
+};
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
