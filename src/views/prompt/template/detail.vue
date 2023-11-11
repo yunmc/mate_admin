@@ -25,7 +25,17 @@
             <el-input v-model="drawerProps.row!.remark" :rows="3" maxlength="100" type="textarea" placeholder="请输入备注" />
           </el-form-item>
           <el-form-item label="Prompt编辑" prop="content">
-            <div contenteditable id="edit" ref="edit" v-html="content" @click="editClick" class="prompt"></div>
+            <div class="bgholder" v-if="isPlaceholder">请输入内容</div>
+            <div
+              contenteditable
+              id="edit"
+              ref="edit"
+              v-html="content"
+              @click="editClick"
+              class="prompt"
+              placeholder="请输入"
+              @input="getData"
+            ></div>
             <div style="margin-top: 10px; line-height: 18px">
               修改时注意：若该模版已给某个AI配置，修改时能增加新变量，不要删减变量，不要删减变量。
             </div>
@@ -103,9 +113,10 @@ const getList = (row: Partial<templateType>) => {
     nextTick(() => {
       console.log("drawerProps.value.isView", drawerProps.value.isView);
       if (drawerProps.value.isView) {
+        isPlaceholder.value = false;
         promptInit();
       } else {
-        content.value = "";
+        isPlaceholder.value = true;
       }
     });
   });
@@ -136,11 +147,21 @@ const promptInit = () => {
 const findInd = (name: any) => {
   return variableList.value.find((item: any) => item.variable_name === name);
 };
+
 let content = ref();
 // 定义鼠标光标值
 let lastEditRange = null;
 // 定义DIV真实dom
 let edit = ref();
+const isPlaceholder = ref(false);
+const getData = () => {
+  if (edit.value.innerHTML == "") {
+    isPlaceholder.value = true;
+  } else {
+    isPlaceholder.value = false;
+  }
+};
+
 const promptPush = (row: any) => {
   let selection = getSelection();
   if (selection?.focusNode.id != "edit" && selection?.focusNode.parentElement.id != "edit") {
@@ -303,9 +324,16 @@ defineExpose({
     width: 100%;
     height: 300px;
     padding: 5px 10px;
+    overflow: auto;
     background-color: var(--el-input-bg-color, var(--el-fill-color-blank));
     background-image: none;
     box-shadow: 0 0 0 1px var(--el-input-border-color, var(--el-border-color)) inset;
+  }
+  .bgholder {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    color: #a8abb2;
   }
 }
 </style>

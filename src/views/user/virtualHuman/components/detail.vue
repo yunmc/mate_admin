@@ -84,8 +84,8 @@ import { ElMessage, FormInstance } from "element-plus";
 import { templateType, getTemplateList, getVariableList } from "@/api/prompt";
 import { isModelType } from "@/utils/index";
 const rules = reactive({
-  template_name: [{ required: true, message: "请编辑一个名称" }],
-  template_content: [{ required: true, message: "请填写Prompt" }]
+  default_chat_mode: [{ required: true, message: "请选择一个模型" }],
+  prompt_template_id: [{ required: true, message: "请选择一个模板" }]
 });
 
 interface DrawerProps {
