@@ -106,21 +106,7 @@ const drawerProps = ref<DrawerProps>({
   row: {}
 });
 const variableList = ref();
-const getList = (row: Partial<templateType>) => {
-  getVariableList({ page: 1, pageSize: 100 }).then((res: any) => {
-    variableList.value = res.data.list;
-    // document.getElementById("edit").innerHTML = "";
-    nextTick(() => {
-      console.log("drawerProps.value.isView", drawerProps.value.isView);
-      if (drawerProps.value.isView) {
-        isPlaceholder.value = false;
-        promptInit();
-      } else {
-        isPlaceholder.value = true;
-      }
-    });
-  });
-};
+
 const promptInit = () => {
   let str_content = "";
   console.log(" drawerProps.value.row!.template_vars", drawerProps.value.row!.template_vars);
@@ -273,6 +259,23 @@ const submitTemplate = (str, vars) => {
     } catch (error) {
       console.log(error);
     }
+  });
+};
+
+const getList = (row: Partial<templateType>) => {
+  getVariableList({ page: 1, pageSize: 100 }).then((res: any) => {
+    variableList.value = res.data.list;
+    // document.getElementById("edit").innerHTML = "";
+    nextTick(() => {
+      if (drawerProps.value.isView) {
+        isPlaceholder.value = false;
+        promptInit();
+      } else {
+        isPlaceholder.value = true;
+        document.getElementById("edit").innerHTML = "";
+        // resetForm(ruleFormRef);
+      }
+    });
   });
 };
 
