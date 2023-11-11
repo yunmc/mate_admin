@@ -176,8 +176,9 @@ const assignment = name => {
 };
 
 const checkPrompt = () => {
+  console.log("template_check.value", template_check.value);
   for (let inx = 0; inx < template_check.value.length; inx++) {
-    if (template_check.value[inx].value == "") {
+    if (template_check.value[inx].value == "" || template_check.value[inx].value == undefined) {
       textPrompt.value = "";
       ElMessage.error({ message: `请输入全部变量值` });
       return false;
