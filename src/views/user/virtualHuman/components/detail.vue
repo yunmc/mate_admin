@@ -155,11 +155,11 @@ const getTemplate = () => {
     let obj = findInd(element);
     if (obj == undefined) {
       dataError.value.disabled = true;
+      return false;
     } else {
       obj.value = "";
       template_check.value.push(obj);
     }
-    console.log("obj", obj);
   });
 };
 

@@ -30,12 +30,12 @@
         </el-button>
       </template>
       <!-- 表格操作 -->
-      <template #operation="scope">
-        <!-- <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)"> 编辑 </el-button> -->
-        <!-- <el-button type="primary" link :icon="View" @click="openDrawer('查看', scope.row)"> 下线 </el-button> -->
-        <!-- <el-button type="primary" link :icon="Refresh" @click="resetPass(scope.row)"> 重置密码 </el-button> -->
-        <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)"> 删除 </el-button>
-      </template>
+      <!-- <template #operation="scope"> -->
+      <!-- <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)"> 编辑 </el-button> -->
+      <!-- <el-button type="primary" link :icon="View" @click="openDrawer('查看', scope.row)"> 下线 </el-button> -->
+      <!-- <el-button type="primary" link :icon="Refresh" @click="resetPass(scope.row)"> 重置密码 </el-button> -->
+      <!-- <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)"> 删除 </el-button> -->
+      <!-- </template> -->
     </ProTable>
     <UserDrawer ref="drawerRef" />
     <PreviewImage ref="previewRef" />

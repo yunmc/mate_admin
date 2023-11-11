@@ -18,6 +18,9 @@
           </el-form-item>
           <el-form-item label="Prompt编辑" prop="content">
             <div contenteditable id="edit" ref="edit" v-html="content" @click="editClick" class="prompt"></div>
+            <div style="margin-top: 10px; line-height: 18px">
+              修改时注意：若该模版已给某个AI配置，修改时能增加新变量，不要删减变量，不要删减变量。
+            </div>
           </el-form-item>
         </el-form>
         <div class="tabs">
@@ -182,6 +185,7 @@ const handleClose = (params: DrawerProps) => {
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
   let arr = edit?.value.innerHTML.split("\u200b");
+  // console.log("123123123213", edit?.value.innerHTML.split("</span>"));
   let str = "";
   let vars = [];
   let isStop = false;
