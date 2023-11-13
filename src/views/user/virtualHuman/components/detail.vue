@@ -25,7 +25,9 @@
             >
               <el-option v-for="item in templateList" :key="item.value" :label="item.template_name" :value="item.id"> </el-option>
             </el-select>
-            <el-button type="" link @click="stopTemplate">不用模版--自定义</el-button>
+            <el-button :type="drawerProps.row!.prompt_template_id == -1 ? 'primary' : ''" link @click="stopTemplate">
+              不用模版--自定义
+            </el-button>
           </el-form-item>
           <el-form-item :label="drawerProps.row!.prompt_template_id == -1 ? 'Promot填写': '变量填写'" prop="content">
             <div v-if="drawerProps.row!.prompt_template_id != -1">
@@ -40,6 +42,9 @@
               @click="checkPrompt()"
               type="primary"
             >
+              检测一下效果
+            </el-button>
+            <el-button v-if="drawerProps.row!.prompt_template_id == -1" @click="checkPrompt()" type="primary">
               检测一下效果
             </el-button>
             <div class="error" v-if="dataError.disabled && drawerProps.row!.prompt_template_id != ''">
@@ -208,12 +213,18 @@ const assignment = name => {
 const stopTemplate = () => {
   drawerProps.value.row!.prompt_template_id = -1;
   dataError.value.disabled = false;
+  textPrompt.value = "";
+  template_check.value = "";
 };
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.resetFields();
 };
 const checkPrompt = () => {
+  if (drawerProps.value.row!.prompt_template_id == -1) {
+    textPrompt.value = promotData;
+    return false;
+  }
   console.log("template_check.value", template_check.value);
   for (let inx = 0; inx < template_check.value.length; inx++) {
     if (template_check.value[inx].value == "" || template_check.value[inx].value == undefined) {
@@ -321,6 +332,8 @@ defineExpose({
     .button {
       max-height: 350px;
       overflow: auto;
+      word-wrap: break-word;
+      white-space: normal;
     }
   }
   .el-button {
