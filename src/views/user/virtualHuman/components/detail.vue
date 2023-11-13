@@ -30,10 +30,16 @@
             </el-button>
           </el-form-item>
           <el-form-item :label="drawerProps.row!.prompt_template_id == -1 ? 'Promot填写': '变量填写'" prop="content">
-            <div style="width: 100%" v-if="drawerProps.row!.prompt_template_id != -1">
+            <div style="width: 100%" v-if="drawerProps.row!.prompt_template_id != -1" contenteditable="false">
               <div class="list" v-for="item in template_check" :key="item.id">
                 <el-tag type="success">{{ item.variable_name }} | {{ item.variable_cname }}</el-tag>
-                <el-input v-model="item.value" placeholder="请输入" :disabled="dataError.disabled" clearable></el-input>
+                <el-input
+                  v-model="item.value"
+                  placeholder="请输入"
+                  :disabled="dataError.disabled"
+                  contenteditable="false"
+                  clearable
+                ></el-input>
               </div>
             </div>
             <el-input v-else v-model="promotData" :rows="10" type="textarea" placeholder="请输入Promot" />
@@ -129,7 +135,6 @@ const getTempList = (row: Partial<variableType>) => {
     }
   });
 };
-
 const variableList = ref();
 const getList = (row: Partial<variableType>) => {
   getVariableList({ page: 1, pageSize: 1000 }).then(res => {
