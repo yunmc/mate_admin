@@ -132,7 +132,7 @@ const getTempList = (row: Partial<variableType>) => {
 
 const variableList = ref();
 const getList = (row: Partial<variableType>) => {
-  getVariableList().then(res => {
+  getVariableList({ page: 1, pageSize: 1000 }).then(res => {
     template_check.value = [];
     template_vars.value = [];
     template_content.value = "";
@@ -155,6 +155,7 @@ const getList = (row: Partial<variableType>) => {
 const acceptParams = async (params: DrawerProps) => {
   drawerProps.value = params;
   drawerVisible.value = true;
+  dataError.value.disabled = false;
   await getTempList();
   if (drawerProps.value.row!.prompt_template_id != -1) {
     promotData.value = "";
