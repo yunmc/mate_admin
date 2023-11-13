@@ -20,7 +20,7 @@
       </template>
 
       <template #prompt="scope">
-        <el-button link @click="onEdit('编辑', scope.row)"> 编辑 </el-button>
+        <el-button link @click="onEdit('编辑', scope.row)"> 编辑</el-button>
         <el-button link @click="onEdit('查看', scope.row)"> 查看 </el-button>
       </template>
 

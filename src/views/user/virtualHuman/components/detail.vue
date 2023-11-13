@@ -27,7 +27,7 @@
             </el-select>
             <el-button type="" link @click="stopTemplate">不用模版--自定义</el-button>
           </el-form-item>
-          <el-form-item label="变量填写" prop="content">
+          <el-form-item :label="drawerProps.row!.prompt_template_id == -1 ? 'Promot填写': '变量填写'" prop="content">
             <div v-if="drawerProps.row!.prompt_template_id != -1">
               <div class="list" v-for="item in template_check" :key="item.id">
                 <el-tag type="success">{{ item.variable_name }} | {{ item.variable_cname }}</el-tag>
