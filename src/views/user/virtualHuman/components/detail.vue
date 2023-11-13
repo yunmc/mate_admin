@@ -30,7 +30,7 @@
             </el-button>
           </el-form-item>
           <el-form-item :label="drawerProps.row!.prompt_template_id == -1 ? 'Promot填写': '变量填写'" prop="content">
-            <div v-if="drawerProps.row!.prompt_template_id != -1">
+            <div style="width: 100%" v-if="drawerProps.row!.prompt_template_id != -1">
               <div class="list" v-for="item in template_check" :key="item.id">
                 <el-tag type="success">{{ item.variable_name }} | {{ item.variable_cname }}</el-tag>
                 <el-input v-model="item.value" placeholder="请输入" :disabled="dataError.disabled" clearable></el-input>
@@ -57,8 +57,13 @@
             Promot展示：<el-button v-if="textPrompt != ''" v-copy="textPrompt" type="primary"> 复制 </el-button>
           </div>
           <div class="button" v-if="drawerProps.isView">
-            <p v-if="drawerProps.row!.prompt_template_id != -1">{{ textPrompt ? textPrompt : "暂无Promot，请编辑" }}</p>
-            <p v-else>{{ promotData }}</p>
+            <p v-if="drawerProps.row!.prompt_template_id != -1">
+              <span v-if="textPrompt != ''" v-html="textPrompt"></span>
+              <span v-else>暂无Promot，请编辑</span>
+            </p>
+            <p v-else>
+              <span v-html="textPrompt"></span>
+            </p>
           </div>
           <div class="button" v-else>{{ textPrompt }}</div>
         </div>
