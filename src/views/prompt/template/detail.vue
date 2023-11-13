@@ -148,6 +148,9 @@ const getData = () => {
   }
 };
 document.addEventListener("paste", e => {
+  if (!drawerVisible.value) {
+    return false;
+  }
   // 阻止默认的复制事件
   e.preventDefault();
   let txt = "";
