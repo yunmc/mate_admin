@@ -19,6 +19,11 @@
         </div>
       </template>
 
+      <template #prompt="scope">
+        <el-button link @click="onEdit('编辑', scope.row)"> 编辑</el-button>
+        <el-button link @click="onEdit('查看', scope.row)"> 查看 </el-button>
+      </template>
+
       <!-- 表格操作 -->
       <template #operation="scope">
         <el-button type="primary" link @click="onAdd('虚拟人编辑', scope.row)"> 编辑 </el-button>
@@ -33,6 +38,8 @@
 
     <!-- 编辑抽屉 -->
     <VirtualHumanDrawer ref="drawerRef" />
+
+    <Drawer ref="drawer2Ref"></Drawer>
   </div>
 </template>
 
@@ -41,9 +48,11 @@ import { ref, reactive } from "vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 
 import VirtualHumanDrawer from "./components/VirtualHumanDrawer.vue";
+import Drawer from "./components/detail.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { getVirtualHumanList, addVirtualHuman, postOfflineAi } from "@/api/user/virtualHuman";
 import { deepClone } from "@/utils/index";
+import { saveAiUserPrompt } from "@/api/prompt";
 
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref<ProTableInstance>();
@@ -62,6 +71,7 @@ const dataCallback = (data: any) => {
   };
 };
 
+const generate_photo_model = ref();
 // 如果你想在请求之前对当前请求参数做一些操作，可以自定义如下函数：params 为当前所有的请求参数（包括分页），最后返回请求列表接口
 // 默认不做操作就直接在 ProTable 组件上绑定	:requestApi="getVirtualHumanList"
 const getTableList = (option: any) => {
@@ -145,6 +155,10 @@ const columns: ColumnProps[] = [
     prop: "bind_celebrity_account",
     label: "网红账号"
   },
+  {
+    prop: "prompt",
+    label: "Prompt设置"
+  },
   { prop: "operation", label: "操作", fixed: "right" }
 ];
 
@@ -154,6 +168,22 @@ const onChangeStatus = (ai_uid: string) => {
     proTable.value?.getTableList();
   });
 };
+
+const getPhotomodel = (option: any) => {
+  const params = {
+    page: option.page,
+    pageSize: option.pageSize,
+    name: "",
+    state: ""
+  };
+  getVirtualHumanList(params).then((res: any) => {
+    if (res.code == 200) {
+      generate_photo_model.value = res.data.options.generate_photo_btn.generate_photo_model;
+    }
+  });
+};
+
+getPhotomodel({ page: 1, pageSize: 1 });
 
 const drawerRef = ref<InstanceType<typeof VirtualHumanDrawer> | null>(null);
 //添加
@@ -167,6 +197,7 @@ const onAdd = (title: string, row?: {}) => {
   };
   const params2 = deepClone(params);
   params2.api = addVirtualHuman;
+  params2.row.generatePhotModel = generate_photo_model;
   params2.getTableList = proTable.value?.getTableList;
   drawerRef.value?.acceptParams(params2);
 };
@@ -179,5 +210,19 @@ const showImages = (row: any, index: number) => {
     row: { ...row }
   };
   previewRef.value?.previewParams(params);
+};
+
+const drawer2Ref = ref<InstanceType<typeof Drawer> | null>(null);
+//添加
+const onEdit = (title: string, row?: {}) => {
+  const params = {
+    title,
+    isView: title === "编辑" ? false : true,
+    row: { ...row },
+    api: saveAiUserPrompt,
+    getTableList: proTable.value?.getTableList
+  };
+
+  drawer2Ref.value?.acceptParams(params);
 };
 </script>
