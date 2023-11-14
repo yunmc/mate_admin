@@ -114,8 +114,12 @@ interface DrawerProps {
 
 const modeList = [
   {
-    value: 1,
-    label: "ChatGPT3.5 16K "
+    value: "ChatGPT3.5 16K",
+    label: "ChatGPT3.5 16K"
+  },
+  {
+    value: "RP-1111",
+    label: "RP-1111"
   }
 ];
 
