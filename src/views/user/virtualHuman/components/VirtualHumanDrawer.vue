@@ -167,15 +167,24 @@
         />
         <!-- <el-switch v-model="drawerProps.row!.default_chat_mode" /> -->
       </el-form-item>
-      <el-form-item label="AI合照类型" v-if="drawerProps.row!.generate_photo_btn == 1" prop="generatePhotModel">
-        <el-radio
-          v-model="drawerProps.row!.generate_photo_model"
-          v-for="item in drawerProps.row!.generatePhotModel"
-          :key="item"
-          :label="item.value"
-        >
-          {{ item.name }}
-        </el-radio>
+
+      <el-form-item label="底模类型" prop="open_state" v-if="drawerProps.row!.generate_photo_btn == 1">
+        <div class="el_select flex">
+          <el-select v-model="drawerProps.row!.generate_photo_model" placeholder="请选择">
+            <el-option v-for="item in loraList" :key="item.id" :label="item.lora_name" :value="item.lora_value"> </el-option>
+          </el-select>
+          <p><el-button @click="editModel()" link>编辑</el-button></p>
+        </div>
+      </el-form-item>
+
+      <el-form-item label="LoRa模型配置" prop="lora_prompt" v-if="drawerProps.row!.generate_photo_btn == 1">
+        <el-input
+          v-model="drawerProps.row!.lora_prompt"
+          type="textarea"
+          :rows="3"
+          placeholder="请输入LoRa模型配置"
+          clearable
+        ></el-input>
       </el-form-item>
 
       <!-- params.generatePhotModel._value[0] -->
@@ -203,6 +212,42 @@
       <el-button v-show="!drawerProps.isView" type="primary" @click="handleSubmit"> 确定 </el-button>
     </template>
   </el-drawer>
+
+  <el-dialog
+    v-model="centerDialogVisible"
+    :close-on-press-escape="false"
+    :close-on-click-modal="false"
+    :show-close="false"
+    title="添加底模类型"
+    width="40%"
+    center
+  >
+    <!-- <span> It should be noted that the content will not be aligned in center by default </span> -->
+    <div class="model_main">
+      <div class="model_list flex" v-for="(item, index) in loraList" :key="item.id">
+        <p class="flex">
+          <el-input v-model="item.lora_name" placeholder="请输入Name">
+            <template #prepend>Name</template>
+          </el-input>
+          <span></span>
+          <el-input v-model="item.lora_value" placeholder="请输入vlaue">
+            <template #prepend>vlaue</template>
+          </el-input>
+        </p>
+        <span class="flex">
+          <el-icon @click="delModel(item)" v-if="index < loraList.length - 1"><Close /></el-icon>
+          <el-button v-else @click="addModel(item)" type="primary">添加</el-button>
+        </span>
+      </div>
+    </div>
+    <el-text class="mx-1" type="danger">点击删除时请确认，该模型没有线上AI配置使用。</el-text>
+    <template #footer>
+      <span class="dialog-footer">
+        <!-- <el-button @click="operateModel(false)">取消</el-button> -->
+        <el-button type="primary" @click="operateModel(true)"> 确定 </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts" name="UserDrawer">
@@ -212,10 +257,11 @@ import { ref, reactive, watch } from "vue";
 // import { genderType } from "@/utils/serviceDict";
 import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
-import { getRelationship } from "@/api/prompt";
+import { getRelationship, getLoraList, addLora, delLora } from "@/api/prompt";
 import UploadImg from "@/components/Upload/Img.vue";
 import UploadVoice from "@/components/Upload/voice.vue";
 import UploadImgs from "@/components/Upload/Imgs.vue";
+import { deepClone } from "@/utils/index";
 
 const rules = reactive({
   // name: [{ required: true, message: "请输入用户名" }],
@@ -240,7 +286,19 @@ const drawerProps = ref<DrawerProps>({
   row: {}
 });
 
+// 监听
+watch(
+  () => drawerProps.value.row!.generate_photo_btn,
+  value => {
+    if (!drawerProps.value.row!.generate_photo_btn) {
+      drawerProps.value.row!.generate_photo_model = "";
+      drawerProps.value.row!.lora_prompt = "";
+    }
+  }
+);
+
 const newDataIndex = ref([]);
+const centerDialogVisible = ref(false);
 
 const handleClose = (params: DrawerProps) => {
   drawerProps.value.isView = false;
@@ -248,6 +306,53 @@ const handleClose = (params: DrawerProps) => {
   drawerProps.value.row = {};
   console.log("drawerProps", drawerProps);
   drawerVisible.value = false;
+};
+
+const generatePhotModelDeep = ref([]);
+const editModel = () => {
+  generatePhotModelDeep.value = deepClone(drawerProps.value.row!.generatePhotModel);
+  centerDialogVisible.value = true;
+  console.log(generatePhotModelDeep.value);
+};
+
+const operateModel = type => {
+  loraList.value.forEach(element => {
+    if (element.lora_name == "" && element.lora_value == "") {
+      loraList.value.splice(loraList.value.indexOf(element), 1);
+    }
+  });
+  centerDialogVisible.value = false;
+};
+
+const addModel = item => {
+  if (item.lora_name == "" || item.lora_value == "") {
+    ElMessage.error("请填写全部信息");
+    return false;
+  }
+  if (item.id) {
+    loraList.value.push({
+      lora_name: "",
+      lora_value: ""
+    });
+    return false;
+  }
+  const params = {
+    lora_name: item.lora_name,
+    lora_value: item.lora_value
+  };
+  addLora(params).then((res: any) => {
+    if (res.code == 200) {
+      getLoraListApi(true);
+    }
+  });
+};
+
+const delModel = item => {
+  delLora({ id: item.id }).then((res: any) => {
+    if (res.code == 200) {
+      loraList.value.splice(loraList.value.indexOf(item), 1);
+    }
+  });
 };
 
 const optionsSex = [
@@ -305,6 +410,27 @@ const acceptParams = (params: DrawerProps) => {
   drawerProps.value.row.generate_photo_btn = drawerProps.value.row.generate_photo_btn == "1" ? true : false;
   drawerProps.value.row.selfie_btn_show = drawerProps.value.row.selfie_btn_show == "1" ? true : false;
   drawerVisible.value = true;
+  getLoraListApi(false);
+};
+
+const loraList = ref();
+
+const getLoraListApi = type => {
+  const params = {
+    page: 1,
+    pageSize: 100
+  };
+  getLoraList(params).then((res: any) => {
+    if (res.code == 200) {
+      loraList.value = res.data.list.reverse();
+      if (type) {
+        loraList.value.push({
+          lora_name: "",
+          lora_value: ""
+        });
+      }
+    }
+  });
 };
 
 const tags = ref<string[]>([]);
@@ -377,5 +503,32 @@ defineExpose({
   margin-bottom: 20px;
   font-weight: bold;
   border-bottom: 1px solid var(--el-border-color-lighter);
+}
+.el_select {
+  width: 100%;
+  p {
+    width: 80px;
+    margin-left: 20px;
+  }
+}
+.model_main {
+  // max-height: 500px;
+  // overflow: auto;
+}
+.model_list {
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 15px;
+  p {
+    width: 100%;
+  }
+  span {
+    align-items: center;
+    justify-content: space-between;
+    margin-left: 10px;
+    font-size: 24px;
+    cursor: pointer;
+  }
 }
 </style>

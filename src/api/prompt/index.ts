@@ -57,3 +57,15 @@ export const getRelationship = () => {
 export const saveAiUserPrompt = (params: promptType) => {
   return http.post(`/admin/ai_user/save_ai_user_prompt`, params);
 };
+
+export const getLoraList = (params: listType) => {
+  return http.post(`/admin/prompt/get_lora_list`, params);
+};
+
+export const delLora = (params: any) => {
+  return http.post(`/admin/prompt/del_lora`, params);
+};
+
+export const addLora = (params: any) => {
+  return http.post(`/admin/prompt/add_lora`, params);
+};
