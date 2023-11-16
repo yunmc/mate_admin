@@ -223,16 +223,22 @@
     center
   >
     <!-- <span> It should be noted that the content will not be aligned in center by default </span> -->
-    <div class="model_list flex" v-for="(item, index) in loraList" :key="item.id">
-      <p class="flex">
-        <el-input v-model="item.lora_name" placeholder="请输入Name" />
-        <span></span>
-        <el-input v-model="item.lora_value" placeholder="请输入vlaue" />
-      </p>
-      <span class="flex">
-        <el-icon @click="delModel(item)" v-if="index < loraList.length - 1"><Close /></el-icon>
-        <el-button v-else @click="addModel(item)" type="primary">添加</el-button>
-      </span>
+    <div class="model_main">
+      <div class="model_list flex" v-for="(item, index) in loraList" :key="item.id">
+        <p class="flex">
+          <el-input v-model="item.lora_name" placeholder="请输入Name">
+            <template #prepend>Name</template>
+          </el-input>
+          <span></span>
+          <el-input v-model="item.lora_value" placeholder="请输入vlaue">
+            <template #prepend>vlaue</template>
+          </el-input>
+        </p>
+        <span class="flex">
+          <el-icon @click="delModel(item)" v-if="index < loraList.length - 1"><Close /></el-icon>
+          <el-button v-else @click="addModel(item)" type="primary">添加</el-button>
+        </span>
+      </div>
     </div>
     <el-text class="mx-1" type="danger">点击删除时请确认，该模型没有线上AI配置使用。</el-text>
     <template #footer>
@@ -505,11 +511,15 @@ defineExpose({
     margin-left: 20px;
   }
 }
+.model_main {
+  // max-height: 500px;
+  // overflow: auto;
+}
 .model_list {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   p {
     width: 100%;
   }
