@@ -310,9 +310,16 @@ const handleClose = (params: DrawerProps) => {
 
 const generatePhotModelDeep = ref([]);
 const editModel = () => {
-  generatePhotModelDeep.value = deepClone(drawerProps.value.row!.generatePhotModel);
+  // console.log(loraList.value == "");
+  if (loraList.value == "") {
+    loraList.value.push({
+      lora_name: "",
+      lora_value: ""
+    });
+  }
+  // generatePhotModelDeep.value = deepClone(drawerProps.value.row!.generatePhotModel);
   centerDialogVisible.value = true;
-  console.log(generatePhotModelDeep.value);
+  // console.log(generatePhotModelDeep.value);
 };
 
 const operateModel = type => {
