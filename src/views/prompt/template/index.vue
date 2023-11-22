@@ -19,6 +19,7 @@
           <el-row :gutter="10">
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="12" v-for="item in list" :key="item.id">
               <div class="grid-content">
+                <div class="badge" v-if="item.template_type">{{ item.template_type }}</div>
                 <div class="title">{{ item.template_name }}</div>
                 <div class="desc flex">
                   <p>{{ item.remark ? item.remark : "--" }}</p>
@@ -210,11 +211,23 @@ const onAdd = (title: string, row?: {}) => {
     }
   }
   .grid-content {
+    position: relative;
     height: 100px;
     padding: 0 30px;
+    padding-left: 80px;
     margin-bottom: 10px;
     overflow: hidden;
     background: #f2f3f5;
+    .badge {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 70px;
+      padding: 2px 0;
+      color: #ffffff;
+      text-align: center;
+      background: #6178f0;
+    }
     .title {
       margin-top: 15px;
       font-size: 16px;

@@ -21,6 +21,11 @@
           <el-form-item label="模板名称" prop="template_name">
             <el-input v-model="drawerProps.row!.template_name" maxlength="30" placeholder="请编辑一个名称" clearable></el-input>
           </el-form-item>
+          <el-form-item label="模板类型" prop="template_name">
+            <el-select style="width: 100%" v-model="drawerProps.row!.template_type" placeholder="请选择模板类型">
+              <el-option v-for="item in templateList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="模板备注" prop="remark">
             <el-input v-model="drawerProps.row!.remark" :rows="3" maxlength="100" type="textarea" placeholder="请输入备注" />
           </el-form-item>
@@ -96,6 +101,17 @@ const options = [
   {
     value: "NUMBER",
     label: "NUMBER"
+  }
+];
+
+const templateList = [
+  {
+    value: "system",
+    label: "system"
+  },
+  {
+    value: "user_say",
+    label: "user_say"
   }
 ];
 
@@ -336,7 +352,7 @@ defineExpose({
       margin-bottom: 10px;
     }
     .button {
-      max-height: 350px;
+      max-height: 470px;
       overflow: auto;
     }
   }

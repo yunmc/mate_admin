@@ -1,10 +1,17 @@
 <template>
   <div class="template">
-    <el-dialog v-model="drawerVisible" :title="`${drawerProps.title}`" width="65%" @before-close="handleClose">
+    <el-dialog
+      v-model="drawerVisible"
+      :title="`${drawerProps.title}`"
+      :destroy-on-close="true"
+      width="65%"
+      @before-close="handleClose"
+      @close="handleClose"
+    >
       <div class="flex main">
         <el-form
           ref="ruleFormRef"
-          label-width="120px"
+          label-width="130px"
           label-suffix=" :"
           :rules="rules"
           :disabled="drawerProps.isView"
@@ -16,75 +23,115 @@
               <el-option v-for="item in modeList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="模板选择" prop="template_name">
+          <el-form-item label="System模板选择" prop="template_name">
             <el-select
               :class="{'template_select':drawerProps.row!.prompt_template_id == -1}"
               v-model="drawerProps.row!.prompt_template_id"
-              @change="getTemplate()"
+              @change="getTemplate(drawerProps.row!.prompt_template_id, 'system')"
               placeholder="请选择"
             >
-              <el-option v-for="item in templateList" :key="item.value" :label="item.template_name" :value="item.id"> </el-option>
+              <el-option v-for="item in system_templateList" :key="item.value" :label="item.template_name" :value="item.id">
+              </el-option>
             </el-select>
             <el-button :type="drawerProps.row!.prompt_template_id == -1 ? 'primary' : ''" link @click="stopTemplate">
               不用模版--自定义
             </el-button>
           </el-form-item>
-          <el-form-item :label="drawerProps.row!.prompt_template_id == -1 ? 'Promot填写': '变量填写'" prop="content">
+          <el-form-item
+            v-if="drawerProps.row!.prompt_template_id"
+            :label="drawerProps.row!.prompt_template_id == -1 ? 'Promot填写': '变量填写'"
+            prop="content"
+          >
             <div style="width: 100%" v-if="drawerProps.row!.prompt_template_id != -1" contenteditable="false">
-              <div class="list" v-for="item in template_check" :key="item.id">
+              <div class="list" v-for="item in system_template_check" :key="item.id">
                 <el-tag type="success">{{ item.variable_name }} | {{ item.variable_cname }}</el-tag>
-                <el-input
-                  v-model="item.value"
-                  placeholder="请输入"
-                  :disabled="dataError.disabled"
-                  contenteditable="false"
-                  clearable
-                ></el-input>
+                <el-input v-model="item.value" placeholder="请输入" contenteditable="false" clearable></el-input>
               </div>
             </div>
             <el-input v-else v-model="promotData" :rows="10" type="textarea" placeholder="请输入Promot" />
-            <el-button
-              v-if="template_check != '' && !dataError.disabled && drawerProps.row!.prompt_template_id != -1"
-              @click="checkPrompt()"
-              type="primary"
-            >
-              检测一下效果
-            </el-button>
-            <el-button v-if="drawerProps.row!.prompt_template_id == -1" @click="checkPrompt()" type="primary">
-              检测一下效果
-            </el-button>
-            <div class="error" v-if="dataError.disabled && drawerProps.row!.prompt_template_id != ''">
-              {{ dataError.error }}
-            </div>
+            <el-button type="primary" @click="checkPrompt('system')"> 检测一下效果 </el-button>
           </el-form-item>
         </el-form>
         <div class="tabs">
           <div class="title">
-            Promot展示：<el-button v-if="textPrompt != ''" v-copy="textPrompt" type="primary"> 复制 </el-button>
+            Promot展示：<el-button v-if="system_textPrompt != ''" v-copy="system_textPrompt" type="primary"> 复制 </el-button>
           </div>
           <div class="button" v-if="drawerProps.isView">
             <p v-if="drawerProps.row!.prompt_template_id != -1">
-              <span v-if="textPrompt != ''" v-html="textPrompt"></span>
+              <span v-if="system_textPrompt != ''" v-html="system_textPrompt"></span>
               <span v-else>暂无Promot，请编辑</span>
             </p>
             <p v-else>
-              <span v-html="textPrompt"></span>
+              <span v-html="system_textPrompt"></span>
             </p>
           </div>
-          <div class="button" v-else>{{ textPrompt }}</div>
+          <div class="button" v-else>{{ system_textPrompt }}</div>
         </div>
       </div>
+
+      <div class="flex main">
+        <el-form
+          ref="ruleFormRef"
+          label-width="130px"
+          label-suffix=" :"
+          :rules="rules"
+          :disabled="drawerProps.isView"
+          :model="drawerProps.row"
+          :hide-required-asterisk="drawerProps.isView"
+        >
+          <el-form-item label="Usersay模板选择" prop="template_name">
+            <el-select
+              :class="{'template_select':drawerProps.row!.user_template_id == -1}"
+              v-model="drawerProps.row!.user_template_id"
+              @change="getTemplate(drawerProps.row!.user_template_id, 'usersay')"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in usersay_templateList"
+                :key="item.value"
+                :disabled="item.template_type != 'user_say'"
+                :label="item.template_name"
+                :value="item.id"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item
+            v-if="drawerProps.row!.user_template_id"
+            :label="drawerProps.row!.user_template_id == -1 ? 'Promot填写': '变量填写'"
+            prop="content"
+          >
+            <div style="width: 100%" v-if="drawerProps.row!.user_template_id != -1" contenteditable="false">
+              <div class="list" v-for="item in usersay_template_check" :key="item.id">
+                <el-tag type="success">{{ item.variable_name }} | {{ item.variable_cname }}</el-tag>
+                <el-input v-model="item.value" placeholder="请输入" contenteditable="false" clearable></el-input>
+              </div>
+            </div>
+            <el-button @click="checkPrompt('user_say')" type="primary"> 检测一下效果 </el-button>
+          </el-form-item>
+        </el-form>
+        <div class="tabs">
+          <div class="title">
+            Promot展示：<el-button v-if="usersay_textPrompt != ''" v-copy="usersay_textPrompt" type="primary"> 复制 </el-button>
+          </div>
+          <div class="button" v-if="drawerProps.isView">
+            <p v-if="drawerProps.row!.user_template_id != -1">
+              <span v-if="usersay_textPrompt != ''" v-html="usersay_textPrompt"></span>
+              <span v-else>暂无Promot，请编辑</span>
+            </p>
+            <p v-else>
+              <span v-html="usersay_textPrompt"></span>
+            </p>
+          </div>
+          <div class="button" v-else>{{ usersay_textPrompt }}</div>
+        </div>
+      </div>
+
       <template #footer>
         <span class="dialog-footer">
-          <el-button type="primary" v-if="!dataError.disabled" @click="handleSubmit"> 确定 </el-button>
-          <el-button
-            @click="
-              resetForm(ruleFormRef);
-              drawerVisible = false;
-            "
-          >
-            取消
-          </el-button>
+          <el-button type="primary" @click="handleSubmit"> 确定 </el-button>
+          <el-button @click="handleClose"> 取消 </el-button>
         </span>
       </template>
     </el-dialog>
@@ -114,11 +161,11 @@ interface DrawerProps {
 
 const modeList = [
   {
-    value: "ChatGPT3.5 16K",
+    value: "openai",
     label: "ChatGPT3.5 16K"
   },
   {
-    value: "RP-1111",
+    value: "rp",
     label: "RP-1111"
   }
 ];
@@ -130,117 +177,78 @@ const drawerProps = ref<DrawerProps>({
   row: {}
 });
 const promotData = ref("");
-const templateList = ref();
+//复制内容
+const system_textPrompt = ref("");
+const usersay_textPrompt = ref("");
+const templateList = ref([]);
+const system_templateList = ref([]);
+const usersay_templateList = ref([]);
 const getTempList = (row: Partial<variableType>) => {
   getTemplateList().then(res => {
     getList();
     if (res.code == 200) {
       templateList.value = res.data.list;
-    }
-  });
-};
-const variableList = ref();
-const getList = (row: Partial<variableType>) => {
-  getVariableList({ page: 1, pageSize: 1000 }).then(res => {
-    template_check.value = [];
-    template_vars.value = [];
-    template_content.value = "";
-    textPrompt.value = "";
-    if (res.code == 200) {
-      variableList.value = res.data.list;
-      nextTick(() => {
-        if (drawerProps.value.row!.prompt_template_id != "" && drawerProps.value.row!.prompt_template_id != -1) {
-          getTemplate();
-          setTimeout(() => {
-            assignment();
-          }, 300);
+      res.data.list.forEach(element => {
+        if (element.template_type == "system") {
+          system_templateList.value.push(element);
+        }
+        if (element.template_type == "user_say") {
+          usersay_templateList.value.push(element);
         }
       });
     }
   });
 };
 
-// 接收父组件传过来的参数
-const acceptParams = async (params: DrawerProps) => {
-  drawerProps.value = params;
-  drawerVisible.value = true;
-  dataError.value.disabled = false;
-  await getTempList();
-  if (drawerProps.value.row!.prompt_template_id != -1) {
-    promotData.value = "";
+const system_template_check = ref([]);
+const system_template_content = ref();
+const system_template_vars = ref();
+
+const usersay_template_check = ref();
+const usersay_template_content = ref();
+const usersay_template_vars = ref();
+const getTemplate = (template_id, type) => {
+  if (type == "system") {
+    system_template_check.value = [];
   } else {
-    promotData.value = drawerProps.value.row!.prompt_template;
+    usersay_template_check.value = [];
   }
-
-  // console.log(drawerProps.value.row!.prompt_template_id);
-};
-
-const dataError = ref({
-  disabled: false,
-  error: "模板变量有变动，请重新编辑模板"
-});
-
-const handleClose = (params: DrawerProps) => {
-  drawerVisible.value = false;
-  dataError.value.disabled = false;
-};
-const template_check = ref([]);
-const template_vars = ref([]);
-const template_content = ref("");
-const template_id = ref("");
-
-const textPrompt = ref("");
-const getTemplate = () => {
-  let prompt_template_index = templateList.value.findIndex(item => item.id == drawerProps.value.row!.prompt_template_id);
-  if (prompt_template_index == -1) {
-    return false;
-  }
-  dataError.value.disabled = false;
-  template_check.value = [];
-  textPrompt.value = "";
-  template_vars.value = templateList.value[prompt_template_index].template_vars;
-  template_content.value = templateList.value[prompt_template_index].template_content;
-  template_id.value = templateList.value[prompt_template_index].id;
-  template_vars.value.forEach(element => {
-    let obj = findInd(element);
-    if (obj == undefined) {
-      dataError.value.disabled = true;
-      return false;
-    } else {
-      obj.value = "";
-      template_check.value.push(obj);
+  let promptData = templateList.value.find(item => item.id == template_id);
+  promptData.template_vars.forEach(element => {
+    // prompt_vars user_say_vars
+    if (promptData.template_type == "system") {
+      system_template_vars.value = promptData.template_vars;
+      system_template_content.value = promptData.template_content;
+      system_template_check.value.push(getKey(element));
+    } else if (promptData.template_type == "user_say") {
+      usersay_template_vars.value = promptData.template_vars;
+      usersay_template_content.value = promptData.template_content;
+      usersay_template_check.value.push(getKey(element));
     }
   });
 };
 
-const findInd = name => {
-  console.log(name);
+const getKey = name => {
   return variableList.value.find(item => item.variable_name === name);
 };
 
-const assignment = name => {
-  template_check.value.forEach(element => {
-    element.value = drawerProps.value.row!.prompt_vars[element.variable_name];
-  });
-  checkPrompt();
+const checkPrompt = type => {
+  if (type == "system") {
+    if (drawerProps.value.row!.prompt_template_id == -1) {
+      system_textPrompt.value = promotData;
+      return false;
+    }
+    return getTextPrompt(system_template_check, system_template_content, system_textPrompt, system_template_vars);
+  } else {
+    if (drawerProps.value.row!.user_template_id == -1) {
+      usersay_textPrompt.value = promotData;
+      return false;
+    }
+    return getTextPrompt(usersay_template_check, usersay_template_content, usersay_textPrompt, usersay_template_vars);
+  }
 };
 
-const stopTemplate = () => {
-  drawerProps.value.row!.prompt_template_id = -1;
-  dataError.value.disabled = false;
-  textPrompt.value = "";
-  template_check.value = "";
-};
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.resetFields();
-};
-const checkPrompt = () => {
-  if (drawerProps.value.row!.prompt_template_id == -1) {
-    textPrompt.value = promotData;
-    return false;
-  }
-  console.log("template_check.value", template_check.value);
+const getTextPrompt = (template_check, template_content, textPrompt, template_vars) => {
   for (let inx = 0; inx < template_check.value.length; inx++) {
     if (template_check.value[inx].value == "" || template_check.value[inx].value == undefined) {
       textPrompt.value = "";
@@ -248,13 +256,60 @@ const checkPrompt = () => {
       return false;
     }
   }
-  let str_content = "";
   textPrompt.value = template_content.value;
   template_vars.value.forEach((element, index) => {
     textPrompt.value = textPrompt.value.replace("{" + element + "}", template_check.value[index].value);
   });
   let str2 = textPrompt.value.replace(/{/g, "");
   textPrompt.value = str2.replace(/}/g, "");
+  return textPrompt;
+};
+
+const stopTemplate = () => {
+  drawerProps.value.row!.prompt_template_id = -1;
+};
+const variableList = ref();
+const getList = (row: Partial<variableType>) => {
+  getVariableList({ page: 1, pageSize: 1000 }).then(res => {
+    if (res.code == 200) {
+      variableList.value = res.data.list;
+      nextTick(() => {
+        if (drawerProps.value.row!.prompt_template_id != "" && drawerProps.value.row!.prompt_template_id != -1) {
+          getTemplate(drawerProps.value.row!.prompt_template_id, "system");
+          setTimeout(() => {
+            assignment(system_template_check, drawerProps.value.row!.prompt_vars, "system");
+          }, 300);
+        }
+        if (drawerProps.value.row!.user_template_id != "" && drawerProps.value.row!.user_template_id != -1) {
+          getTemplate(drawerProps.value.row!.user_template_id, "usersay");
+          setTimeout(() => {
+            assignment(usersay_template_check, drawerProps.value.row!.user_say_vars, "user_say");
+          }, 300);
+        }
+      });
+    }
+  });
+};
+const assignment = (template, vars, name) => {
+  template.value.forEach(element => {
+    element.value = vars[element.variable_name];
+  });
+  checkPrompt(name);
+};
+// 接收父组件传过来的参数
+const acceptParams = async (params: DrawerProps) => {
+  drawerProps.value = params;
+  drawerVisible.value = true;
+  // dataError.value.disabled = false;
+  await getTempList();
+  if (drawerProps.value.row!.prompt_template_id != -1) {
+    promotData.value = "";
+  } else {
+    promotData.value = drawerProps.value.row!.prompt_template;
+    system_textPrompt.value = drawerProps.value.row!.prompt_template;
+  }
+
+  // console.log(drawerProps.value.row!.prompt_template_id);
 };
 
 // 提交数据（新增/编辑）
@@ -269,20 +324,34 @@ const handleSubmit = () => {
     return false;
   }
   let prompt_vars = {};
-  for (let inx = 0; inx < template_check.value.length; inx++) {
-    if (template_check.value[inx].value == "") {
-      textPrompt.value = "";
+  for (let inx = 0; inx < system_template_check.value.length; inx++) {
+    if (system_template_check.value[inx].value == "" || system_template_check.value[inx].value == undefined) {
+      system_textPrompt.value = "";
       ElMessage.error({ message: `请输入全部变量值` });
       return false;
     }
-    prompt_vars[template_check.value[inx].variable_name] = template_check.value[inx].value;
+    prompt_vars[system_template_check.value[inx].variable_name] = system_template_check.value[inx].value;
+  }
+  let usersay_prompt_vars = {};
+  for (let iny = 0; iny < usersay_template_check.value.length; iny++) {
+    if (usersay_template_check.value[iny].value == "" || usersay_template_check.value[iny].value == undefined) {
+      usersay_textPrompt.value = "";
+      ElMessage.error({ message: `请输入全部变量值` });
+      return false;
+    }
+    usersay_prompt_vars[usersay_template_check.value[iny].variable_name] = usersay_template_check.value[iny].value;
   }
   const params = {
-    prompt_template: template_content.value,
+    prompt_template: system_template_content.value,
+    user_say_template: usersay_template_content.value,
     prompt_vars: prompt_vars,
+    user_say_vars: usersay_prompt_vars,
     ai_uid: drawerProps.value.row!.ai_uid,
-    prompt_template_id: template_id.value
+    prompt_template_id: drawerProps.value.row!.prompt_template_id,
+    user_template_id: drawerProps.value.row!.user_template_id,
+    llm_type: drawerProps.value.row!.default_chat_mode
   };
+  console.log("params", params);
   submitTemplate(params);
 };
 
@@ -291,26 +360,58 @@ const stopTemParams = () => {
     ElMessage.error({ message: `请输入Promot` });
     return false;
   }
+  let usersay_prompt_vars = {};
+  if (drawerProps.value.row!.user_template_id >= 1) {
+    for (let iny = 0; iny < usersay_template_check.value.length; iny++) {
+      if (usersay_template_check.value[iny].value == "" || usersay_template_check.value[iny].value == undefined) {
+        usersay_textPrompt.value = "";
+        ElMessage.error({ message: `请输入全部变量值` });
+        return false;
+      }
+      usersay_prompt_vars[usersay_template_check.value[iny].variable_name] = usersay_template_check.value[iny].value;
+    }
+  }
+
   const params = {
     prompt_template: promotData.value,
     prompt_vars: [],
     ai_uid: drawerProps.value.row!.ai_uid,
-    prompt_template_id: drawerProps.value.row!.prompt_template_id
+    user_template_id: drawerProps.value.row!.user_template_id,
+    user_say_template: usersay_template_content.value,
+    user_say_vars: usersay_prompt_vars,
+    prompt_template_id: drawerProps.value.row!.prompt_template_id,
+    llm_type: drawerProps.value.row!.default_chat_mode
   };
   submitTemplate(params);
 };
-const submitTemplate = params => {
-  ruleFormRef.value!.validate(async valid => {
-    if (!valid) return;
-    try {
-      await drawerProps.value.api!(params);
-      ElMessage.success({ message: `${drawerProps.value.title}模板成功！` });
-      drawerProps.value.getTableList!();
-      drawerVisible.value = false;
-    } catch (error) {
-      console.log(error);
-    }
-  });
+const submitTemplate = async params => {
+  try {
+    await drawerProps.value.api!(params);
+    ElMessage.success({ message: `${drawerProps.value.title}模板成功！` });
+    drawerProps.value.getTableList!();
+    drawerVisible.value = false;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const handleClose = (params: DrawerProps) => {
+  system_template_check.value = [];
+  system_template_content.value = "";
+  system_template_vars.value = "";
+
+  usersay_template_check.value = "";
+  usersay_template_content.value = "";
+  usersay_template_vars.value = "";
+
+  system_textPrompt.value = "";
+  usersay_textPrompt.value = "";
+  templateList.value = [];
+  system_templateList.value = [];
+  usersay_templateList.value = [];
+
+  console.log("123123", 131231231);
+  drawerVisible.value = false;
 };
 
 defineExpose({

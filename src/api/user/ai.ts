@@ -11,6 +11,9 @@ interface getUserAiListType {
   stm?: string;
   etm?: string;
 }
+interface AiUser {
+  ai_uid: string;
+}
 // 获取用户ai列表
 export const getUserList = (params: getUserAiListType) => {
   return http.post(`/admin/ai_user/get_custom_ai_list`, params);
@@ -18,4 +21,12 @@ export const getUserList = (params: getUserAiListType) => {
 
 export const getRelationship = () => {
   return http.post(`/admin/ai_user/get_relationship`);
+};
+
+export const offlineAiUser = (params: AiUser) => {
+  return http.post(`/admin/aiUser/offline_ai_user`, params);
+};
+
+export const openState = (params: AiUser) => {
+  return http.post(`/admin/aiUser/open_state`, params);
 };

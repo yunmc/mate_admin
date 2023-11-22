@@ -12,9 +12,16 @@
         <p v-if="scope.row!.voice_original_url == ''">--</p>
         <audio v-else controls :src="scope.row!.voice_original_url"></audio>
       </template>
+      <template #state_type="scope">
+        <span v-if="scope.row.ai_state > 2">下线</span>
+        <span v-else>
+          {{ scope.row.open_state == 2 ? "公开" : "私有" }}
+        </span>
+      </template>
       <!-- 表格操作 -->
       <template #operation="scope">
-        <el-button type="primary" link @click="goDetail(scope.row)"> 查看详情 </el-button>
+        <el-button v-if="scope.row.open_state == 2" type="primary" link @click="privacy(scope.row.ai_uid)"> 私密 </el-button>
+        <el-button v-if="scope.row.open_state == 2" type="primary" link @click="Offline(scope.row.ai_uid)"> 下线 </el-button>
       </template>
     </ProTable>
     <PreviewImage ref="previewRef" />
@@ -24,9 +31,10 @@
 <script setup lang="tsx" name="useInfo">
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
+import { ElMessageBox } from "element-plus";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
-
-import { getUserList, getRelationship } from "@/api/user/ai";
+import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
+import { getUserList, getRelationship, openState, offlineAiUser } from "@/api/user/ai";
 
 const router = useRouter();
 
@@ -149,16 +157,12 @@ const getAiSexStatus = () => {
 const getAiStatus = () => {
   return [
     {
-      value: "",
-      label: "不限"
-    },
-    {
-      value: 0,
-      label: "使用中"
-    },
-    {
       value: 1,
-      label: "已删除"
+      label: "私有"
+    },
+    {
+      value: 2,
+      label: "公开"
     }
   ];
 };
@@ -168,67 +172,85 @@ const getAiStatus = () => {
 // 表格配置项
 const columns: ColumnProps[] = [
   {
-    prop: "avatar",
-    label: "头像",
+    prop: "introduce_image",
+    label: "形象",
     width: "100",
     render: scope => {
-      return <el-image style="z-index:100;width:80px;height:80px;cursor: pointer;" src={scope.row.avatar}></el-image>;
+      return (
+        <el-image
+          style="z-index:100;width:80px;height:80px;cursor: pointer;"
+          src={scope.row.introduce_image}
+          onClick={() => showImages(scope.row, 9)}
+        ></el-image>
+      );
     }
   },
+  // render: scope => {
+  //     return (
+  //       <el-image
+  //         style="z-index:100;width:80px;height:80px;cursor: pointer;"
+  //         src={scope.row.avatar}
+  //         onClick={() => showImages(scope.row, 9)}
+  //       ></el-image>
+  //     );
+  //   }
   {
     prop: "ai_name",
-    label: "虚拟人昵称",
+    label: "昵称",
     search: { el: "input", key: "uid", label: "用户ID" }
   },
   {
+    prop: "uid",
+    label: "创作者"
+  },
+  {
     prop: "sex",
-    label: "性别",
+    label: "AI性别",
     search: { el: "tree-select", props: { filterable: true }, key: "sex" },
     enum: getAiSexStatus(),
     fieldNames: { label: "label", value: "value" }
   },
   {
-    prop: "relationship",
-    label: "关系",
-    search: { el: "tree-select", props: { filterable: false }, key: "relationship" },
-    enum: relationshipList(),
-    fieldNames: { label: "label", value: "value" }
+    prop: "ai_class",
+    label: "AI分类"
+  },
+  {
+    prop: "ai_role",
+    label: "AI角色"
   },
   {
     prop: "tags",
     label: "Tags"
   },
   {
+    prop: "tags",
+    label: "AI介绍"
+  },
+  {
+    prop: "description",
+    label: "Prompt描述词"
+  },
+  {
     prop: "open_remark",
     label: "开场白"
   },
   {
-    prop: "soure",
-    label: "音频"
-  },
-  {
     prop: "dialogue_example",
-    label: "对话"
+    label: "对话示例(LIST)"
   },
   {
-    prop: "description",
-    label: "描述"
+    prop: "soure",
+    label: "声音选择"
   },
   {
-    prop: "is_deleted",
-    label: "状态",
-    search: { el: "tree-select", props: { filterable: true }, key: "state" },
-    enum: getAiStatus(),
-    fieldNames: { label: "label", value: "value" }
+    prop: "ai_chat_style",
+    label: "对话风格"
   },
   {
     prop: "ai_uid",
     label: "虚拟人ID"
   },
-  {
-    prop: "uid",
-    label: "用户ID"
-  },
+
   {
     prop: "created_time",
     label: "创建时间",
@@ -242,21 +264,59 @@ const columns: ColumnProps[] = [
   {
     prop: "updated_time",
     label: "最近修改时间"
-  }
+  },
+  // {
+  //   prop: "open_state",
+  //   label: "状态",
+  //   search: { el: "tree-select", props: { filterable: true }, key: "state" },
+  //   enum: getAiStatus(),
+  //   fieldNames: { label: "label", value: "value" }
+  // },
+  {
+    prop: "state_type",
+    label: "状态"
+  },
+  { prop: "operation", label: "操作", fixed: "right" }
 ];
 
 //查看详情
 const goDetail = (row: { uid: string }) => {
   router.push("/user/user-info/detail?uid=" + row.uid);
 };
+const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 //预览图片
-// const showImages = (row: any, index: number) => {
-//   const params = {
-//     index: index,
-//     row: { ...row }
-//   };
-//   previewRef.value?.previewParams(params);
-// };
+const showImages = (row: any, index: number) => {
+  const params = {
+    index: index,
+    row: { ...row }
+  };
+  previewRef.value?.previewParams(params);
+};
+const privacy = (id: any) => {
+  ElMessageBox.confirm("确定设为私密上线？", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(async () => {
+    let data: any = await openState({ ai_uid: id });
+    if (data.code == 200) {
+      proTable.value?.getTableList();
+    }
+  });
+};
+
+const Offline = (id: any) => {
+  ElMessageBox.confirm("确定下线？", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(async () => {
+    let data: any = await offlineAiUser({ ai_uid: id });
+    if (data.code == 200) {
+      proTable.value?.getTableList();
+    }
+  });
+};
 </script>
 <style scoped lang="scss">
 audio {

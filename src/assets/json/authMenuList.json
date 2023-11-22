@@ -84,20 +84,6 @@
             "isAffix": false,
             "isKeepAlive": true
           }
-        },
-        {
-          "path": "/user/user-ai",
-          "name": "userAi",
-          "component": "/user/userAi/index",
-          "meta": {
-            "icon": "Menu",
-            "title": "用户AI",
-            "isLink": "",
-            "isHide": false,
-            "isFull": false,
-            "isAffix": false,
-            "isKeepAlive": true
-          }
         }
       ]
     },
@@ -136,6 +122,20 @@
           "meta": {
             "icon": "Menu",
             "title": "虚拟人图库",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/user/user-ai",
+          "name": "userAi",
+          "component": "/user/userAi/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "UGC AI列表",
             "isLink": "",
             "isHide": false,
             "isFull": false,
