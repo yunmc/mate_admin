@@ -18,8 +18,8 @@
           :model="drawerProps.row"
           :hide-required-asterisk="drawerProps.isView"
         >
-          <el-form-item label="模型选择" prop="template_name">
-            <el-select v-model="drawerProps.row!.default_chat_mode" placeholder="请选择">
+          <el-form-item label="模型选择" prop="llm_type">
+            <el-select v-model="drawerProps.row!.llm_type" placeholder="请选择">
               <el-option v-for="item in modeList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
           </el-form-item>
@@ -349,7 +349,7 @@ const handleSubmit = () => {
     ai_uid: drawerProps.value.row!.ai_uid,
     prompt_template_id: drawerProps.value.row!.prompt_template_id,
     user_template_id: drawerProps.value.row!.user_template_id,
-    llm_type: drawerProps.value.row!.default_chat_mode
+    llm_type: drawerProps.value.row!.llm_type
   };
   console.log("params", params);
   submitTemplate(params);
@@ -380,7 +380,7 @@ const stopTemParams = () => {
     user_say_template: usersay_template_content.value,
     user_say_vars: usersay_prompt_vars,
     prompt_template_id: drawerProps.value.row!.prompt_template_id,
-    llm_type: drawerProps.value.row!.default_chat_mode
+    llm_type: drawerProps.value.row!.llm_type
   };
   submitTemplate(params);
 };
