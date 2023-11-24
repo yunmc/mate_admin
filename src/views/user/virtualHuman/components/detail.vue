@@ -324,23 +324,29 @@ const handleSubmit = () => {
     return false;
   }
   let prompt_vars = {};
-  for (let inx = 0; inx < system_template_check.value.length; inx++) {
-    if (system_template_check.value[inx].value == "" || system_template_check.value[inx].value == undefined) {
-      system_textPrompt.value = "";
-      ElMessage.error({ message: `请输入全部变量值` });
-      return false;
+  if (drawerProps.value.row!.prompt_template_id) {
+    for (let inx = 0; inx < system_template_check.value.length; inx++) {
+      if (system_template_check.value[inx].value == "" || system_template_check.value[inx].value == undefined) {
+        system_textPrompt.value = "";
+        ElMessage.error({ message: `请输入全部变量值` });
+        return false;
+      }
+      prompt_vars[system_template_check.value[inx].variable_name] = system_template_check.value[inx].value;
     }
-    prompt_vars[system_template_check.value[inx].variable_name] = system_template_check.value[inx].value;
   }
+
   let usersay_prompt_vars = {};
-  for (let iny = 0; iny < usersay_template_check.value.length; iny++) {
-    if (usersay_template_check.value[iny].value == "" || usersay_template_check.value[iny].value == undefined) {
-      usersay_textPrompt.value = "";
-      ElMessage.error({ message: `请输入全部变量值` });
-      return false;
+  if (drawerProps.value.row!.user_template_id) {
+    for (let iny = 0; iny < usersay_template_check.value.length; iny++) {
+      if (usersay_template_check.value[iny].value == "" || usersay_template_check.value[iny].value == undefined) {
+        usersay_textPrompt.value = "";
+        ElMessage.error({ message: `请输入全部变量值` });
+        return false;
+      }
+      usersay_prompt_vars[usersay_template_check.value[iny].variable_name] = usersay_template_check.value[iny].value;
     }
-    usersay_prompt_vars[usersay_template_check.value[iny].variable_name] = usersay_template_check.value[iny].value;
   }
+
   const params = {
     prompt_template: system_template_content.value,
     user_say_template: usersay_template_content.value,
