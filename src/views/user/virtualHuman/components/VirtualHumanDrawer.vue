@@ -22,6 +22,12 @@
         <el-input v-model="drawerProps.row!.ai_name" placeholder="name" clearable></el-input>
       </el-form-item>
 
+      <el-form-item label="Sex" prop="Sex">
+        <el-select v-model="drawerProps.row!.sex" placeholder="请选择">
+          <el-option v-for="item in optionsSex" :key="item.label" :label="item.label" :value="item.value"> </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="create_by" prop="create_by">
         <el-input v-model="drawerProps.row!.create_by" placeholder="create_by" clearable></el-input>
       </el-form-item>
