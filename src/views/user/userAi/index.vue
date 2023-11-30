@@ -8,6 +8,10 @@
       :init-param="initParam"
       :data-callback="dataCallback"
     >
+      <template #uid="scope">
+        <p>{{scope.row!.alias}}</p>
+        <p>{{scope.row!.uid}}</p>
+      </template>
       <template #soure="scope">
         <p v-if="scope.row!.voice_original_url == ''">--</p>
         <audio v-else controls :src="scope.row!.voice_original_url"></audio>
@@ -223,11 +227,11 @@ const columns: ColumnProps[] = [
     label: "Tags"
   },
   {
-    prop: "tags",
+    prop: "description",
     label: "AI介绍"
   },
   {
-    prop: "description",
+    prop: "lora_prompt",
     label: "Prompt描述词"
   },
   {
