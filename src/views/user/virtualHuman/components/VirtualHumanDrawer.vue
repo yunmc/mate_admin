@@ -22,6 +22,23 @@
         <el-input v-model="drawerProps.row!.ai_name" placeholder="name" clearable></el-input>
       </el-form-item>
 
+      <el-form-item label="Sex" prop="Sex">
+        <el-select v-model="drawerProps.row!.sex" placeholder="请选择">
+          <el-option v-for="item in optionsSex" :key="item.label" :label="item.label" :value="item.value"> </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="create_by" prop="create_by">
+        <el-input v-model="drawerProps.row!.create_by" placeholder="create_by" clearable></el-input>
+      </el-form-item>
+
+      <el-form-item label="Class" prop="Class">
+        <el-select v-model="drawerProps.row!.ai_class" placeholder="请选择">
+          <el-option v-for="item in drawerProps.row!.ai_classes" :key="item.title" :label="item.title" :value="item.title">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
       <el-form-item label="avatar" prop="Avatar:">
         <UploadImg v-model:image-url="drawerProps.row!.avatar" width="135px" height="135px" :file-size="3">
           <template #empty>
@@ -459,6 +476,14 @@ const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
   if (drawerProps.value.row.ai_name == "") {
     ElMessage.error("请输入姓名");
+    return false;
+  }
+  if (drawerProps.value.row.create_by == "") {
+    ElMessage.error("请输入create_by");
+    return false;
+  }
+  if (drawerProps.value.row.ai_class == "") {
+    ElMessage.error("请选择class");
     return false;
   }
   drawerProps.value.row.name = drawerProps.value.row.ai_name;
