@@ -294,6 +294,7 @@ const showImages = (row: any, index: number) => {
     index: index,
     row: { ...row }
   };
+  params.row.avatar = params.row.introduce_image;
   previewRef.value?.previewParams(params);
 };
 const privacy = (id: any) => {
