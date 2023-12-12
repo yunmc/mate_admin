@@ -28,6 +28,6 @@ export const seasonList = (params: any) => {
 };
 
 // 剧情季列表
-export const delSeason = (id: string) => {
+export const delSeason = (id: any) => {
   return http.post(`/admin/drama/del_season`, { id: id });
 };

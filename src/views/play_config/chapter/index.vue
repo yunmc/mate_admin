@@ -123,7 +123,7 @@ const onAdd = (title: string, row?: {}) => {
   drawerRef.value?.acceptParams(params2);
 };
 //删除
-const delModel = item => {
+const delModel = (item: any) => {
   delSeason({ id: item.id }).then((res: any) => {
     if (res.code == 200) {
       proTable.value?.getTableList();
