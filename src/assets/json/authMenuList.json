@@ -362,6 +362,50 @@
           }
         }
       ]
+    },
+    {
+      "path": "/play_config",
+      "name": "/play_config",
+      "redirect": "/play_config/",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "剧本配置",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/play_config/",
+          "name": "play_config",
+          "component": "/play_config/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "剧本配置",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/chapter/",
+          "name": "chapter",
+          "component": "/play_config/chapter/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "章节列表",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
     }
   ],
   "msg": "成功"

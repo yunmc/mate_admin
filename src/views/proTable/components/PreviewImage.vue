@@ -18,7 +18,11 @@ const showViewer = ref(false);
 const initialIndex = ref(0);
 
 const previewParams = (params: DrawerProps) => {
-  if (params.index == 9) {
+  if (params.index == 8) {
+    srcList.value = [];
+    initialIndex.value = 0;
+    srcList.value.push(params.row.episode_remarks_img);
+  } else if (params.index == 9) {
     initialIndex.value = 0;
     srcList.value = [];
     srcList.value.push(params.row.avatar);
@@ -27,7 +31,6 @@ const previewParams = (params: DrawerProps) => {
     initialIndex.value = params.index;
     srcList.value = params.row.posters;
   }
-  console.log("----", srcList.value);
   showViewer.value = true;
 };
 

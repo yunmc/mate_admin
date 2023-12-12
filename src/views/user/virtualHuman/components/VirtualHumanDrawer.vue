@@ -150,6 +150,31 @@
         ></el-input>
       </el-form-item>
 
+      <el-form-item label="是否发开场白图片" prop="open_remark_img_switch">
+        <el-switch v-model="drawerProps.row!.open_remark_img_switch" />
+      </el-form-item>
+
+      <el-form-item label="开场白图片" prop="images">
+        <UploadImgs v-model:file-list="drawerProps.row!.open_remark_img" :limit="1" height="140px" width="140px">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+          <!-- <template #tip> 最多上传 9 张照片 </template> -->
+        </UploadImgs>
+      </el-form-item>
+
+      <el-form-item label="意图标签组" prop="Class">
+        <el-select v-model="drawerProps.row!.intent_tag_id" placeholder="请选择">
+          <el-option v-for="item in drawerProps.row!.ai_classes" :key="item.title" :label="item.title" :value="item.title">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="是否开启大尺度语音" prop="large_scale_open">
+        <el-switch v-model="drawerProps.row!.large_scale_open" />
+      </el-form-item>
+
       <!-- <el-form-item label="默认对话模式" prop="default_chat_mode">
         <el-radio-group v-model="drawerProps.row!.default_chat_mode" @change="drawerProps.row!.set_chat_mode_permission = 0">
           <el-radio :label="2">心动模式</el-radio>
@@ -180,6 +205,12 @@
           v-model="drawerProps.row!.selfie_btn_show"
           :checked="drawerProps.row!.selfie_btn_show == 1"
           label="自拍照"
+          size="large"
+        />
+        <el-checkbox
+          v-model="drawerProps.row!.drama_date_btn_show"
+          :checked="drawerProps.row!.drama_date_btn_show == 1"
+          label="剧情模式"
           size="large"
         />
         <!-- <el-switch v-model="drawerProps.row!.default_chat_mode" /> -->
