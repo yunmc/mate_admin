@@ -13,10 +13,8 @@
         <el-button type="primary" icon="CirclePlus" @click="onAdd('添加章节')"> 添加 </el-button>
       </template>
 
-      <template #tags="scope">
-        <div style="white-space: initial">
-          <el-tag class="mx-1" v-for="item in scope.row.tags" :key="item" style="margin: 2px 4px"> {{ item }} </el-tag>
-        </div>
+      <template #ai_name="scope">
+        {{ scope.row.ai_name }}
       </template>
 
       <!-- 表格操作 -->
@@ -58,10 +56,11 @@ const dataCallback = (data: any) => {
 // 如果你想在请求之前对当前请求参数做一些操作，可以自定义如下函数：params 为当前所有的请求参数（包括分页），最后返回请求列表接口
 // 默认不做操作就直接在 ProTable 组件上绑定	:requestApi="getEpisodeList"
 const getTableList = (option: any) => {
+  console.log("option", option);
   const params = {
     page: option.page,
     pageSize: option.pageSize,
-    ai_uid: option.ai_uid
+    ai_uid: option.ai_name
   };
   return seasonList(params);
 };
@@ -82,30 +81,12 @@ const columns: ColumnProps[] = [
   {
     prop: "ai_name",
     label: "绑定AI",
-    search: { el: "input", key: "ai_uid" }
-    // enum: getAiUser(),
-    // fieldNames: { label: "ai_name", value: "ai_uid" }
+    enum: () => getPicList({ page: 1, pageSize: 1, search: true }),
+    search: { el: "select", props: { filterable: true } },
+    fieldNames: { label: "ai_name", value: "ai_uid" }
   },
   { prop: "operation", label: "操作", fixed: "right" }
 ];
-const getAiUser = () => {
-  return aiUsers.value;
-};
-let aiUsers = ref([] as any);
-const getAiUserList = async () => {
-  const params = {
-    page: 1,
-    pageSize: 1,
-    ai_uid: "",
-    ai_name: "",
-    pic_level: ""
-  };
-  let data: any = await getPicList(params);
-  if (data.code == 200) {
-    aiUsers.value = data.data.ai_users;
-  }
-};
-// getAiUserList();
 
 const drawerRef = ref<InstanceType<typeof VirtualHumanDrawer> | null>(null);
 //添加

@@ -13,6 +13,9 @@
         <el-button type="primary" icon="CirclePlus" @click="onAdd('添加剧本')"> 添加 </el-button>
       </template>
 
+      <template #ai_name="scope">
+        {{ scope.row.ai_name }}
+      </template>
       <template #episode_sid="scope">
         {{ searchTitle(scope.row.episode_sid) }}
       </template>
@@ -52,7 +55,7 @@ import Drawer from "./components/detail.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { getEpisodeList, saveEpisode, seasonList } from "@/api/playConfig/play";
 import { deepClone } from "@/utils/index";
-
+import { getPicList } from "@/api/gallery";
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref<ProTableInstance>();
 
@@ -74,10 +77,11 @@ const ai_classes = ref();
 // 如果你想在请求之前对当前请求参数做一些操作，可以自定义如下函数：params 为当前所有的请求参数（包括分页），最后返回请求列表接口
 // 默认不做操作就直接在 ProTable 组件上绑定	:requestApi="getEpisodeList"
 const getTableList = (option: any) => {
+  console.log("option", option);
   const params = {
     page: option.page,
     pageSize: option.pageSize,
-    ai_uid: option.episode_ai_uid
+    ai_uid: option.ai_name
   };
   return getEpisodeList(params);
 };
@@ -106,12 +110,14 @@ const columns: ColumnProps[] = [
   {
     prop: "ai_name",
     label: "AI昵称",
-    width: "120"
+    width: "120",
+    enum: () => getPicList({ page: 1, pageSize: 1, search: true }),
+    search: { el: "select", props: { filterable: true } },
+    fieldNames: { label: "ai_name", value: "ai_uid" }
   },
   {
     prop: "episode_ai_uid",
-    label: "AI_id",
-    search: { el: "input", key: "episode_ai_uid", label: "虚拟人昵称" }
+    label: "AI_id"
   },
   {
     prop: "episode_sid",
