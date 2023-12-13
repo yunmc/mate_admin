@@ -6,6 +6,7 @@ interface getPicType {
   pic_level?: number | string; // 图片等级 1 2 3
   page: number;
   pageSize: number;
+  search?: boolean;
 }
 interface savePicType {
   images: Array<string>; // AI用户的ID
