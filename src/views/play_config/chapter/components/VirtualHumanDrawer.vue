@@ -1,13 +1,5 @@
 <template>
-  <el-dialog
-    v-model="drawerVisible"
-    :close-on-press-escape="false"
-    :close-on-click-modal="false"
-    :show-close="false"
-    title="添加章节"
-    width="50%"
-    center
-  >
+  <el-dialog v-model="drawerVisible" :close-on-click-modal="false" title="添加章节" width="50%" center>
     <!-- <span> It should be noted that the content will not be aligned in center by default </span> -->
     <div class="model_main">
       <div class="bindAi">
