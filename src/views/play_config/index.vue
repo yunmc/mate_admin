@@ -13,6 +13,10 @@
         <el-button type="primary" icon="CirclePlus" @click="onAdd('添加剧本')"> 添加 </el-button>
       </template>
 
+      <template #episode_sid="scope">
+        {{ searchTitle(scope.row.episode_sid) }}
+      </template>
+
       <template #tags="scope">
         <div style="white-space: initial">
           <el-tag class="mx-1" v-for="item in scope.row.tags" :key="item" style="margin: 2px 4px"> {{ item }} </el-tag>
@@ -46,7 +50,7 @@ import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import VirtualHumanDrawer from "./components/VirtualHumanDrawer.vue";
 import Drawer from "./components/detail.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
-import { getEpisodeList, saveEpisode } from "@/api/playConfig/play";
+import { getEpisodeList, saveEpisode, seasonList } from "@/api/playConfig/play";
 import { deepClone } from "@/utils/index";
 
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
@@ -122,22 +126,18 @@ const columns: ColumnProps[] = [
     label: "关卡排序"
   },
   {
-    prop: "episode_remarks_img",
+    prop: "episode_thumbnail",
     label: "图片(缩略图)",
     width: "100",
     render: scope => {
       return (
         <el-image
           style="z-index:100;width:80px;height:80px;cursor: pointer;"
-          src={scope.row.episode_remarks_img}
+          src={scope.row.episode_thumbnail}
           onClick={() => showImages(scope.row, 8)}
         ></el-image>
       );
     }
-  },
-  {
-    prop: "episode_remarks",
-    label: "备注"
   },
   {
     prop: "prompt",
@@ -165,6 +165,8 @@ const onAdd = (title: string, row?: {}) => {
   const params2 = deepClone(params);
   params2.api = saveEpisode;
   params2.getTableList = proTable.value?.getTableList;
+  params2.row.loraList = loraList.value;
+  console.log("params2", params2);
   drawerRef.value?.acceptParams(params2);
 };
 
@@ -191,5 +193,29 @@ const onEdit = (title: string, row?: {}) => {
   };
   const params2 = deepClone(params);
   drawer2Ref.value?.acceptParams(params);
+};
+
+const loraList = ref([]);
+
+const getLoraListApi = type => {
+  const params = {
+    page: 1,
+    pageSize: 1000
+  };
+  seasonList(params).then((res: any) => {
+    if (res.code == 200) {
+      loraList.value = res.data.list.reverse();
+    }
+  });
+};
+getLoraListApi();
+
+const searchTitle = id => {
+  const items = loraList.value.find(function (item) {
+    return item.id == id;
+  });
+  if (items) {
+    return items.season_title;
+  }
 };
 </script>

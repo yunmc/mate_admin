@@ -27,7 +27,8 @@
       <el-form-item label="章节名称" prop="open_state">
         <div class="el_select flex">
           <el-select v-model="drawerProps.row!.episode_sid" placeholder="请选择" @change="changeUid($event)">
-            <el-option v-for="item in loraList" :key="item.id" :label="item.season_title" :value="item.id"> </el-option>
+            <el-option v-for="item in  drawerProps.row!.loraList" :key="item.id" :label="item.season_title" :value="item.id">
+            </el-option>
           </el-select>
         </div>
       </el-form-item>
@@ -130,7 +131,6 @@
 import { ref, reactive, watch } from "vue";
 import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
-import { seasonList } from "@/api/playConfig/play.ts";
 import UploadImg from "@/components/Upload/Img.vue";
 
 const rules = reactive({
@@ -147,7 +147,7 @@ interface DrawerProps {
 }
 
 const changeUid = event => {
-  const item = loraList.value.find(function (item) {
+  const item = drawerProps.value.row!.loraList.find(function (item) {
     return item.id == event;
   });
   drawerProps.value.row!.episode_ai_uid = item.season_ai_uid;
@@ -171,22 +171,22 @@ const acceptParams = (params: DrawerProps) => {
   drawerProps.value.row!.episode_online_state = drawerProps.value.row!.episode_online_state == 1 ? true : false;
   drawerProps.value.row!.episode_unlock_state = drawerProps.value.row!.episode_unlock_state == 1 ? true : false;
   drawerVisible.value = true;
-  getLoraListApi();
+  // getLoraListApi();
 };
 
-const loraList = ref([]);
+// const loraList = ref([]);
 
-const getLoraListApi = type => {
-  const params = {
-    page: 1,
-    pageSize: 1000
-  };
-  seasonList(params).then((res: any) => {
-    if (res.code == 200) {
-      loraList.value = res.data.list.reverse();
-    }
-  });
-};
+// const getLoraListApi = type => {
+//   const params = {
+//     page: 1,
+//     pageSize: 1000
+//   };
+//   seasonList(params).then((res: any) => {
+//     if (res.code == 200) {
+//       loraList.value = res.data.list.reverse();
+//     }
+//   });
+// };
 
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();

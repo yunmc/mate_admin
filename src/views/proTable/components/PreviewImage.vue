@@ -21,7 +21,7 @@ const previewParams = (params: DrawerProps) => {
   if (params.index == 8) {
     srcList.value = [];
     initialIndex.value = 0;
-    srcList.value.push(params.row.episode_remarks_img);
+    srcList.value.push(params.row.episode_thumbnail);
   } else if (params.index == 9) {
     initialIndex.value = 0;
     srcList.value = [];
