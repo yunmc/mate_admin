@@ -197,7 +197,7 @@ const onEdit = (title: string, row?: {}) => {
 
 const loraList = ref([]);
 
-const getLoraListApi = type => {
+const getLoraListApi = () => {
   const params = {
     page: 1,
     pageSize: 1000
@@ -210,8 +210,8 @@ const getLoraListApi = type => {
 };
 getLoraListApi();
 
-const searchTitle = id => {
-  const items = loraList.value.find(function (item) {
+const searchTitle = (id: any) => {
+  const items: any = loraList.value.find(function (item: any) {
     return item.id == id;
   });
   if (items) {
