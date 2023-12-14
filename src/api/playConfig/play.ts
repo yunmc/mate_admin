@@ -31,3 +31,8 @@ export const seasonList = (params: any) => {
 export const delSeason = (id: any) => {
   return http.post(`/admin/drama/del_season`, { id: id });
 };
+
+// 剧情季列表
+export const episodePrompt = (params: any) => {
+  return http.post(`/admin/drama/save_episode_prompt`, params);
+};

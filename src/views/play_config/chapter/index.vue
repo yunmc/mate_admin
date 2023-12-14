@@ -1,4 +1,9 @@
 <template>
+  <div class="chapter">
+    <h3>创建章节</h3>
+    <p>章节将作为标题展示在AI剧本功能中，请先创建章节再添加关卡</p>
+    <s></s>
+  </div>
   <div class="table-box">
     <ProTable
       ref="proTable"
@@ -112,3 +117,30 @@ const delModel = (item: any) => {
   });
 };
 </script>
+<style scoped lang="scss">
+.chapter {
+  position: relative;
+  padding: 10px;
+  background-color: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+  h3 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  p {
+    font-size: 14px;
+  }
+  s {
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 10px;
+    background: #ffffff;
+  }
+}
+</style>

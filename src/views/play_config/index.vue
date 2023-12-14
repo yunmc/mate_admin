@@ -53,7 +53,7 @@ import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import VirtualHumanDrawer from "./components/VirtualHumanDrawer.vue";
 import Drawer from "./components/detail.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
-import { getEpisodeList, saveEpisode, seasonList } from "@/api/playConfig/play";
+import { getEpisodeList, saveEpisode, seasonList, episodePrompt } from "@/api/playConfig/play";
 import { deepClone } from "@/utils/index";
 import { getPicList } from "@/api/gallery";
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
@@ -194,7 +194,7 @@ const onEdit = (title: string, row?: {}) => {
     title,
     isView: title === "编辑" ? false : true,
     row: { ...row },
-    api: saveEpisode,
+    api: episodePrompt,
     getTableList: proTable.value?.getTableList
   };
   const params2 = deepClone(params);
