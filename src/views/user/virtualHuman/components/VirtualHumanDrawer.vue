@@ -418,7 +418,7 @@ const optionOpenState = [
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
-  // console.log("drawerProps", params.generatePhotModel._value[0]);
+  console.log("params", params);
   drawerProps.value.row.images = [];
   if (drawerProps.value.row.posters) {
     drawerProps.value.row.posters.forEach((element: any) => {
