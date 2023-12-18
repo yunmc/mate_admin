@@ -23,7 +23,7 @@ export const useTable = (
       // 当前页数
       page: 1,
       // 每页显示条数
-      pageSize: 20,
+      pageSize: 5,
       // 总条数
       total: 0
     },

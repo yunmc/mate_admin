@@ -493,9 +493,11 @@ const acceptParams = (params: DrawerProps) => {
   drawerProps.value.row.role_play_btn = drawerProps.value.row.role_play_btn == "1" ? true : false;
   drawerProps.value.row.generate_photo_btn = drawerProps.value.row.generate_photo_btn == "1" ? true : false;
   drawerProps.value.row.selfie_btn_show = drawerProps.value.row.selfie_btn_show == "1" ? true : false;
+  drawerProps.value.row!.drama_date_btn_show = drawerProps.value.row!.drama_date_btn_show == "1" ? true : false;
 
   drawerProps.value.row.large_scale_open = drawerProps.value.row.large_scale_open == "1" ? true : false;
   drawerProps.value.row.open_remark_img_switch = drawerProps.value.row.open_remark_img_switch == "1" ? true : false;
+
   drawerVisible.value = true;
   getLoraListApi(false);
   console.log('drawerProps.value.row.intent_recognition_list == ""', drawerProps.value.row.intent_recognition_list == "");
@@ -600,6 +602,7 @@ const handleSubmit = () => {
   drawerProps.value.row.large_scale_open = drawerProps.value.row.large_scale_open ? "1" : "0";
   drawerProps.value.row.open_remark_img_switch = drawerProps.value.row.open_remark_img_switch ? "1" : "0";
   drawerProps.value.row.intent_recognition_list = intent_recognition_list;
+  drawerProps.value.row!.drama_date_btn_show = drawerProps.value.row!.drama_date_btn_show ? "1" : "0";
 
   drawerProps.value.row.posters = [];
   // console.log("drawerProps.value.row.images", drawerProps.value.row.images != undefined);
