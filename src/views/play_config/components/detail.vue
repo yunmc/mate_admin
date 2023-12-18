@@ -154,6 +154,8 @@ const getList = (row: Partial<variableType>) => {
           setTimeout(() => {
             assignment();
           }, 300);
+        } else {
+          textPrompt.value = promotData.value;
         }
       });
     }

@@ -73,6 +73,7 @@ const dataCallback = (data: any) => {
 
 const generate_photo_model = ref();
 const ai_classes = ref();
+const intention = ref();
 // 如果你想在请求之前对当前请求参数做一些操作，可以自定义如下函数：params 为当前所有的请求参数（包括分页），最后返回请求列表接口
 // 默认不做操作就直接在 ProTable 组件上绑定	:requestApi="getVirtualHumanList"
 const getTableList = (option: any) => {
@@ -181,6 +182,10 @@ const getPhotomodel = (option: any) => {
     if (res.code == 200) {
       generate_photo_model.value = res.data.options.generate_photo_btn.generate_photo_model;
       ai_classes.value = res.data.options.ai_classes.ai_class;
+      // for (let i = 0; i < 3; i++) {
+      //   res.data.options.intention.push("SpecialRequest_" + i);
+      // }
+      intention.value = res.data.options.intention;
     }
   });
 };
@@ -201,6 +206,7 @@ const onAdd = (title: string, row?: {}) => {
   params2.api = addVirtualHuman;
   params2.row.generatePhotModel = generate_photo_model;
   params2.row.ai_classes = ai_classes;
+  params2.row.intention = intention;
   params2.getTableList = proTable.value?.getTableList;
   drawerRef.value?.acceptParams(params2);
 };
