@@ -11,11 +11,11 @@
           :model="drawerProps.row"
           :hide-required-asterisk="drawerProps.isView"
         >
-          <el-form-item label="模型选择" prop="template_name">
+          <!-- <el-form-item label="模型选择" prop="template_name">
             <el-select v-model="drawerProps.row!.default_chat_mode" placeholder="请选择">
               <el-option v-for="item in modeList" :key="item.value" :label="item.label" :value="item.value"> </el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="模板选择" prop="template_name">
             <el-select
               :class="{'template_select':drawerProps.row!.prompt_template_id == -1}"
@@ -100,7 +100,7 @@ import { ElMessage, FormInstance } from "element-plus";
 import { templateType, getTemplateList, getVariableList } from "@/api/prompt";
 import { isModelType } from "@/utils/index";
 const rules = reactive({
-  default_chat_mode: [{ required: true, message: "请选择一个模型" }],
+  // default_chat_mode: [{ required: true, message: "请选择一个模型" }],
   prompt_template_id: [{ required: true, message: "请选择一个模板" }]
 });
 
