@@ -59,6 +59,26 @@
         </UploadImg>
       </el-form-item>
 
+      <el-form-item label="introduce_video" prop="introduce_video">
+        <UploadVideo v-model:image-url="drawerProps.row!.introduce_video" height="140px" width="540px" :file-size="10">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传视频文件</span>
+          </template>
+          <template #tip> 视频大小不能超过 10M </template>
+        </UploadVideo>
+      </el-form-item>
+
+      <el-form-item label="introduce_video_cover" prop="introduce_video_cover">
+        <UploadImg v-model:image-url="drawerProps.row!.introduce_video_cover" height="140px" width="140px" :file-size="5">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+          <template #tip> 照片大小不能超过 5M </template>
+        </UploadImg>
+      </el-form-item>
+
       <el-form-item label="posters" prop="images">
         <UploadImgs v-model:file-list="drawerProps.row!.images" :limit="9" height="140px" width="140px">
           <template #empty>
@@ -321,6 +341,7 @@ import { User } from "@/api/interface";
 import { getRelationship, getLoraList, addLora, delLora, intentTags } from "@/api/prompt";
 import UploadImg from "@/components/Upload/Img.vue";
 import UploadVoice from "@/components/Upload/voice.vue";
+import UploadVideo from "@/components/Upload/video.vue";
 import UploadImgs from "@/components/Upload/Imgs.vue";
 import { deepClone } from "@/utils/index";
 
