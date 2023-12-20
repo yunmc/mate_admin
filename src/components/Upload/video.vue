@@ -15,9 +15,9 @@
       :accept="fileType.join(',')"
     >
       <template v-if="imageUrl">
-        <video controls>
-          <source :src="imageUrl" type="video/*" />
-          您的浏览器不支持 video 元素。
+        <video controls :src="imageUrl">
+          <!-- <source :src="imageUrl" type="video/*" />
+          您的浏览器不支持 video 元素。 -->
         </video>
         <!-- <img :src="imageUrl" class="upload-image" />
         <div class="upload-handle" @click.stop>
