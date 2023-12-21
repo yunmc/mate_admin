@@ -3,7 +3,7 @@
     <div class="upload flx-start">
       <!-- 多图上传 -->
       <div class="content flx-start">
-        <UploadImgs v-model:file-list="fileList1" :limit="50">
+        <UploadImgs v-model:file-list="fileList1" :limit="50" :file-size="10000">
           <template #empty>
             <el-icon><Picture /></el-icon>
             <span>请上传照片</span>
