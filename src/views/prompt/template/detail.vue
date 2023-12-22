@@ -247,10 +247,15 @@ const handleClose = (params: DrawerProps) => {
   drawerVisible.value = false;
 };
 
+const removeHtmlTags = str => {
+  return str.replace(/<[^>]+>/g, "");
+};
+
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
   let arr = edit?.value.innerHTML.split("\u200b");
+
   // console.log("123123123213", edit?.value.innerHTML.split("</span>"));
   let str = "";
   let vars = [];
@@ -283,7 +288,7 @@ const handleSubmit = () => {
 
 const submitTemplate = (str, vars) => {
   if (str != "") {
-    drawerProps.value.row!.template_content = str;
+    drawerProps.value.row!.template_content = removeHtmlTags(str);
   }
 
   if (vars.length >= 1) {
