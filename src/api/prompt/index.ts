@@ -69,3 +69,6 @@ export const delLora = (params: any) => {
 export const addLora = (params: any) => {
   return http.post(`/admin/prompt/add_lora`, params);
 };
+export const intentTags = (params: any) => {
+  return http.post(`/admin/ai_user/intent_tags`, params, { noLoading: true });
+};

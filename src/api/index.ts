@@ -74,7 +74,21 @@ class RequestHttp {
         if (data.access_token) {
           userStore.setToken(data.access_token);
         }
-        return data;
+        if (response.config.url == "/admin/ai_user_pic/list") {
+          const params = JSON.parse(response.config.data);
+          if (params.search) {
+            const data2 = {
+              code: 200,
+              data: data.data.ai_users,
+              access_token: data.access_token
+            };
+            return data2;
+          } else {
+            return data;
+          }
+        } else {
+          return data;
+        }
       },
       async (error: AxiosError) => {
         const { response } = error;

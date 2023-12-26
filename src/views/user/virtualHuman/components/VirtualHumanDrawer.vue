@@ -59,6 +59,26 @@
         </UploadImg>
       </el-form-item>
 
+      <el-form-item label="introduce_video" prop="introduce_video">
+        <UploadVideo v-model:image-url="drawerProps.row!.introduce_video" height="140px" width="540px" :file-size="10">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传视频文件</span>
+          </template>
+          <template #tip> 视频大小不能超过 10M </template>
+        </UploadVideo>
+      </el-form-item>
+
+      <el-form-item label="introduce_video_cover" prop="introduce_video_cover">
+        <UploadImg v-model:image-url="drawerProps.row!.introduce_video_cover" height="140px" width="140px" :file-size="5">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+          <template #tip> 照片大小不能超过 5M </template>
+        </UploadImg>
+      </el-form-item>
+
       <el-form-item label="posters" prop="images">
         <UploadImgs v-model:file-list="drawerProps.row!.images" :limit="9" height="140px" width="140px">
           <template #empty>
@@ -150,6 +170,44 @@
         ></el-input>
       </el-form-item>
 
+      <el-form-item label="是否发开场白图片" prop="open_remark_img_switch">
+        <el-switch v-model="drawerProps.row!.open_remark_img_switch" />
+      </el-form-item>
+      <el-form-item label="开场白图片" prop="images">
+        <UploadImg v-model:image-url="drawerProps.row!.open_remark_img" width="135px" height="135px" :file-size="3">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+          <!-- <template #tip> 头像大小不能超过 3M </template> -->
+        </UploadImg>
+      </el-form-item>
+
+      <el-form-item label="意图标签组" prop="Class">
+        <!-- <el-select v-model="drawerProps.row!.intent_tag_id" placeholder="请选择">
+          <el-option v-for="item in drawerProps.row!.intention" :key="item" :label="item" :value="item"> </el-option>
+        </el-select> -->
+        <el-tabs v-model="activeName" type="border-card" class="demo-tabs" @tab-change="getIntentTags()">
+          <el-tab-pane v-for="item in drawerProps.row!.intention" :key="item" :label="item" :name="item">
+            <!-- <el-radio-group v-model="recognitionList[item + '_value']">
+              <el-radio v-for="items in recognitionList[item]" :key="items" :label="items.collection">{{ items.name }}</el-radio>
+            </el-radio-group> -->
+            <el-select v-model="recognitionList[item]" clearable placeholder="请选择组名称">
+              <el-option
+                v-for="items in recognitionList[item + '_list']"
+                :key="items"
+                :label="items.name"
+                :value="items.collection"
+              />
+            </el-select>
+          </el-tab-pane>
+        </el-tabs>
+      </el-form-item>
+
+      <el-form-item label="是否开启大尺度语音" prop="large_scale_open">
+        <el-switch v-model="drawerProps.row!.large_scale_open" />
+      </el-form-item>
+
       <!-- <el-form-item label="默认对话模式" prop="default_chat_mode">
         <el-radio-group v-model="drawerProps.row!.default_chat_mode" @change="drawerProps.row!.set_chat_mode_permission = 0">
           <el-radio :label="2">心动模式</el-radio>
@@ -180,6 +238,12 @@
           v-model="drawerProps.row!.selfie_btn_show"
           :checked="drawerProps.row!.selfie_btn_show == 1"
           label="自拍照"
+          size="large"
+        />
+        <el-checkbox
+          v-model="drawerProps.row!.drama_date_btn_show"
+          :checked="drawerProps.row!.drama_date_btn_show == 1"
+          label="剧情模式"
           size="large"
         />
         <!-- <el-switch v-model="drawerProps.row!.default_chat_mode" /> -->
@@ -274,9 +338,10 @@ import { ref, reactive, watch } from "vue";
 // import { genderType } from "@/utils/serviceDict";
 import { ElMessage, FormInstance } from "element-plus";
 import { User } from "@/api/interface";
-import { getRelationship, getLoraList, addLora, delLora } from "@/api/prompt";
+import { getRelationship, getLoraList, addLora, delLora, intentTags } from "@/api/prompt";
 import UploadImg from "@/components/Upload/Img.vue";
 import UploadVoice from "@/components/Upload/voice.vue";
+import UploadVideo from "@/components/Upload/video.vue";
 import UploadImgs from "@/components/Upload/Imgs.vue";
 import { deepClone } from "@/utils/index";
 
@@ -314,13 +379,27 @@ watch(
   }
 );
 
+// watch(
+//   () => drawerProps.value.row!.intent_tag_id,
+//   value => {
+//     if (drawerProps.value.row!.intent_tag_id != "") {
+//       getIntentTags();
+//     }
+//   }
+// );
+
 const newDataIndex = ref([]);
 const centerDialogVisible = ref(false);
+
+const activeName = ref();
+const recognitionList = ref({});
 
 const handleClose = (params: DrawerProps) => {
   drawerProps.value.isView = false;
   drawerProps.value.title = "";
   drawerProps.value.row = {};
+  activeName.value = "";
+  recognitionList.value = {};
   console.log("drawerProps", drawerProps);
   drawerVisible.value = false;
 };
@@ -428,13 +507,33 @@ const acceptParams = (params: DrawerProps) => {
       });
     });
   }
+  activeName.value = "";
+  recognitionList.value = {};
   tags.value = params.row.tags || [];
   drawerProps.value.row.private_date_btn = drawerProps.value.row.private_date_btn == "1" ? true : false;
   drawerProps.value.row.role_play_btn = drawerProps.value.row.role_play_btn == "1" ? true : false;
   drawerProps.value.row.generate_photo_btn = drawerProps.value.row.generate_photo_btn == "1" ? true : false;
   drawerProps.value.row.selfie_btn_show = drawerProps.value.row.selfie_btn_show == "1" ? true : false;
+  drawerProps.value.row!.drama_date_btn_show = drawerProps.value.row!.drama_date_btn_show == "1" ? true : false;
+
+  drawerProps.value.row.large_scale_open = drawerProps.value.row.large_scale_open == "1" ? true : false;
+  drawerProps.value.row.open_remark_img_switch = drawerProps.value.row.open_remark_img_switch == "1" ? true : false;
+
   drawerVisible.value = true;
   getLoraListApi(false);
+  console.log('drawerProps.value.row.intent_recognition_list == ""', drawerProps.value.row.intent_recognition_list == "");
+  if (drawerProps.value.row.intent_recognition_list == "") {
+    activeName.value = drawerProps.value.row!.intention[0];
+    getIntentTags();
+  } else {
+    activeName.value = drawerProps.value.row!.intention[0];
+    getIntentTags();
+    drawerProps.value.row.intent_recognition_list.forEach(element => {
+      console.log("element", element);
+      recognitionList.value[element.intention] = element.collection;
+    });
+    console.log("recognitionList", recognitionList.value);
+  }
 };
 
 const loraList = ref();
@@ -457,6 +556,24 @@ const getLoraListApi = type => {
   });
 };
 
+const getIntentTags = () => {
+  if (recognitionList.value[activeName.value + "_list"]) {
+    return false;
+  }
+  const params = {
+    intent: activeName.value
+  };
+  intentTags(params).then((res: any) => {
+    if (res.code == 200) {
+      recognitionList.value[activeName.value + "_list"] = [];
+      recognitionList.value[activeName.value + "_list"] = res.data;
+      if (!recognitionList.value[activeName.value]) {
+        recognitionList.value[activeName.value] = "";
+      }
+    }
+  });
+};
+
 const tags = ref<string[]>([]);
 const tagtxt = ref<string>("");
 // 添加标签
@@ -474,6 +591,18 @@ const onDelTag = (index: number) => {
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
+  const intent_recognition_list = ref([]);
+  for (const key in recognitionList.value) {
+    if (typeof recognitionList.value[key] === "string") {
+      if (recognitionList.value[key] != "") {
+        console.log("element", key, recognitionList.value[key]);
+        intent_recognition_list.value.push({
+          intention: key,
+          collection: recognitionList.value[key]
+        });
+      }
+    }
+  }
   if (drawerProps.value.row.ai_name == "") {
     ElMessage.error("请输入姓名");
     return false;
@@ -491,6 +620,11 @@ const handleSubmit = () => {
   drawerProps.value.row.role_play_btn = drawerProps.value.row.role_play_btn ? "1" : "0";
   drawerProps.value.row.generate_photo_btn = drawerProps.value.row.generate_photo_btn ? "1" : "0";
   drawerProps.value.row.selfie_btn_show = drawerProps.value.row.selfie_btn_show ? "1" : "0";
+  drawerProps.value.row.large_scale_open = drawerProps.value.row.large_scale_open ? "1" : "0";
+  drawerProps.value.row.open_remark_img_switch = drawerProps.value.row.open_remark_img_switch ? "1" : "0";
+  drawerProps.value.row.intent_recognition_list = intent_recognition_list;
+  drawerProps.value.row!.drama_date_btn_show = drawerProps.value.row!.drama_date_btn_show ? "1" : "0";
+
   drawerProps.value.row.posters = [];
   // console.log("drawerProps.value.row.images", drawerProps.value.row.images != undefined);
   drawerProps.value.row.images.forEach((element: { url: any }) => {
@@ -507,7 +641,8 @@ const handleSubmit = () => {
       if (res.code == "200") {
         ElMessage.success({ message: `${drawerProps.value.title}成功！` });
         drawerProps.value.getTableList!();
-        drawerVisible.value = false;
+        // drawerVisible.value = false;
+        handleClose();
       } else {
         ElMessage.warning({ message: res.msg });
       }
@@ -526,6 +661,9 @@ defineExpose({
 .el-tag {
   margin-right: 10px;
   cursor: pointer;
+}
+.demo-tabs {
+  overflow: hidden;
 }
 .title {
   display: flex;
