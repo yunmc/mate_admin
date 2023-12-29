@@ -497,7 +497,7 @@ const optionOpenState = [
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
   drawerProps.value = params;
-  // console.log("drawerProps", params.generatePhotModel._value[0]);
+  console.log("drawerProps", params.generatePhotModel);
   drawerProps.value.row.images = [];
   if (drawerProps.value.row.posters) {
     drawerProps.value.row.posters.forEach((element: any) => {
@@ -521,18 +521,15 @@ const acceptParams = (params: DrawerProps) => {
 
   drawerVisible.value = true;
   getLoraListApi(false);
-  console.log('drawerProps.value.row.intent_recognition_list == ""', drawerProps.value.row.intent_recognition_list == "");
   if (drawerProps.value.row.intent_recognition_list == "") {
     activeName.value = drawerProps.value.row!.intention[0];
     getIntentTags();
   } else {
     activeName.value = drawerProps.value.row!.intention[0];
     getIntentTags();
-    drawerProps.value.row.intent_recognition_list.forEach(element => {
-      console.log("element", element);
+    drawerProps.value.row!.intent_recognition_list.forEach(element => {
       recognitionList.value[element.intention] = element.collection;
     });
-    console.log("recognitionList", recognitionList.value);
   }
 };
 
