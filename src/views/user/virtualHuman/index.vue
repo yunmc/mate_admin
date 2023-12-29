@@ -207,6 +207,8 @@ const onAdd = (title: string, row?: {}) => {
   params2.row.generatePhotModel = generate_photo_model;
   params2.row.ai_classes = ai_classes;
   params2.row.intention = intention;
+  params2.row.intent_recognition_list = "";
+
   params2.getTableList = proTable.value?.getTableList;
   drawerRef.value?.acceptParams(params2);
 };
