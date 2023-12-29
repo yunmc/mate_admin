@@ -114,8 +114,6 @@ const getRelationshipList = async () => {
     });
   });
   proTable.value?.reset;
-  console.log("proTable", proTable.value);
-  console.log("rspList", rspList);
 };
 
 // getRelationshipList();
@@ -126,11 +124,8 @@ const getTableList = (option: any) => {
   const params = {
     page: option.page,
     pageSize: option.pageSize,
-    sex: option.sex,
+    open_state: option.sex,
     uid: option.uid,
-    ai_uid: option.ai_uid,
-    state: option.state,
-    relationship: option.relationship,
     stm: option.stm,
     etm: option.etm
   };
@@ -148,12 +143,12 @@ const getAiSexStatus = () => {
       label: "不限"
     },
     {
-      value: "Male",
-      label: "男"
+      value: 1,
+      label: "私有"
     },
     {
-      value: "Female",
-      label: "女"
+      value: 2,
+      label: "公开"
     }
   ];
 };
@@ -210,7 +205,7 @@ const columns: ColumnProps[] = [
   {
     prop: "sex",
     label: "AI性别",
-    search: { el: "tree-select", props: { filterable: true }, key: "sex" },
+    search: { el: "tree-select", props: { filterable: true }, key: "sex", label: "是否公开" },
     enum: getAiSexStatus(),
     fieldNames: { label: "label", value: "value" }
   },
