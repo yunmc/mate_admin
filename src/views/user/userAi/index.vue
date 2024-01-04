@@ -25,7 +25,7 @@
       <!-- 表格操作 -->
       <template #operation="scope">
         <el-button v-if="scope.row.open_state == 2" type="primary" link @click="privacy(scope.row.ai_uid)"> 私密 </el-button>
-        <el-button v-if="scope.row.open_state == 2" type="primary" link @click="Offline(scope.row.ai_uid)"> 下线 </el-button>
+        <el-button type="primary" link @click="Offline(scope.row.ai_uid)"> 下线 </el-button>
       </template>
     </ProTable>
     <PreviewImage ref="previewRef" />
