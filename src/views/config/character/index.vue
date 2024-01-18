@@ -132,7 +132,7 @@ const columns: ColumnProps<User.ResUserList>[] = [
         <el-image
           style="z-index:100;width:80px;height:80px;cursor: pointer;"
           src={scope.row.avatar}
-          onClick={() => showImages(scope.row, 9)}
+          onClick={() => showImages(scope.row.avatar, 0)}
         ></el-image>
       );
     }
@@ -151,7 +151,7 @@ const columns: ColumnProps<User.ResUserList>[] = [
                     initial-index="20000"
                     style="z-index:100;width:80px;height:80px;margin: 0 10px;cursor: pointer;"
                     src={item}
-                    onClick={() => showImages(scope.row, index)}
+                    onClick={() => showImages(scope.row.posters, index)}
                   ></el-image>
                 );
               })
@@ -187,10 +187,10 @@ const columns: ColumnProps<User.ResUserList>[] = [
 
 const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 // const imageIndex = ref(0);
-const showImages = (row: User.ResUserList, index: number) => {
+const showImages = (row: any, index: number) => {
   const params = {
     index: index,
-    row: { ...row }
+    row: row
   };
   previewRef.value?.previewParams(params);
 };

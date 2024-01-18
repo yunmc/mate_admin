@@ -140,7 +140,7 @@ const columns: ColumnProps[] = [
         <el-image
           style="z-index:100;width:80px;height:80px;cursor: pointer;"
           src={scope.row.episode_thumbnail}
-          onClick={() => showImages(scope.row, 8)}
+          onClick={() => showImages(scope.row.episode_thumbnail, 0)}
         ></el-image>
       );
     }
@@ -181,7 +181,7 @@ const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 const showImages = (row: any, index: number) => {
   const params = {
     index: index,
-    row: { ...row }
+    row: row
   };
   previewRef.value?.previewParams(params);
 };
