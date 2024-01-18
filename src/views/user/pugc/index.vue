@@ -37,7 +37,7 @@
                 style="width: 160px; height: 180px"
                 hide-on-click-modal
                 :preview-src-list="[item.pic_source_url]"
-                :src="item.pic_fuzzy_url"
+                :src="item.pic_source_url"
                 fit="cover"
               />
             </div>

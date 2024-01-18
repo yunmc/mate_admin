@@ -116,6 +116,20 @@
           }
         },
         {
+          "path": "/user/virtual-human/prompt",
+          "name": "prompt",
+          "component": "/user/prompt/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "prompt配置",
+            "isLink": "",
+            "isHide": true,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": false
+          }
+        },
+        {
           "path": "/user/gallery",
           "name": "gallery",
           "component": "/user/gallery/index",

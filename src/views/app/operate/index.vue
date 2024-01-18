@@ -170,6 +170,15 @@ const getSortStatus = () => {
   ];
 };
 
+//activity_channel
+
+const activity_channel = () => {
+  return [
+    { stateLabel: "我的页", stateValue: 1 },
+    { stateLabel: "首页", stateValue: 2 }
+  ];
+};
+
 // 表格配置项
 const columns: ColumnProps[] = [
   {
@@ -245,7 +254,8 @@ const onAdd = (title: string, row?: {}) => {
     api: title === "添加" ? getActivitySave : getActivityUpdate,
     getTableList: proTable.value?.getTableList,
     getTargetStatus: getTargetStatus(),
-    getPlatformStatus: getPlatformStatus()
+    getPlatformStatus: getPlatformStatus(),
+    activity_channel: activity_channel()
   };
   drawerRef.value?.acceptParams(params);
 };

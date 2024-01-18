@@ -53,7 +53,9 @@ import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { getVirtualHumanList, addVirtualHuman, postOfflineAi } from "@/api/user/virtualHuman";
 import { deepClone } from "@/utils/index";
 import { saveAiUserPrompt } from "@/api/prompt";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref<ProTableInstance>();
 
@@ -228,6 +230,10 @@ const showImages = (row: any, index: number) => {
 const drawer2Ref = ref<InstanceType<typeof Drawer> | null>(null);
 //添加
 const onEdit = (title: string, row?: {}) => {
+  // console.log(title, row);
+  // router.push({
+  //   name: "prompt"
+  // });
   const params = {
     title,
     isView: title === "编辑" ? false : true,
@@ -235,7 +241,6 @@ const onEdit = (title: string, row?: {}) => {
     api: saveAiUserPrompt,
     getTableList: proTable.value?.getTableList
   };
-
   drawer2Ref.value?.acceptParams(params);
 };
 </script>

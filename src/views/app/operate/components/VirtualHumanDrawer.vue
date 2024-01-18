@@ -64,6 +64,19 @@
           </el-select>
         </div>
       </el-form-item>
+      <el-form-item label="频道页面" prop="activity_target">
+        <div class="el_select flex">
+          <el-select v-model="drawerProps.row!.activity_channel" placeholder="请选择">
+            <el-option
+              v-for="item in drawerProps?.activity_channel"
+              :key="item.stateLabel"
+              :label="item.stateLabel"
+              :value="item.stateValue"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </el-form-item>
       <el-form-item label="排序" prop="activity_weight">
         <el-input v-model="drawerProps.row!.activity_weight" placeholder="activity_weight" clearable></el-input>
       </el-form-item>
@@ -115,6 +128,7 @@ interface DrawerProps {
   getTableList?: () => void;
   getPlatformStatus?: Array<any>;
   getTargetStatus?: Array<any>;
+  activity_channel?: Array<any>;
 }
 
 const drawerVisible = ref(false);
@@ -135,6 +149,8 @@ const acceptParams = (params: DrawerProps) => {
   drawerProps.value.row!.start_time = drawerProps.value.row!.start_time * 1000;
   drawerProps.value.row!.end_time = drawerProps.value.row!.end_time * 1000;
   drawerProps.value.row!.activity_status = drawerProps.value.row!.activity_status == 1 ? true : false;
+  drawerProps.value.row!.activity_channel =
+    drawerProps.value.row!.activity_channel == 0 ? "" : drawerProps.value.row!.activity_channel;
   drawerVisible.value = true;
 };
 // 提交数据（新增/编辑）
