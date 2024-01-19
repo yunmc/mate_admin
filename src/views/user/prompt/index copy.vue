@@ -24,7 +24,8 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <system ref="systemRef" :key="componentKey"></system>
+
+              <system ref="systemRef"></system>
             </div>
             <div class="item">
               <el-form-item label="Usersay模板选择" prop="user_template_id">
@@ -38,7 +39,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <usersay ref="usersayRef" :key="componentKey"></usersay>
+              <usersay ref="usersayRef"></usersay>
             </div>
           </div>
           <!-- end System模板选择 -->
@@ -46,7 +47,8 @@
       </div>
     </VueDraggable>
     <div class="btn">
-      <el-button type="primary" style="margin-bottom: 12px" @click="submit()"> 提交模型 </el-button>
+      <el-button type="primary" style="margin-bottom: 12px" @click="submit()"> 提交 </el-button>
+      <el-button type="primary" style="margin-bottom: 12px">取消</el-button>
     </div>
   </div>
 </template>
@@ -67,7 +69,6 @@ const usePrompt = usePromptStore();
 
 const route = useRoute();
 const router = useRouter();
-const componentKey = ref("");
 
 const title = {
   0: "一",
@@ -88,7 +89,7 @@ const usersay_templateList = ref([]);
 const templateList = ref([]);
 const variableList = ref([]);
 
-const dataProps = ref([
+const dataProps = reactive([
   {
     prompt_template: "",
     prompt_vars: {},
@@ -110,24 +111,17 @@ const dataProps = ref([
 ]);
 
 const onUpdate = () => {
-  componentKey.value = Math.random();
-  setTimeout(() => {
-    dataProps.value.forEach((element, index) => {
-      getTemplateSystem(element, index, false);
-      getTemplateUsersay(element, index, false);
-    });
-  }, 50);
+  console.log("update", dataProps);
 };
 
 const systemRef = ref<InstanceType<typeof system> | null>(null);
 //添加
-const getTemplateSystem = (row?: {}, index: string, isRefresh = true) => {
+const getTemplateSystem = (row?: {}, index: string) => {
   const params = {
     isView: true,
     row: row,
     templateList: templateList,
-    variableList: variableList,
-    isRefresh: isRefresh
+    variableList: variableList
   };
   systemRef.value[index]?.acceptParams(params);
 };
@@ -157,7 +151,7 @@ const getTempList = (row: Partial<variableType>) => {
       setTimeout(() => {
         if (usePrompt.info.prompt_list) {
           usePrompt.info.prompt_list.forEach((element, index) => {
-            dataProps.value[index] = element;
+            dataProps[index] = element;
             getTemplateSystem(element, index);
             getTemplateUsersay(element, index);
           });
@@ -178,7 +172,7 @@ const submit = async () => {
   usePrompt.isSystem = false;
   usePrompt.isUsersay = false;
   usePrompt.isMessage = true;
-  dataProps.value.forEach(async (element, index) => {
+  dataProps.forEach(async (element, index) => {
     if (element.llm_type != "") {
       if (element.prompt_template_id == "") {
         ElMessage.error({ message: `请选择System模板` });
@@ -203,7 +197,7 @@ const submitTemplate = async () => {
   console.log("dataProps", dataProps);
   try {
     await saveAiUserPrompt({
-      prompt_list: dataProps.value,
+      prompt_list: dataProps,
       ai_uid: route.query.ai_uid
     });
     ElMessage.success({ message: `模板成功！` });

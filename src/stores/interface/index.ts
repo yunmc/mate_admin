@@ -29,6 +29,13 @@ export interface UserState {
   userInfo: any;
 }
 
+export interface PromptState {
+  info: any;
+  isSystem: boolean;
+  isUsersay: boolean;
+  isMessage: boolean;
+}
+
 /* tabsMenuProps */
 export interface TabsMenuProps {
   icon: string;
