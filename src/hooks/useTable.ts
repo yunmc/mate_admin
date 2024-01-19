@@ -25,7 +25,7 @@ export const useTable = (
       // 当前页数
       page: 1,
       // 每页显示条数
-      pageSize: 2,
+      pageSize: 20,
       // 总条数
       total: 0
     },
