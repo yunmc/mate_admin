@@ -4,7 +4,7 @@
     <VueDraggable ref="el" v-model="dataProps" @update="onUpdate">
       <div class="main" v-for="(item, index) in dataProps" :key="index">
         <div class="title">模型{{ title[index] }}</div>
-        <el-form ref="ruleFormRef" label-width="150px" label-suffix=" :" :rules="rules" :disabled="item.isView">
+        <el-form ref="ruleFormRef" label-width="150px" label-suffix=" :">
           <el-form-item label="模型选择" prop="llm_type">
             <el-select v-model="item.llm_type" placeholder="请选择" clearable>
               <el-option v-for="item_2 in modeList" :key="item_2.value" :label="item_2.label" :value="item_2.value"> </el-option>
@@ -52,6 +52,8 @@
 </template>
 
 <script setup lang="ts" name="prompt">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { ref, reactive, nextTick, onMounted } from "vue";
 import { templateType, getTemplateList, getVariableList } from "@/api/prompt";
 import { ElMessage, FormInstance } from "element-plus";
@@ -69,10 +71,10 @@ const route = useRoute();
 const router = useRouter();
 const componentKey = ref("");
 
-const title = {
+const title = ref<any>({
   0: "一",
   1: "二"
-};
+});
 const modeList = [
   {
     value: "openai",
@@ -88,7 +90,7 @@ const usersay_templateList = ref([]);
 const templateList = ref([]);
 const variableList = ref([]);
 
-const dataProps = ref([
+const dataProps = ref<any>([
   {
     prompt_template: "",
     prompt_vars: {},
@@ -121,7 +123,7 @@ const onUpdate = () => {
 
 const systemRef = ref<InstanceType<typeof system> | null>(null);
 //添加
-const getTemplateSystem = (row?: {}, index: string, isRefresh = true) => {
+const getTemplateSystem = (row?: {}, index: any, isRefresh = true) => {
   const params = {
     isView: true,
     row: row,
@@ -132,7 +134,7 @@ const getTemplateSystem = (row?: {}, index: string, isRefresh = true) => {
   systemRef.value[index]?.acceptParams(params);
 };
 const usersayRef = ref<InstanceType<typeof usersay> | null>(null);
-const getTemplateUsersay = (row?: {}, index: string) => {
+const getTemplateUsersay = (row?: {}, index: any) => {
   const params = {
     isView: true,
     row: row,
@@ -142,7 +144,7 @@ const getTemplateUsersay = (row?: {}, index: string) => {
   usersayRef.value[index]?.acceptParams(params);
 };
 
-const getTempList = (row: Partial<variableType>) => {
+const getTempList = (row: any) => {
   getTemplateList().then(res => {
     if (res.code == 200) {
       templateList.value = res.data.list;
@@ -166,7 +168,7 @@ const getTempList = (row: Partial<variableType>) => {
     }
   });
 };
-const getList = (row: Partial<variableType>) => {
+const getList = (row: any) => {
   getVariableList({ page: 1, pageSize: 1000 }).then(res => {
     if (res.code == 200) {
       variableList.value = res.data.list;

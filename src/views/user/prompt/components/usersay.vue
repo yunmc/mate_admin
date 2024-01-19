@@ -33,9 +33,9 @@ import { deepClone } from "@/utils/index";
 const usePrompt = usePromptStore();
 interface DrawerProps {
   isView: boolean;
-  row: object;
-  templateList: Array;
-  variableList: Array;
+  row: any;
+  templateList: Array<any>;
+  variableList: Array<any>;
 }
 const dialogVisible = ref(false);
 const drawerProps = ref<DrawerProps>({
@@ -45,7 +45,13 @@ const drawerProps = ref<DrawerProps>({
   variableList: []
 });
 
-const data = ref({
+interface DrawerData {
+  system_template_check: any;
+  system_template_content: any;
+  system_template_vars: any;
+  system_textPrompt: any;
+}
+const data = ref<DrawerData>({
   system_template_check: [],
   system_template_content: "",
   system_template_vars: "",
@@ -72,14 +78,14 @@ const templateInit = () => {
   let promptData = drawerProps.value.templateList.find(item => item.id == drawerProps.value.row!.user_template_id);
   // console.log("promptData", promptData);
 
-  promptData.template_vars.forEach(element => {
+  promptData.template_vars.forEach((element: any) => {
     data.value.system_template_vars = promptData.template_vars;
     data.value.system_template_content = promptData.template_content;
     data.value.system_template_check.push(getKey(element));
   });
   // console.log("data.value", data.value);
 };
-const getKey = name => {
+const getKey = (name: string) => {
   const data2 = drawerProps.value.variableList.find(item => item.variable_name === name);
   data2.value = drawerProps.value.row.user_say_vars[data2.variable_name];
   return deepClone(data2);
@@ -94,7 +100,7 @@ const checkPrompt = () => {
     }
   }
   data.value.system_textPrompt = data.value.system_template_content;
-  data.value.system_template_vars.forEach((element, index) => {
+  data.value.system_template_vars.forEach((element: any, index: any) => {
     data.value.system_textPrompt = data.value.system_textPrompt.replace(
       "{" + element + "}",
       data.value.system_template_check[index].value
@@ -113,7 +119,7 @@ const getResultPrompt = () => {
   drawerProps.value.row!.user_say_template = data.value.system_template_content;
 
   drawerProps.value.row!.user_say_vars = {};
-  data.value.system_template_check.forEach((element, index) => {
+  data.value.system_template_check.forEach((element: any, index: any) => {
     if ((element.variable_name == "" || element.value == undefined) && usePrompt.isMessage) {
       usePrompt.isMessage = false;
       ElMessage.error({ message: `请输入全部变量值` });

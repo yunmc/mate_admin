@@ -232,10 +232,10 @@ const showImages = (row: any, index: number) => {
 
 const drawer2Ref = ref<InstanceType<typeof Drawer> | null>(null);
 //添加
-const onEdit = (title: string, row?: {}) => {
+const onEdit = (title: string, row: any) => {
   usePrompt.setPromptInfo(row);
   const req = {
-    ai_uid: row.ai_uid
+    ai_uid: row?.ai_uid
   };
   router.push({
     name: "prompt",
