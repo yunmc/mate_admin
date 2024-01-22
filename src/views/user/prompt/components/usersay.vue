@@ -4,7 +4,22 @@
       <div style="width: 100%" contenteditable="false">
         <div class="list" v-for="item in data.system_template_check" :key="item.id">
           <el-tag type="success">{{ item.variable_name }} | {{ item.variable_cname }}</el-tag>
-          <el-input v-model="item.value" placeholder="请输入" contenteditable="false" clearable></el-input>
+          <el-input
+            v-if="item.variable_name != 'CAI_ID' && item.variable_name != 'PROMPT_ID'"
+            v-model="item.value"
+            placeholder="请输入"
+            contenteditable="false"
+            clearable
+          ></el-input>
+          <el-input
+            v-model="item.value"
+            v-else
+            :rows="6"
+            type="textarea"
+            placeholder="请输入"
+            contenteditable="false"
+            clearable
+          ></el-input>
         </div>
       </div>
       <el-button @click="checkPrompt()" v-if="data.system_template_check.length >= 1" class="test" type="primary">

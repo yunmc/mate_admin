@@ -39,6 +39,8 @@
               @click="editClick"
               class="prompt"
               placeholder="请输入"
+              @focus="editFocus"
+              @blur="editBlur"
               @input="getData"
             ></div>
             <div style="margin-top: 10px; line-height: 18px">
@@ -164,10 +166,26 @@ const getData = () => {
     isPlaceholder.value = false;
   }
 };
+
+const isEdit = ref(false);
+
+const editFocus = () => {
+  console.log("111111", isEdit.value);
+  isEdit.value = true;
+};
+
+const editBlur = () => {
+  isEdit.value = false;
+  console.log("222222", isEdit.value);
+};
+
 document.addEventListener("paste", e => {
-  if (!drawerVisible.value) {
+  if (!isEdit.value) {
     return false;
   }
+  // if (!drawerVisible.value && !isEdit) {
+  //   return false;
+  // }
   // 阻止默认的复制事件
   e.preventDefault();
   let txt = "";

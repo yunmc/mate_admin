@@ -14,7 +14,12 @@
           <div class="template flex">
             <div class="item">
               <el-form-item label="System模板选择" prop="template_name">
-                <el-select v-model="item.prompt_template_id" @change="getTemplateSystem(item, index)" placeholder="请选择">
+                <el-select
+                  v-model="item.prompt_template_id"
+                  @change="getTemplateSystem(item, index)"
+                  placeholder="请选择"
+                  clearable
+                >
                   <el-option
                     v-for="item_2 in system_templateList"
                     :key="item_2.value"
@@ -28,7 +33,12 @@
             </div>
             <div class="item">
               <el-form-item label="Usersay模板选择" prop="user_template_id">
-                <el-select v-model="item.user_template_id" @change="getTemplateUsersay(item, index)" placeholder="请选择">
+                <el-select
+                  v-model="item.user_template_id"
+                  @change="getTemplateUsersay(item, index)"
+                  placeholder="请选择"
+                  clearable
+                >
                   <el-option
                     v-for="item_2 in usersay_templateList"
                     :key="item_2.value"
@@ -248,7 +258,7 @@ function goBack() {
   .template {
     justify-content: flex-start;
     .item {
-      width: 500px;
+      width: 600px;
     }
   }
   .btn {
