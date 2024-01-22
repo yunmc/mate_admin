@@ -1,6 +1,9 @@
 <template>
   <div class="prompt">
     <el-button type="primary" style="margin-bottom: 12px" icon="ArrowLeft" @click="goBack">返回</el-button>
+    <p style="margin-left: 150px">
+      <el-text class="mx-1" type="danger">模板类型为c.ai 模型类型只能选择c.ai 选其他类型不生效</el-text>
+    </p>
     <VueDraggable ref="el" v-model="dataProps" @update="onUpdate">
       <div class="main" v-for="(item, index) in dataProps" :key="index">
         <div class="title">模型{{ title[index] }}</div>
@@ -93,6 +96,10 @@ const modeList = [
   {
     value: "rp",
     label: "RP-1111"
+  },
+  {
+    value: "c.ai",
+    label: "c.ai"
   }
 ];
 const system_templateList = ref([]);
