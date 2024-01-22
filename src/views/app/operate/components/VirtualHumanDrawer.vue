@@ -18,7 +18,7 @@
       <div class="title">运营位配置</div>
 
       <el-form-item label="活动标题" prop="activity_title">
-        <el-input v-model="drawerProps.row!.activity_title" placeholder="activity_title" clearable></el-input>
+        <el-input v-model="drawerProps.row!.activity_title" placeholder="仅做记录,不对用户展示,30字以内" clearable></el-input>
       </el-form-item>
       <el-form-item label="活动图" prop="banner_url">
         <UploadImg v-model:image-url="drawerProps.row!.banner_url" width="135px" height="135px" :file-size="3">
@@ -45,7 +45,7 @@
       </el-form-item>
 
       <el-form-item label="跳转链接" prop="activity_scheme">
-        <el-input v-model="drawerProps.row!.activity_scheme" placeholder="activity_scheme" clearable></el-input>
+        <el-input v-model="drawerProps.row!.activity_scheme" placeholder="需要跳转的必须配置路径" clearable></el-input>
       </el-form-item>
       <!-- <el-form-item label="跳转参数" prop="episode_sort">
         <el-input v-model="drawerProps.row!.episode_sort" placeholder="episode_sort" clearable></el-input>
@@ -78,13 +78,13 @@
         </div>
       </el-form-item>
       <el-form-item label="排序" prop="activity_weight">
-        <el-input v-model="drawerProps.row!.activity_weight" placeholder="activity_weight" clearable></el-input>
+        <el-input v-model="drawerProps.row!.activity_weight" placeholder="大号排前面" clearable></el-input>
       </el-form-item>
       <el-form-item label="上线时间" prop="start_time">
         <el-date-picker
           v-model="drawerProps.row!.start_time"
           type="datetime"
-          placeholder="start_time"
+          placeholder="选择时间"
           format="YYYY/MM/DD hh:mm:ss"
           value-format="x"
         />
@@ -93,7 +93,7 @@
         <el-date-picker
           v-model="drawerProps.row!.end_time"
           type="datetime"
-          placeholder="end_time"
+          placeholder="选择时间"
           format="YYYY/MM/DD hh:mm:ss"
           value-format="x"
         />
@@ -159,6 +159,7 @@ const handleSubmit = () => {
   drawerProps.value.row!.activity_status = drawerProps.value.row!.activity_status ? 1 : 2;
   drawerProps.value.row!.start_time = drawerProps.value.row!.start_time / 1000;
   drawerProps.value.row!.end_time = drawerProps.value.row!.end_time / 1000;
+  delete drawerProps.value.row!.updated_time;
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
     try {
