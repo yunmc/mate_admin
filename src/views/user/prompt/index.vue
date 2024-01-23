@@ -78,6 +78,7 @@ import usersay from "./components/usersay.vue";
 // import usersay from "./components/usersay.vue";
 import { saveAiUserPrompt } from "@/api/prompt";
 import { usePromptStore } from "@/stores/modules/prompt";
+import { fa } from "element-plus/es/locale";
 const usePrompt = usePromptStore();
 
 const route = useRoute();
@@ -197,6 +198,7 @@ const submit = async () => {
   usePrompt.isSystem = false;
   usePrompt.isUsersay = false;
   usePrompt.isMessage = true;
+  let arr = [];
   dataProps.value.forEach(async (element, index) => {
     if (element.llm_type != "") {
       if (element.prompt_template_id == "") {
@@ -211,12 +213,18 @@ const submit = async () => {
         ElMessage.error({ message: `请选择一个模型` });
       }
     }
-  });
-  setTimeout(() => {
-    if (usePrompt.isSystem && usePrompt.isUsersay) {
-      submitTemplate();
+    arr.push(index);
+    if (dataProps.value.length == arr.length) {
+      if (usePrompt.isSystem && usePrompt.isUsersay) {
+        submitTemplate();
+      }
     }
-  }, 1300);
+  });
+  // setTimeout(() => {
+  //   if (usePrompt.isSystem && usePrompt.isUsersay && isData) {
+  //     submitTemplate();
+  //   }
+  // }, 1300);
 };
 
 const submitTemplate = async () => {
