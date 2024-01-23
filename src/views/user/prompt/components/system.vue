@@ -124,11 +124,6 @@ const checkPrompt = () => {
 };
 
 const getResultPrompt = () => {
-  console.log("drawerProps.value.row!", drawerProps.value.row!);
-  if (drawerProps.value.row!.prompt_template_id == "") {
-    ElMessage.error({ message: `请选择System模板` });
-    return false;
-  }
   drawerProps.value.row!.prompt_template = data.value.system_template_content;
 
   drawerProps.value.row!.prompt_vars = {};

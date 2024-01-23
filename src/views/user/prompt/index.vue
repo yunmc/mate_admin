@@ -200,6 +200,7 @@ const submit = async () => {
   dataProps.value.forEach(async (element, index) => {
     if (element.llm_type != "") {
       if (element.prompt_template_id == "") {
+        console.log("element", element);
         ElMessage.error({ message: `请选择System模板` });
         return false;
       }

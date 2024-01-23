@@ -128,7 +128,7 @@ const checkPrompt = () => {
 
 const getResultPrompt = () => {
   if (drawerProps.value.row!.user_template_id == "") {
-    ElMessage.error({ message: `请选择System模板` });
+    usePrompt.isUsersay = true;
     return false;
   }
   drawerProps.value.row!.user_say_template = data.value.system_template_content;
