@@ -127,7 +127,7 @@ const checkPrompt = () => {
 };
 
 const getResultPrompt = () => {
-  if (drawerProps.value.row!.user_template_id == "") {
+  if (drawerProps.value.row!.user_template_id == "" || drawerProps.value.row!.user_template_id == undefined) {
     usePrompt.isUsersay = true;
     return false;
   }
