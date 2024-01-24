@@ -102,9 +102,6 @@ const rspList = [
   }
 ];
 
-const relationshipList = () => {
-  return rspList;
-};
 const getRelationshipList = async () => {
   let data: any = await getRelationship();
   Object.entries(data.data).forEach(element => {
@@ -256,8 +253,8 @@ const columns: ColumnProps[] = [
     search: {
       el: "date-picker",
       span: 1,
-      props: { type: "datetimerange", valueFormat: "x" }
-      // defaultValue: ["2022-11-12 11:35:00", "2022-12-12 11:35:00"]
+      props: { type: "datetimerange", valueFormat: "x" },
+      defaultValue: [new Date().getTime() - 1000 * 60 * 60 * 24 * 7, new Date().getTime()]
     }
   },
   {
@@ -289,7 +286,6 @@ const showImages = (row: any, index: number) => {
     index: index,
     row: row
   };
-  params.row.avatar = params.row.introduce_image;
   previewRef.value?.previewParams(params);
 };
 const privacy = (id: any) => {
