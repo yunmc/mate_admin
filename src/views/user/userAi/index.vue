@@ -261,13 +261,6 @@ const columns: ColumnProps[] = [
     prop: "updated_time",
     label: "最近修改时间"
   },
-  // {
-  //   prop: "open_state",
-  //   label: "状态",
-  //   search: { el: "tree-select", props: { filterable: true }, key: "state" },
-  //   enum: getAiStatus(),
-  //   fieldNames: { label: "label", value: "value" }
-  // },
   {
     prop: "state_type",
     label: "状态"

@@ -32,6 +32,10 @@
         <el-input v-model="drawerProps.row!.create_by" placeholder="create_by" clearable></el-input>
       </el-form-item>
 
+      <el-form-item label="时刻moment" prop="Class">
+        <el-input v-model="drawerProps.row!.moment" placeholder="时刻moment" clearable></el-input>
+      </el-form-item>
+
       <el-form-item label="Class" prop="Class">
         <el-select v-model="drawerProps.row!.ai_class" placeholder="请选择">
           <el-option v-for="item in drawerProps.row!.ai_classes" :key="item.title" :label="item.title" :value="item.title">
