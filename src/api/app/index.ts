@@ -6,6 +6,16 @@ interface getAPPType {
   upgrade_version?: string; // 最新版本
   upgrade_type?: number; // 更新类型
 }
+
+interface ActivityType {
+  id?: number | string;
+  activity_target?: number | string;
+  activity_channel?: number | string; // 频道页面 id  1：我的页  2：首页
+  activity_platform?: number | string; // 跳转类型   1：原生页面  2：h5 页面
+  activity_status?: number | string; // 运营位状态   1：上线   2：下线
+  page: number | string; // 页码
+  page_size: number | string; // 每页数量
+}
 // 获取app版本更新
 export const getUpgradeVersion = () => {
   return http.post(`/admin/system/upgrade_version`);
@@ -29,4 +39,24 @@ export const delCheckVersion = (params: getAPPType) => {
 // 审核版本列表
 export const getCheckVersions = () => {
   return http.get(`/admin/system/get_check_versions`);
+};
+
+// 运营位列表
+export const getActivityList = (params: ActivityType) => {
+  return http.post(`/admin/user_activity/list`, params);
+};
+
+// 更新运营位
+export const getActivityUpdate = (params: any) => {
+  return http.post(`/admin/user_activity/update`, params);
+};
+
+// 添加运营位
+export const getActivitySave = (params: any) => {
+  return http.post(`/admin/user_activity/save`, params);
+};
+
+// 删除运营位
+export const deleteActivity = (params: any) => {
+  return http.post(`/admin/user_activity/delete`, params);
 };

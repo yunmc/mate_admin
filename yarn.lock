@@ -7615,6 +7615,11 @@ vue-demi@*, vue-demi@>=0.14.5, vue-demi@>=0.14.6:
   resolved "https://registry.npmmirror.com/vue-demi/-/vue-demi-0.14.6.tgz#dc706582851dc1cdc17a0054f4fec2eb6df74c92"
   integrity sha512-8QA7wrYSHKaYgUxDA5ZC24w+eHm3sYCbp0EzcDwKqN3p6HqtTCGR/GVsPyZW92unff4UlcSh++lmqDWN3ZIq4w==
 
+vue-draggable-plus@^0.3.5:
+  version "0.3.5"
+  resolved "https://registry.npmmirror.com/vue-draggable-plus/-/vue-draggable-plus-0.3.5.tgz#e37f2eaf6b50a8aa061952784dbc7cf2be071183"
+  integrity sha512-HqIxV4Wr4U5LRPLRi2oV+EJ4g6ibyRKhuaiH4ZQo+LxK4zrk2XcBk9UyXC88OXp4SAq0XYH4Wco/T3LX5kJ79A==
+
 vue-eslint-parser@^9.3.1:
   version "9.3.2"
   resolved "https://registry.npmmirror.com/vue-eslint-parser/-/vue-eslint-parser-9.3.2.tgz#6f9638e55703f1c77875a19026347548d93fd499"

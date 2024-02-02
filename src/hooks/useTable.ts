@@ -8,6 +8,8 @@ import { reactive, computed, toRefs } from "vue";
  * @param {Boolean} isPageable 是否有分页 (非必传，默认为true)
  * @param {Function} dataCallBack 对后台返回的数据进行处理的方法 (非必传)
  * */
+
+// console.log("import.meta.env.VITE_API_URL", import.meta.env.VITE_USER_NODE_ENV);
 export const useTable = (
   api?: (params: any) => Promise<any>,
   initParam: object = {},
@@ -23,7 +25,7 @@ export const useTable = (
       // 当前页数
       page: 1,
       // 每页显示条数
-      pageSize: 20,
+      pageSize: 10,
       // 总条数
       total: 0
     },

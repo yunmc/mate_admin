@@ -4,11 +4,11 @@
 
 <script setup lang="ts" name="PreviewImage">
 import { ref } from "vue";
-import { User } from "@/api/interface";
+import { isArray } from "@/utils/is";
 
 interface DrawerProps {
   index: number;
-  row: Partial<User.ResUserList>;
+  row: any;
 }
 
 const srcList = ref();
@@ -18,18 +18,12 @@ const showViewer = ref(false);
 const initialIndex = ref(0);
 
 const previewParams = (params: DrawerProps) => {
-  if (params.index == 8) {
-    srcList.value = [];
-    initialIndex.value = 0;
-    srcList.value.push(params.row.episode_thumbnail);
-  } else if (params.index == 9) {
-    initialIndex.value = 0;
-    srcList.value = [];
-    srcList.value.push(params.row.avatar);
+  srcList.value = [];
+  initialIndex.value = params.index;
+  if (!isArray(params.row)) {
+    srcList.value.push(params.row);
   } else {
-    srcList.value = [];
-    initialIndex.value = params.index;
-    srcList.value = params.row.posters;
+    srcList.value = params.row;
   }
   showViewer.value = true;
 };

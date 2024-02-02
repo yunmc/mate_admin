@@ -107,7 +107,7 @@
           "component": "/user/virtualHuman/index",
           "meta": {
             "icon": "Menu",
-            "title": "虚拟人管理",
+            "title": "PGC AI管理",
             "isLink": "",
             "isHide": false,
             "isFull": false,
@@ -116,12 +116,26 @@
           }
         },
         {
+          "path": "/user/virtual-human/prompt",
+          "name": "prompt",
+          "component": "/user/prompt/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "prompt配置",
+            "isLink": "",
+            "isHide": true,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": false
+          }
+        },
+        {
           "path": "/user/gallery",
           "name": "gallery",
           "component": "/user/gallery/index",
           "meta": {
             "icon": "Menu",
-            "title": "虚拟人图库",
+            "title": "PGC 图库管理",
             "isLink": "",
             "isHide": false,
             "isFull": false,
@@ -149,7 +163,21 @@
           "component": "/user/audio/index",
           "meta": {
             "icon": "Menu",
-            "title": "音频管理",
+            "title": "PGC 音频管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/user/pugc",
+          "name": "pugc",
+          "component": "/user/pugc/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "PUGC 图片模板配置",
             "isLink": "",
             "isHide": false,
             "isFull": false,
@@ -252,6 +280,20 @@
           "meta": {
             "icon": "Menu",
             "title": "APP审核管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/app/operate",
+          "name": "operates",
+          "component": "/app/operate/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "运营位配置",
             "isLink": "",
             "isHide": false,
             "isFull": false,

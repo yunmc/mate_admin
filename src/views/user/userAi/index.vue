@@ -102,9 +102,6 @@ const rspList = [
   }
 ];
 
-const relationshipList = () => {
-  return rspList;
-};
 const getRelationshipList = async () => {
   let data: any = await getRelationship();
   Object.entries(data.data).forEach(element => {
@@ -179,7 +176,7 @@ const columns: ColumnProps[] = [
         <el-image
           style="z-index:100;width:80px;height:80px;cursor: pointer;"
           src={scope.row.introduce_image}
-          onClick={() => showImages(scope.row, 9)}
+          onClick={() => showImages(scope.row.avatar, 0)}
         ></el-image>
       );
     }
@@ -256,21 +253,14 @@ const columns: ColumnProps[] = [
     search: {
       el: "date-picker",
       span: 1,
-      props: { type: "datetimerange", valueFormat: "x" }
-      // defaultValue: ["2022-11-12 11:35:00", "2022-12-12 11:35:00"]
+      props: { type: "datetimerange", valueFormat: "x" },
+      defaultValue: [new Date().getTime() - 1000 * 60 * 60 * 24 * 7, new Date().getTime()]
     }
   },
   {
     prop: "updated_time",
     label: "最近修改时间"
   },
-  // {
-  //   prop: "open_state",
-  //   label: "状态",
-  //   search: { el: "tree-select", props: { filterable: true }, key: "state" },
-  //   enum: getAiStatus(),
-  //   fieldNames: { label: "label", value: "value" }
-  // },
   {
     prop: "state_type",
     label: "状态"
@@ -287,9 +277,8 @@ const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 const showImages = (row: any, index: number) => {
   const params = {
     index: index,
-    row: { ...row }
+    row: row
   };
-  params.row.avatar = params.row.introduce_image;
   previewRef.value?.previewParams(params);
 };
 const privacy = (id: any) => {

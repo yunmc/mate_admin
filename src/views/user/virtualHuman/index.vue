@@ -53,7 +53,12 @@ import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { getVirtualHumanList, addVirtualHuman, postOfflineAi } from "@/api/user/virtualHuman";
 import { deepClone } from "@/utils/index";
 import { saveAiUserPrompt } from "@/api/prompt";
+import { useRouter } from "vue-router";
+import { usePromptStore } from "@/stores/modules/prompt";
 
+const usePrompt = usePromptStore();
+
+const router = useRouter();
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref<ProTableInstance>();
 
@@ -127,7 +132,7 @@ const columns: ColumnProps[] = [
         <el-image
           style="z-index:100;width:80px;height:80px;cursor: pointer;"
           src={scope.row.avatar}
-          onClick={() => showImages(scope.row, 9)}
+          onClick={() => showImages(scope.row.avatar, 0)}
         ></el-image>
       );
     }
@@ -220,22 +225,21 @@ const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 const showImages = (row: any, index: number) => {
   const params = {
     index: index,
-    row: { ...row }
+    row: row
   };
   previewRef.value?.previewParams(params);
 };
 
 const drawer2Ref = ref<InstanceType<typeof Drawer> | null>(null);
 //添加
-const onEdit = (title: string, row?: {}) => {
-  const params = {
-    title,
-    isView: title === "编辑" ? false : true,
-    row: { ...row },
-    api: saveAiUserPrompt,
-    getTableList: proTable.value?.getTableList
+const onEdit = (title: string, row: any) => {
+  usePrompt.setPromptInfo(row);
+  const req = {
+    ai_uid: row?.ai_uid
   };
-
-  drawer2Ref.value?.acceptParams(params);
+  router.push({
+    name: "prompt",
+    query: req
+  });
 };
 </script>
