@@ -104,13 +104,13 @@ const getKey = (name: any) => {
 };
 
 const checkPrompt = () => {
-  for (let inx = 0; inx < data.value.system_template_check.length; inx++) {
-    if (data.value.system_template_check[inx].value == "" || data.value.system_template_check[inx].value == undefined) {
-      data.value.system_textPrompt = "";
-      ElMessage.error({ message: `请输入全部变量值` });
-      return false;
-    }
-  }
+  // for (let inx = 0; inx < data.value.system_template_check.length; inx++) {
+  //   if (data.value.system_template_check[inx].value == "" || data.value.system_template_check[inx].value == undefined) {
+  //     data.value.system_textPrompt = "";
+  //     ElMessage.error({ message: `请输入全部变量值` });
+  //     return false;
+  //   }
+  // }
   data.value.system_textPrompt = data.value.system_template_content;
   data.value.system_template_vars.forEach((element: any, index: any) => {
     data.value.system_textPrompt = data.value.system_textPrompt.replace(
@@ -130,15 +130,17 @@ const getResultPrompt = () => {
   data.value.system_template_check.forEach((element: any, index: any) => {
     console.log("element.value", element.value, index);
     if ((element.variable_name == "" || element.value == undefined) && usePrompt.isMessage) {
-      usePrompt.isMessage = false;
-      ElMessage.error({ message: `请输入全部变量值` });
-      usePrompt.isSystem = false;
-      return false;
+      // usePrompt.isMessage = false;
+      // ElMessage.error({ message: `请输入全部变量值` });
+      // usePrompt.isSystem = false;
+      // return false;
+      drawerProps.value.row!.prompt_vars[element.variable_name] = "";
+    } else {
+      drawerProps.value.row!.prompt_vars[element.variable_name] = element.value;
     }
-    drawerProps.value.row!.prompt_vars[element.variable_name] = element.value;
-    if (data.value.system_template_check.length - 1 == index && usePrompt.isMessage) {
-      usePrompt.isSystem = true;
-    }
+    // if (data.value.system_template_check.length - 1 == index && usePrompt.isMessage) {
+    //   usePrompt.isSystem = true;
+    // }
   });
 };
 defineExpose({

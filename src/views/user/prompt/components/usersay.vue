@@ -107,13 +107,13 @@ const getKey = (name: string) => {
 };
 
 const checkPrompt = () => {
-  for (let inx = 0; inx < data.value.system_template_check.length; inx++) {
-    if (data.value.system_template_check[inx].value == "" || data.value.system_template_check[inx].value == undefined) {
-      data.value.system_textPrompt = "";
-      ElMessage.error({ message: `请输入全部变量值` });
-      return false;
-    }
-  }
+  // for (let inx = 0; inx < data.value.system_template_check.length; inx++) {
+  //   if (data.value.system_template_check[inx].value == "" || data.value.system_template_check[inx].value == undefined) {
+  //     data.value.system_textPrompt = "";
+  //     ElMessage.error({ message: `请输入全部变量值` });
+  //     return false;
+  //   }
+  // }
   data.value.system_textPrompt = data.value.system_template_content;
   data.value.system_template_vars.forEach((element: any, index: any) => {
     data.value.system_textPrompt = data.value.system_textPrompt.replace(
@@ -136,16 +136,18 @@ const getResultPrompt = () => {
   drawerProps.value.row!.user_say_vars = {};
   data.value.system_template_check.forEach((element: any, index: any) => {
     if ((element.variable_name == "" || element.value == undefined) && usePrompt.isMessage) {
-      usePrompt.isMessage = false;
-      ElMessage.error({ message: `请输入全部变量值` });
-      usePrompt.isUsersay = false;
-      return false;
+      // usePrompt.isMessage = false;
+      // ElMessage.error({ message: `请输入全部变量值` });
+      // usePrompt.isUsersay = false;
+      // return false;
+      drawerProps.value.row!.user_say_vars[element.variable_name] = "";
+    } else {
+      drawerProps.value.row!.user_say_vars[element.variable_name] = element.value;
     }
-    console.log("index", index, data.value.system_template_check.length);
-    drawerProps.value.row!.user_say_vars[element.variable_name] = element.value;
-    if (data.value.system_template_check.length - 1 == index && usePrompt.isMessage) {
-      usePrompt.isUsersay = true;
-    }
+    // console.log("index", index, data.value.system_template_check.length);
+    // if (data.value.system_template_check.length - 1 == index && usePrompt.isMessage) {
+    //   usePrompt.isUsersay = true;
+    // }
   });
   // console.log("drawerProps.value.row!.user_say_vars", drawerProps.value.row!.user_say_vars);
 };
