@@ -195,14 +195,13 @@ const getList = (row: any) => {
 };
 
 const submit = async () => {
-  usePrompt.isSystem = false;
-  usePrompt.isUsersay = false;
-  usePrompt.isMessage = true;
+  // usePrompt.isSystem = false;
+  // usePrompt.isUsersay = false;
+  // usePrompt.isMessage = true;
   let arr = [];
   dataProps.value.forEach(async (element, index) => {
     if (element.llm_type != "") {
       if (element.prompt_template_id == "") {
-        console.log("element", element);
         ElMessage.error({ message: `请选择System模板` });
         return false;
       }
@@ -215,9 +214,9 @@ const submit = async () => {
     }
     arr.push(index);
     if (dataProps.value.length == arr.length) {
-      if (usePrompt.isSystem && usePrompt.isUsersay) {
-        submitTemplate();
-      }
+      // if (usePrompt.isSystem && usePrompt.isUsersay) {
+      submitTemplate();
+      // }
     }
   });
   // setTimeout(() => {
