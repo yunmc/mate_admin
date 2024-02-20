@@ -93,8 +93,8 @@
         </UploadImgs>
       </el-form-item>
 
-      <el-form-item label="Description" prop="ai_desc">
-        <el-input v-model="drawerProps.row!.ai_desc" type="textarea" :rows="3" placeholder="ai_desc" clearable></el-input>
+      <el-form-item label="introduce" prop="ai_desc">
+        <el-input v-model="drawerProps.row!.ai_desc" type="textarea" :rows="3" placeholder="introduce" clearable></el-input>
       </el-form-item>
 
       <el-form-item label="虚拟人标签" prop="tags">
