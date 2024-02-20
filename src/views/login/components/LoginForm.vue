@@ -38,7 +38,7 @@ if (window.location.origin == "https://admin-matelink.flyai.com") {
 const fsLogin = () => {
   const goto =
     "https://passport.feishu.cn/suite/passport/oauth/authorize?client_id=" +
-    "cli_a16c9d1a4479d00e" +
+    "cli_a5587ef3b2f9100d" +
     "&redirect_uri=" +
     url +
     "&response_type=code&state=STATE";
