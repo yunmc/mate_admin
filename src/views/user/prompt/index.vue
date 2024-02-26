@@ -101,6 +101,10 @@ const modeList = [
   {
     value: "c.ai",
     label: "c.ai"
+  },
+  {
+    value: "8onfHfKu",
+    label: "8onfHfKu"
   }
 ];
 const system_templateList = ref([]);
