@@ -305,7 +305,7 @@ const ruleFormRef = ref<FormInstance>();
 const handleSubmit = async () => {
   ruleFormRef.value!.validate(async valid => {
     drawerProps.value.row!.episode_online_state = drawerProps.value.row!.episode_online_state ? 1 : 0;
-    drawerProps.value.row!.episode_remarks_img_switch = drawerProps.value.row!.episode_online_state ? 1 : 0;
+    drawerProps.value.row!.episode_remarks_img_switch = drawerProps.value.row!.episode_remarks_img_switch ? 1 : 0;
     Object.keys(drawerProps.value.row.episode_emotions).forEach(k => {
       let emotion = drawerProps.value.row.episode_emotions[k];
       if (!Array.isArray(emotion)) emotion = [emotion];
