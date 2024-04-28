@@ -75,8 +75,8 @@ const data = ref<DrawerData>({
 });
 // 接收父组件传过来的参数
 const acceptParams = (params: DrawerProps) => {
-  console.log("params", params);
-  console.log("data", data);
+  // console.log("params", params);
+  // console.log("data", data);
   drawerProps.value = params;
   data.value.system_template_check = [];
   data.value.system_template_content = "";

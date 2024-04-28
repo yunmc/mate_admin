@@ -34,7 +34,7 @@ export const delVariable = (id: string) => {
 };
 
 export const getVariableList = (params: listType) => {
-  console.log("params", params);
+  // console.log("params", params);
   return http.post(`/admin/prompt/get_variable_list`, params);
 };
 

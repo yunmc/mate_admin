@@ -31,6 +31,7 @@ export interface UserState {
 
 export interface PromptState {
   info: any;
+  momentInfo: any;
   isSystem: boolean;
   isUsersay: boolean;
   isMessage: boolean;

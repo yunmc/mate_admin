@@ -27,7 +27,7 @@
       </el-button>
     </el-form-item>
 
-    <el-dialog v-model="dialogVisible" title="Promot展示" width="50%" draggable>
+    <el-dialog v-model="dialogVisible" title="Prompt展示" width="50%" draggable>
       <p>{{ data.system_textPrompt }}</p>
       <el-link class="copy" type="primary" v-copy="data.system_textPrompt">复制</el-link>
       <template #footer>

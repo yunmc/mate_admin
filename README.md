@@ -20,6 +20,8 @@ Geeker-Admin 一款基于 Vue3.3、TypeScript、Vite4、Pinia、Element-Plus 开
 
 ```text
 pnpm install
+
+yarn install # 有时候因为依赖版本的问题，用 yarn 安装反而可以通过 tsc 编辑！
 ```
 
 - **Run：**

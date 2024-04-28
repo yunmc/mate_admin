@@ -43,7 +43,7 @@ router.beforeEach(async (to, from, next) => {
   const title = import.meta.env.VITE_GLOB_APP_TITLE;
   document.title = to.meta.title ? `${to.meta.title} - ${title}` : title;
 
-  console.log(LOGIN_URL);
+  // console.log(LOGIN_URL);
   // 3.判断是访问登陆页，有 Token 就在当前页面，没有 Token 重置路由到登陆页
   if (to.path.toLocaleLowerCase() === LOGIN_URL) {
     if (userStore.token) return next(from.fullPath);

@@ -59,7 +59,9 @@
       </div>
     </VueDraggable>
     <div class="btn">
-      <el-button type="primary" style="margin-bottom: 12px" @click="submit()"> 提交模型 </el-button>
+      <el-button type="primary" style="margin-bottom: 12px" @click="submit()" :disabled="route.query.is_view === '1'">
+        提交模型
+      </el-button>
     </div>
   </div>
 </template>
@@ -79,6 +81,7 @@ import usersay from "./components/usersay.vue";
 import { saveAiUserPrompt } from "@/api/prompt";
 import { usePromptStore } from "@/stores/modules/prompt";
 import { fa } from "element-plus/es/locale";
+import { episodePrompt, saveEpisodePromptList } from "@/api/playConfig/play";
 const usePrompt = usePromptStore();
 
 const route = useRoute();
@@ -112,6 +115,7 @@ const usersay_templateList = ref([]);
 const templateList = ref([]);
 const variableList = ref([]);
 
+// 目前只有模型一和模型二
 const dataProps = ref<any>([
   {
     prompt_template: "",
@@ -179,13 +183,19 @@ const getTempList = (row: any) => {
         }
       });
       setTimeout(() => {
-        if (usePrompt.info.prompt_list) {
-          usePrompt.info.prompt_list.forEach((element, index) => {
-            dataProps.value[index] = element;
-            getTemplateSystem(element, index);
-            getTemplateUsersay(element, index);
-          });
+        let prompt_list = [];
+        // @tips：创建 moment 的时候会继承 ai 的 prompt_list 配置。
+        if (route.query.moment_id && usePrompt.momentInfo.episode_prompt_list) {
+          prompt_list = JSON.parse(usePrompt.momentInfo.episode_prompt_list);
         }
+        if (!route.query.moment_id && usePrompt.info.prompt_list) {
+          prompt_list = usePrompt.info.prompt_list;
+        }
+        prompt_list.forEach((element, index) => {
+          dataProps.value[index] = element;
+          getTemplateSystem(element, index);
+          getTemplateUsersay(element, index);
+        });
       }, 1000);
     }
   });
@@ -231,18 +241,31 @@ const submit = async () => {
 };
 
 const submitTemplate = async () => {
-  console.log("dataProps", dataProps);
-  try {
-    await saveAiUserPrompt({
-      prompt_list: dataProps.value,
-      ai_uid: route.query.ai_uid
-    });
-    ElMessage.success({ message: `模板成功！` });
-    // drawerProps.value.getTableList!();
-    // drawerVisible.value = false;
-  } catch (error) {
-    console.log(error);
-  }
+  const _update_ai = async () => {
+    try {
+      await saveAiUserPrompt({
+        prompt_list: dataProps.value,
+        ai_uid: route.query.ai_uid
+      });
+      ElMessage.success({ message: `模板成功！` });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const _update_moment = async () => {
+    try {
+      const params = {
+        prompt_list: dataProps.value,
+        id: route.query.moment_id
+      };
+      await saveEpisodePromptList(params);
+      ElMessage.success({ message: `模板成功！` });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  if (route.query.moment_id) return await _update_moment();
+  return await _update_ai();
 };
 
 // onMounted(() => {

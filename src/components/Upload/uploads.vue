@@ -132,10 +132,10 @@ interface UploadEmits {
 }
 const emit = defineEmits<UploadEmits>();
 const uploadSuccess = (response: { fileUrl: string } | undefined, uploadFile: UploadFile) => {
-  console.log("response", response);
+  // console.log("response", response);
   if (!response) return;
   uploadFile.url = response.fileUrl;
-  console.log("_fileList.value", _fileList.value);
+  // console.log("_fileList.value", _fileList.value);
   emit("update:fileList", _fileList.value);
   // 调用 el-form 内部的校验方法（可自动校验）
   formItemContext?.prop && formContext?.validateField([formItemContext.prop as string]);

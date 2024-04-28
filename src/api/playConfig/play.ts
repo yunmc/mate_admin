@@ -36,3 +36,12 @@ export const delSeason = (id: any) => {
 export const episodePrompt = (params: any) => {
   return http.post(`/admin/drama/save_episode_prompt`, params);
 };
+
+/**
+ * 保存 moment（普通模式）的 prompt_list
+ * @param params
+ * @returns
+ */
+export const saveEpisodePromptList = (params: any) => {
+  return http.post(`/admin/drama/save_episode_prompt_list`, params);
+};

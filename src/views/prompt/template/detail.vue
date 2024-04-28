@@ -207,14 +207,15 @@ document.addEventListener("paste", e => {
 
 const promptPush = (row: any) => {
   let selection = getSelection();
-  if (selection?.focusNode.id != "edit" && selection?.focusNode.parentElement.id != "edit") {
+  if (selection?.focusNode?.id != "edit" && selection?.focusNode?.parentElement?.id != "edit") {
     return false;
   }
   // 获取光标对象
   let range = selection?.getRangeAt(0);
   // 获取光标对象的范围界定对象，一般就是textNode对象
   let textNode = range.startContainer;
-  console.log("textNode", textNode);
+  // console.log("textNode", textNode);
+
   // 获取光标位置
   let rangeStartOffset = range.startOffset;
 

@@ -32,9 +32,9 @@
         <el-input v-model="drawerProps.row!.create_by" placeholder="create_by" clearable></el-input>
       </el-form-item>
 
-      <el-form-item label="时刻moment" prop="Class">
+      <!-- <el-form-item label="时刻moment" prop="Class">
         <el-input v-model="drawerProps.row!.moment" placeholder="时刻moment" clearable></el-input>
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item label="Class" prop="Class">
         <el-select v-model="drawerProps.row!.ai_class" placeholder="请选择">
@@ -174,6 +174,16 @@
         ></el-input>
       </el-form-item>
 
+      <el-form-item label="开场白语音" prop="open_remark_img_audio">
+        <UploadVoice v-model:image-url="drawerProps.row!.open_remark_img_audio" height="140px" width="540px" :file-size="10">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传音频文件</span>
+          </template>
+          <template #tip> 音频大小不能超过 10M </template>
+        </UploadVoice>
+      </el-form-item>
+
       <el-form-item label="是否发开场白图片" prop="open_remark_img_switch">
         <el-switch v-model="drawerProps.row!.open_remark_img_switch" />
       </el-form-item>
@@ -244,12 +254,12 @@
           label="自拍照"
           size="large"
         />
-        <el-checkbox
+        <!-- <el-checkbox
           v-model="drawerProps.row!.drama_date_btn_show"
           :checked="drawerProps.row!.drama_date_btn_show == 1"
           label="剧情模式"
           size="large"
-        />
+        /> -->
         <!-- <el-switch v-model="drawerProps.row!.default_chat_mode" /> -->
       </el-form-item>
 

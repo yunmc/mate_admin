@@ -5,7 +5,8 @@ import piniaPersistConfig from "@/config/piniaPersist";
 export const usePromptStore = defineStore({
   id: "prompt",
   state: (): PromptState => ({
-    info: {},
+    info: {}, // ai info
+    momentInfo: {}, // moment info
     isSystem: false,
     isUsersay: false,
     isMessage: false
@@ -13,8 +14,9 @@ export const usePromptStore = defineStore({
   getters: {},
   actions: {
     // Set setUserInfo
-    setPromptInfo(userInfo: PromptState) {
+    setPromptInfo(userInfo: any, momentInfo: any = {}) {
       this.info = userInfo;
+      this.momentInfo = momentInfo;
     }
   },
   persist: piniaPersistConfig("prompt")

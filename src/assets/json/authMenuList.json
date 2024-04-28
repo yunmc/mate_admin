@@ -88,6 +88,36 @@
       ]
     },
     {
+      "path": "/moment",
+      "name": "moment",
+      "redirect": "/moment",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "Moment管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/moment",
+          "name": "moment",
+          "component": "/moment/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "Moment配置",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
       "path": "/user/virtual-human",
       "name": "virtualHuman",
       "redirect": "/user/virtual-human",
