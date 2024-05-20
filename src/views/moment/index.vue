@@ -191,8 +191,7 @@ const handleEditMoment = (row: any) => {
     api: saveEpisode,
     getTableList: proTable.value?.getTableList
   };
-  // @todo：这里不知道为什么要 deep clone 一下，先这样。
-  const _params = deepClone(params);
+  const _params = deepClone(params); // 断一下引用
   _params.api = saveEpisode;
   _params.getTableList = proTable.value?.getTableList;
   drawerRef.value?.acceptParams(_params);

@@ -192,9 +192,9 @@
         <el-input v-model="drawerProps.row!.episode_remarks" type="textarea" :rows="3" placeholder="" clearable></el-input>
       </el-form-item>
 
-      <el-form-item label="是否发开场白图片" prop="episode_remarks_img_switch">
+      <!-- <el-form-item label="是否发开场白图片" prop="episode_remarks_img_switch">
         <el-switch v-model="drawerProps.row!.episode_remarks_img_switch" />
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item label="开场白语音" prop="episode_remarks_audio">
         <UploadVoice v-model:image-url="drawerProps.row!.episode_remarks_audio" height="140px" width="540px" :file-size="10">
@@ -206,13 +206,47 @@
         </UploadVoice>
       </el-form-item>
 
-      <el-form-item label="开场白图片" prop="episode_remarks_img">
+      <!-- <el-form-item label="开场白图片" prop="episode_remarks_img">
         <UploadImg v-model:image-url="drawerProps.row!.episode_remarks_img" width="135px" height="135px" :file-size="5">
           <template #empty>
             <el-icon><Avatar /></el-icon>
             <span>请选择上传图片</span>
           </template>
         </UploadImg>
+      </el-form-item> -->
+
+      <el-form-item label="用户的选项A" prop="quick_word1">
+        <el-input v-model="drawerProps.row!.quick_word1" type="textarea" :rows="3" placeholder="" clearable></el-input>
+      </el-form-item>
+
+      <el-form-item label="选项A的AI回复" prop="quick_resp1">
+        <el-input v-model="drawerProps.row!.quick_resp1" type="textarea" :rows="3" placeholder="" clearable></el-input>
+      </el-form-item>
+
+      <el-form-item label="选项A的图片" prop="quick_img1">
+        <UploadImgs2 v-model:file-list="saveParams.quick_pic1" :api="uploadFile" :limit="1" height="140px" width="140px">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+        </UploadImgs2>
+      </el-form-item>
+
+      <el-form-item label="用户的选项B" prop="quick_word2">
+        <el-input v-model="drawerProps.row!.quick_word2" type="textarea" :rows="3" placeholder="" clearable></el-input>
+      </el-form-item>
+
+      <el-form-item label="选项B的AI回复" prop="quick_resp2">
+        <el-input v-model="drawerProps.row!.quick_resp2" type="textarea" :rows="3" placeholder="" clearable></el-input>
+      </el-form-item>
+
+      <el-form-item label="选项B的图片" prop="quick_img2">
+        <UploadImgs2 v-model:file-list="saveParams.quick_pic2" :api="uploadFile" :limit="1" height="140px" width="140px">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+        </UploadImgs2>
       </el-form-item>
 
       <div class="title">状态设置</div>
@@ -247,12 +281,13 @@
 </template>
 
 <script setup lang="ts" name="MomentEditDrawer">
-import { ref, reactive, watch } from "vue";
+import { ref, reactive } from "vue";
 import { ElMessage, FormInstance } from "element-plus";
 import UploadImg from "@/components/Upload/Img.vue";
 import UploadImgs from "@/components/Upload/uploads.vue";
+import UploadImgs2 from "@/components/Upload/Imgs.vue"; // UploadImgs2 组件可以预览图库的图片数据结构
 import UploadVoice from "@/components/Upload/voice.vue";
-import { getPicList } from "@/api/gallery";
+import { getPicList, uploadFile, savePic } from "@/api/gallery";
 
 interface DrawerProps {
   row: any;
@@ -267,7 +302,43 @@ const drawerProps = ref<DrawerProps>({
   isView: false
 });
 
-const rules = reactive({});
+/**
+ * 若配置6项中的1项，则其他5项也必填
+ * @param rule
+ * @param value
+ * @param callback
+ */
+const checkQuick = (rule: any, value: any, callback: any) => {
+  if (
+    [
+      drawerProps.value.row.quick_word1,
+      drawerProps.value.row.quick_resp1,
+      drawerProps.value.row.quick_word2,
+      drawerProps.value.row.quick_resp2
+    ].some(i => !!i) ||
+    [saveParams.value.quick_pic1, saveParams.value.quick_pic1].some(img => img.length > 0)
+  ) {
+    if (["quick_word1", "quick_resp1", "quick_word2", "quick_word2"].includes(rule.field) && value === "") {
+      return callback("当前配置项必填");
+    }
+    if (rule.field === "quick_img1" && saveParams.value.quick_pic1.length === 0) {
+      return callback("当前配置项必填");
+    }
+    if (rule.field === "quick_img2" && saveParams.value.quick_pic2.length === 0) {
+      return callback("当前配置项必填");
+    }
+  }
+  return callback();
+};
+
+const rules = reactive({
+  quick_word1: [{ required: false, validator: checkQuick, trigger: "blur" }],
+  quick_resp1: [{ required: false, validator: checkQuick, trigger: "blur" }],
+  quick_img1: [{ required: false, validator: checkQuick, trigger: "blur" }],
+  quick_word2: [{ required: false, validator: checkQuick, trigger: "blur" }],
+  quick_resp2: [{ required: false, validator: checkQuick, trigger: "blur" }],
+  quick_img2: [{ required: false, validator: checkQuick, trigger: "blur" }]
+});
 
 const momentTypeList = [
   { stateLabel: "默认", stateValue: 0 },
@@ -285,7 +356,20 @@ const init = async () => {
 };
 init();
 
+const saveParams = ref({
+  quick_pic1: [] as any[],
+  quick_pic2: [] as any[],
+  ai_uid: "",
+  pic_level: 0
+});
+
 const acceptParams = (params: DrawerProps) => {
+  saveParams.value.quick_pic1 =
+    params.row.quick_pic1 && Object.keys(params.row.quick_pic1).length ? [{ url: params.row.quick_pic1.pic_source_url }] : [];
+  saveParams.value.quick_pic2 =
+    params.row.quick_pic2 && Object.keys(params.row.quick_pic2).length ? [{ url: params.row.quick_pic2.pic_source_url }] : [];
+  saveParams.value.ai_uid = params.row.episode_ai_uid;
+  saveParams.value.pic_level = 0;
   drawerProps.value = params;
   drawerProps.value.row!.episode_online_state = drawerProps.value.row!.episode_online_state == 1 ? true : false;
   drawerProps.value.row!.episode_remarks_img_switch = drawerProps.value.row!.episode_remarks_img_switch == 1 ? true : false;
@@ -315,6 +399,39 @@ const handleSubmit = async () => {
       return;
     }
     try {
+      // @tips：首先上传 AI 收费图片。
+      if (saveParams.value.quick_pic1.length && saveParams.value.quick_pic2.length) {
+        let images: any[] = [];
+        // @tips：看看有没有变化。
+        const npic1 = (saveParams.value.quick_pic1[0] as any).url.pic_source_url;
+        const opic1 = drawerProps.value.row.quick_pic1?.pic_source_url;
+        if (opic1 !== npic1) images.push(saveParams.value.quick_pic1[0]);
+        const npic2 = (saveParams.value.quick_pic2[0] as any).url.pic_source_url;
+        const opic2 = drawerProps.value.row.quick_pic2?.pic_source_url;
+        if (opic2 !== npic2) images.push(saveParams.value.quick_pic2[0]);
+        images = images.map(img => ({ pic_source_url: img.url.pic_source_url, pic_fuzzy_url: img.url.pic_fuzzy_url })) as any[];
+        const {
+          data: { pic_ids = [] }
+        } = (await savePic({
+          images,
+          pic_level: saveParams.value.pic_level,
+          ai_uid: saveParams.value.ai_uid
+        })) as any;
+        if (pic_ids.length === 2) {
+          drawerProps.value.row.quick_img1 = parseInt(pic_ids[0]);
+          drawerProps.value.row.quick_img2 = parseInt(pic_ids[1]);
+        } else if (pic_ids.length === 1 && opic1 !== npic1) {
+          drawerProps.value.row.quick_img1 = parseInt(pic_ids[0]);
+        } else if (pic_ids.length === 1 && opic2 !== npic2) {
+          drawerProps.value.row.quick_img2 = parseInt(pic_ids[0]);
+        }
+      }
+      // @tips：清空 quick 配置的情况。
+      if (!saveParams.value.quick_pic1.length && !saveParams.value.quick_pic2.length) {
+        drawerProps.value.row.quick_img1 = 0;
+        drawerProps.value.row.quick_img2 = 0;
+      }
+      // @tips：更新 moment 配置。
       const params = {
         ...drawerProps.value.row
       };
@@ -332,6 +449,10 @@ const handleSubmit = async () => {
   });
 };
 const beforeCloseDrawer = () => {
+  saveParams.value.quick_pic1 = [];
+  saveParams.value.quick_pic2 = [];
+  saveParams.value.ai_uid = "";
+  saveParams.value.pic_level = 0;
   drawerProps.value.isView = false;
   drawerProps.value.row = {};
   drawerVisible.value = false;
