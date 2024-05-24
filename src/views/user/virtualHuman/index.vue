@@ -46,19 +46,25 @@
 <script setup lang="tsx" name="useInfo">
 import { ref, reactive } from "vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
-
-import VirtualHumanDrawer from "./components/VirtualHumanDrawer.vue";
-import Drawer from "./components/detail.vue";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { getVirtualHumanList, addVirtualHuman, postOfflineAi } from "@/api/user/virtualHuman";
 import { deepClone } from "@/utils/index";
-import { saveAiUserPrompt } from "@/api/prompt";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { usePromptStore } from "@/stores/modules/prompt";
+import VirtualHumanDrawer from "./components/VirtualHumanDrawer.vue";
+import Drawer from "./components/detail.vue";
 
 const usePrompt = usePromptStore();
 
 const router = useRouter();
+const route = useRoute();
+
+// 0:ios(web) 1:android 2:web大尺度
+let ai_platform = 0;
+if (route.name === "virtualHuman2") {
+  ai_platform = 1;
+}
+
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
 const proTable = ref<ProTableInstance>();
 
@@ -86,7 +92,8 @@ const getTableList = (option: any) => {
     page: option.page,
     pageSize: option.pageSize,
     name: option.name,
-    state: option.state
+    state: option.state,
+    ai_platform
   };
   return getVirtualHumanList(params);
 };
@@ -181,7 +188,8 @@ const getPhotomodel = (option: any) => {
     page: option.page,
     pageSize: option.pageSize,
     name: "",
-    state: ""
+    state: "",
+    ai_platform
   };
   getVirtualHumanList(params).then((res: any) => {
     if (res.code == 200) {

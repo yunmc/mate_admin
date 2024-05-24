@@ -46,7 +46,7 @@
 
 <script setup lang="tsx" name="moment">
 import { ref, reactive } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
 import { getEpisodeList, saveEpisode, episodePrompt } from "@/api/playConfig/play";
@@ -59,6 +59,13 @@ import MomentEditDrawer from "./components/MomentEditDrawer.vue";
 import PromptEditModal from "./components/PromptEditModal.vue";
 
 const router = useRouter();
+const route = useRoute();
+
+// 0:ios(web) 1:android 2:web大尺度
+let ai_platform = 0;
+if (route.name === "moment2") {
+  ai_platform = 1;
+}
 
 const usePrompt = usePromptStore();
 
@@ -66,10 +73,11 @@ const proTable = ref<ProTableInstance>();
 const initParam = reactive({});
 // @tips：moment 就是 episode（剧本）。
 const getTableList = async (option: any) => {
-  const params = {
+  const params: any = {
     page: option.page,
     pageSize: option.pageSize,
-    ai_uid: option.ai_name
+    ai_uid: option.ai_name,
+    ai_platform
   };
   return getEpisodeList(params);
 };
@@ -105,7 +113,7 @@ const columns: ColumnProps[] = [
     prop: "ai_name",
     label: "AI昵称",
     width: "120",
-    enum: () => getPicList({ page: 1, pageSize: 1, search: true }),
+    enum: () => getPicList({ page: 1, pageSize: 1, search: true, ai_platform }),
     search: { el: "select", props: { filterable: true } },
     fieldNames: { label: "ai_name", value: "ai_uid" }
   },
@@ -208,7 +216,7 @@ const handleViewMoment = (row: any) => {
 };
 const handleChangeStatus = async (row: any) => {
   try {
-    const params = { ...row, episode_online_state: ~~!row.episode_online_state };
+    const params = { ...row, episode_online_state: ~~!row.episode_online_state, ai_platform };
     const resp: any = await saveEpisode(params);
     if (resp.code != 200) {
       return ElMessage.warning({ message: resp.msg });
@@ -240,7 +248,7 @@ const handleEditPrompt = async (title: string, row: any) => {
     // @todo：拉取 moment 对应的 ai 信息，跳转到 prompt 编辑界面。
     const {
       data: { list }
-    }: any = await getVirtualHumanList({ name: row.ai_name, page: 1, pageSize: 10 });
+    }: any = await getVirtualHumanList({ name: row.ai_name, page: 1, pageSize: 10, ai_platform });
     usePrompt.setPromptInfo(list[0], row);
     const req = {
       ai_uid: row.episode_ai_uid,
@@ -248,7 +256,7 @@ const handleEditPrompt = async (title: string, row: any) => {
       is_view: ~~(title === "查看")
     };
     router.push({
-      name: "prompt",
+      name: "prompt2",
       query: req
     });
   } catch (e) {

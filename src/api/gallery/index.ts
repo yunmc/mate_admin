@@ -7,11 +7,13 @@ interface getPicType {
   page: number;
   pageSize: number;
   search?: boolean;
+  ai_platform?: number;
 }
 interface savePicType {
   images: Array<string>; // AI用户的ID
   ai_uid: string; // 需要添加的机器人ID
   pic_level?: number; // 图片等级 1 2 3
+  ai_platform?: number;
 }
 export interface fileType {
   ext: string;

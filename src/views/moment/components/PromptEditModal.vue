@@ -99,6 +99,16 @@ import { ref, reactive, nextTick } from "vue";
 import { ElMessage, FormInstance } from "element-plus";
 import { templateType, getTemplateList, getVariableList } from "@/api/prompt";
 import { isModelType } from "@/utils/index";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+// 0:ios(web) 1:android 2:web大尺度
+let ai_platform = 0;
+if (route.name === "moment2") {
+  ai_platform = 1;
+}
+
 const rules = reactive({
   // default_chat_mode: [{ required: true, message: "请选择一个模型" }],
   prompt_template_id: [{ required: true, message: "请选择一个模板" }]
@@ -312,7 +322,7 @@ const submitTemplate = params => {
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
     try {
-      await drawerProps.value.api!(params);
+      await drawerProps.value.api!({ ...params, ai_platform });
       ElMessage.success({ message: `${drawerProps.value.title}模板成功！` });
       drawerProps.value.getTableList!();
       drawerVisible.value = false;

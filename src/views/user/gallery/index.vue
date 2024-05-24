@@ -87,9 +87,19 @@
 <script setup lang="tsx" name="useInfo">
 import { ref, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import Drawer from "./components/Drawer.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { getPicList, savePic, uploadFile, delPic } from "@/api/gallery";
+import { getPicList, savePic, delPic } from "@/api/gallery";
+import { useRoute } from "vue-router";
+import Drawer from "./components/Drawer.vue";
+
+const route = useRoute();
+
+// 0:ios(web) 1:android 2:web大尺度
+let ai_platform = 0;
+if (route.name === "gallery2") {
+  ai_platform = 1;
+}
+
 const small = ref(false);
 const background = ref(true);
 const disabled = ref(false);
@@ -189,7 +199,8 @@ const getTableList = async () => {
     pageSize: pagination.value.pageSize,
     ai_uid: user.value.ai_uid,
     ai_name: user.value.ai_name,
-    pic_level: user.value.pic_level
+    pic_level: user.value.pic_level,
+    ai_platform
   };
   let data: any = await getPicList(params);
   if (data.code == 200) {

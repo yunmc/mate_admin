@@ -392,6 +392,15 @@ import UploadVideo from "@/components/Upload/video.vue";
 import UploadImgs from "@/components/Upload/Imgs.vue";
 import UploadImgs2 from "@/components/Upload/Imgs.vue"; // UploadImgs2 组件可以预览图库的图片数据结构
 import { uploadFile, savePic } from "@/api/gallery";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+// 0:ios(web) 1:android 2:web大尺度
+let ai_platform = 0;
+if (route.name === "virtualHuman2") {
+  ai_platform = 1;
+}
 
 /**
  * 若配置6项中的1项，则其他5项也必填
@@ -748,7 +757,8 @@ const handleSubmit = () => {
         } = (await savePic({
           images,
           pic_level: saveParams.value.pic_level,
-          ai_uid: saveParams.value.ai_uid
+          ai_uid: saveParams.value.ai_uid,
+          ai_platform
         })) as any;
         if (pic_ids.length === 2) {
           drawerProps.value.row.quick_img1 = parseInt(pic_ids[0]);
@@ -767,7 +777,8 @@ const handleSubmit = () => {
       // @tips：更新 moment 配置。
       const params = {
         ...drawerProps.value.row,
-        tags: tags.value
+        tags: tags.value,
+        ai_platform
       };
       const res = await drawerProps.value.api!(params);
       if (res.code == "200") {

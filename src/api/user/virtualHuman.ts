@@ -6,6 +6,7 @@ interface getUserListType {
   pageSize: number;
   name?: string;
   state?: string | number;
+  ai_platform?: number;
 }
 // 获取虚拟人列表
 export const getVirtualHumanList = (params: getUserListType) => {

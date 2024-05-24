@@ -70,23 +70,30 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { ref, reactive, nextTick, onMounted } from "vue";
-import { templateType, getTemplateList, getVariableList } from "@/api/prompt";
+import { getTemplateList, getVariableList } from "@/api/prompt";
 import { ElMessage, FormInstance } from "element-plus";
 import { useRoute, useRouter } from "vue-router";
 import { VueDraggable } from "vue-draggable-plus";
-import system from "./components/system.vue";
-import usersay from "./components/usersay.vue";
 // import system from "./components/system.vue";
 // import usersay from "./components/usersay.vue";
 import { saveAiUserPrompt } from "@/api/prompt";
 import { usePromptStore } from "@/stores/modules/prompt";
 import { fa } from "element-plus/es/locale";
-import { episodePrompt, saveEpisodePromptList } from "@/api/playConfig/play";
+import { saveEpisodePromptList } from "@/api/playConfig/play";
+import system from "./components/system.vue";
+import usersay from "./components/usersay.vue";
+
 const usePrompt = usePromptStore();
 
 const route = useRoute();
 const router = useRouter();
 const componentKey = ref("");
+
+// 0:ios(web) 1:android 2:web大尺度
+let ai_platform = 0;
+if (route.name === "prompt2") {
+  ai_platform = 1;
+}
 
 const title = ref<any>({
   0: "一",
@@ -148,7 +155,7 @@ const onUpdate = () => {
 };
 
 const systemRef = ref<InstanceType<typeof system> | null>(null);
-//添加
+// 添加
 const getTemplateSystem = (row?: {}, index: any, isRefresh = true) => {
   const params = {
     isView: true,
@@ -245,7 +252,8 @@ const submitTemplate = async () => {
     try {
       await saveAiUserPrompt({
         prompt_list: dataProps.value,
-        ai_uid: route.query.ai_uid
+        ai_uid: route.query.ai_uid,
+        ai_platform
       });
       ElMessage.success({ message: `模板成功！` });
     } catch (error) {
@@ -256,7 +264,8 @@ const submitTemplate = async () => {
     try {
       const params = {
         prompt_list: dataProps.value,
-        id: route.query.moment_id
+        id: route.query.moment_id,
+        ai_platform
       };
       await saveEpisodePromptList(params);
       ElMessage.success({ message: `模板成功！` });

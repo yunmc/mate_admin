@@ -49,8 +49,16 @@ import { ElMessage, FormInstance } from "element-plus";
 import { App } from "@/api/interface";
 import UploadImgs from "@/components/Upload/Imgs.vue";
 import { uploadFile } from "@/api/gallery";
-
 import { deepClone } from "@/utils/index";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+// 0:ios(web) 1:android 2:web大尺度
+let ai_platform = 0;
+if (route.name === "gallery2") {
+  ai_platform = 1;
+}
 
 const rules = reactive({});
 
@@ -135,7 +143,7 @@ const handleSubmit = () => {
   ruleFormRef.value!.validate(async valid => {
     if (!valid) return;
     try {
-      await drawerProps.value.api!(params);
+      await drawerProps.value.api!({ ...params, ai_platform });
       ElMessage.success({ message: `上传成功！` });
       drawerProps.value.getTableList!();
       handleClose();

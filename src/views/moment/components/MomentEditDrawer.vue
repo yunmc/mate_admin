@@ -288,6 +288,15 @@ import UploadImgs from "@/components/Upload/uploads.vue";
 import UploadImgs2 from "@/components/Upload/Imgs.vue"; // UploadImgs2 组件可以预览图库的图片数据结构
 import UploadVoice from "@/components/Upload/voice.vue";
 import { getPicList, uploadFile, savePic } from "@/api/gallery";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+
+// 0:ios(web) 1:android 2:web大尺度
+let ai_platform = 0;
+if (route.name === "moment2") {
+  ai_platform = 1;
+}
 
 interface DrawerProps {
   row: any;
@@ -349,7 +358,7 @@ const momentTypeList = [
 const aiUserList = ref();
 const init = async () => {
   // @tips：拉一下 ai 人列表。
-  const resp: any = await getPicList({ page: 1, pageSize: 1, search: true });
+  const resp: any = await getPicList({ page: 1, pageSize: 1, search: true, ai_platform });
   if (resp.code == 200) {
     aiUserList.value = resp.data;
   }
@@ -415,7 +424,8 @@ const handleSubmit = async () => {
         } = (await savePic({
           images,
           pic_level: saveParams.value.pic_level,
-          ai_uid: saveParams.value.ai_uid
+          ai_uid: saveParams.value.ai_uid,
+          ai_platform
         })) as any;
         if (pic_ids.length === 2) {
           drawerProps.value.row.quick_img1 = parseInt(pic_ids[0]);
@@ -433,7 +443,8 @@ const handleSubmit = async () => {
       }
       // @tips：更新 moment 配置。
       const params = {
-        ...drawerProps.value.row
+        ...drawerProps.value.row,
+        ai_platform
       };
       const res = await drawerProps.value.api!(params);
       if (res.code == "200") {

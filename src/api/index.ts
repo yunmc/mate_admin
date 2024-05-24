@@ -30,7 +30,7 @@ class RequestHttp {
     /**
      * @description 请求拦截器
      * 客户端发送请求 -> [请求拦截器] -> 服务器
-     * token校验(JWT) : 接受服务器返回的 token,存储到 vuex/pinia/本地储存当中
+     * token校验(JWT) : 接受服务器返回的 token, 存储到 vuex/pinia/本地储存当中
      */
     this.service.interceptors.request.use(
       (config: CustomAxiosRequestConfig) => {
@@ -50,7 +50,7 @@ class RequestHttp {
 
     /**
      * @description 响应拦截器
-     *  服务器换返回信息 -> [拦截统一处理] -> 客户端JS获取到信息
+     * 服务器换返回信息 -> [拦截统一处理] -> 客户端JS获取到信息
      */
     this.service.interceptors.response.use(
       (response: AxiosResponse) => {

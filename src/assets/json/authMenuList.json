@@ -93,7 +93,7 @@
       "redirect": "/moment",
       "meta": {
         "icon": "MessageBox",
-        "title": "Moment管理",
+        "title": "IOS Moment管理",
         "isLink": "",
         "isHide": false,
         "isFull": false,
@@ -123,7 +123,7 @@
       "redirect": "/user/virtual-human",
       "meta": {
         "icon": "MessageBox",
-        "title": "AI管理",
+        "title": "IOS AI管理",
         "isLink": "",
         "isHide": false,
         "isFull": false,
@@ -208,6 +208,94 @@
           "meta": {
             "icon": "Menu",
             "title": "PUGC 图片模板配置",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/moment2",
+      "name": "moment2",
+      "redirect": "/moment2",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "安卓Moment管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/moment2",
+          "name": "moment2",
+          "component": "/moment/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "安卓Moment配置",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/user/virtual-human2",
+      "name": "virtualHuman2",
+      "redirect": "/user/virtual-human2",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "安卓AI管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/user/virtual-human2",
+          "name": "virtualHuman2",
+          "component": "/user/virtualHuman/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "安卓PGC AI管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/user/virtual-human/prompt2",
+          "name": "prompt2",
+          "component": "/user/prompt/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "prompt配置",
+            "isLink": "",
+            "isHide": true,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": false
+          }
+        },
+        {
+          "path": "/user/gallery2",
+          "name": "gallery2",
+          "component": "/user/gallery/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "安卓PGC 图库管理",
             "isLink": "",
             "isHide": false,
             "isFull": false,
