@@ -790,10 +790,10 @@ const handleSubmit = () => {
     ElMessage.error("请输入create_by");
     return false;
   }
-  if (drawerProps.value.row.ai_class == "") {
-    ElMessage.error("请选择class");
-    return false;
-  }
+  // if (drawerProps.value.row.ai_class == "") {
+  //   ElMessage.error("请选择class");
+  //   return false;
+  // }
   drawerProps.value.row.name = drawerProps.value.row.ai_name;
   drawerProps.value.row.private_date_btn = drawerProps.value.row.private_date_btn ? "1" : "0";
   drawerProps.value.row.role_play_btn = drawerProps.value.row.role_play_btn ? "1" : "0";
