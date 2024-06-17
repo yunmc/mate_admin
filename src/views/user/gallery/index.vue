@@ -98,6 +98,8 @@ const route = useRoute();
 let ai_platform = 0;
 if (route.name === "gallery2") {
   ai_platform = 1;
+} else if (route.name === "gallery3") {
+  ai_platform = 2;
 }
 
 const small = ref(false);

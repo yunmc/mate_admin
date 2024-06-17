@@ -1,5 +1,9 @@
 import http from "@/api";
 
+export const getAllTags = () => {
+  return http.post(`/admin/tag/all_tags`);
+};
+
 interface IGetTagListType {
   page: number;
   page_size: number;
@@ -40,4 +44,40 @@ interface IDeleteTagType {
 }
 export const deleteTag = (params: IDeleteTagType) => {
   return http.post(`/admin/tag/delete_tag`, params);
+};
+
+export const getAllCategories = () => {
+  return http.post(`/admin/category/all_category`);
+};
+
+interface ICreateCategoryParams {
+  category_name: string;
+  category_weight: number;
+}
+export const createCategory = (params: ICreateCategoryParams) => {
+  return http.post(`/admin/category/save_category`, params);
+};
+
+interface IUpdateCategoryParams {
+  id: number;
+  category_name: string;
+  category_weight: number;
+}
+export const updateCategory = (params: IUpdateCategoryParams) => {
+  return http.post(`/admin/category/update_category`, params);
+};
+
+interface IDeleteCategoryParams {
+  id: number;
+}
+export const deleteCategory = (params: IDeleteCategoryParams) => {
+  return http.post(`/admin/category/delete_category`, params);
+};
+
+interface IGetCategoryParams {
+  page: number;
+  page_size: number;
+}
+export const getCategoryList = (params: IGetCategoryParams) => {
+  return http.post(`/admin/category/category_list`, params);
 };

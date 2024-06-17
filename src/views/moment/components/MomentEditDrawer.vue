@@ -296,6 +296,8 @@ const route = useRoute();
 let ai_platform = 0;
 if (route.name === "moment2") {
   ai_platform = 1;
+} else if (route.name === "moment3") {
+  ai_platform = 2;
 }
 
 interface DrawerProps {

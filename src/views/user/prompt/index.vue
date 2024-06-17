@@ -93,6 +93,8 @@ const componentKey = ref("");
 let ai_platform = 0;
 if (route.name === "prompt2") {
   ai_platform = 1;
+} else if (route.name === "prompt3") {
+  ai_platform = 2;
 }
 
 const title = ref<any>({

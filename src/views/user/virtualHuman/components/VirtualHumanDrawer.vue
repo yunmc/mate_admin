@@ -36,12 +36,27 @@
         <el-input v-model="drawerProps.row!.moment" placeholder="时刻moment" clearable></el-input>
       </el-form-item> -->
 
-      <el-form-item label="Class" prop="Class">
+      <!-- <el-form-item label="Class" prop="Class">
         <el-select v-model="drawerProps.row!.ai_class" placeholder="请选择">
           <el-option v-for="item in drawerProps.row!.ai_classes" :key="item.title" :label="item.title" :value="item.title">
           </el-option>
         </el-select>
+      </el-form-item> -->
+
+      <el-form-item label="Class" prop="category" v-for="(category, index) in saveParams.categories" :key="category">
+        <el-select v-model="saveParams.categories[index]">
+          <el-option v-for="item in allCategories" :key="item.id" :label="item.category_name" :value="item.id" />
+        </el-select>
+        <a style="font-size: 14px; color: rgb(0 150 136); cursor: pointer" @click="onDeleteCategory(index)">删除</a>
       </el-form-item>
+
+      <a
+        v-if="!drawerProps.isView"
+        style="display: block; margin-bottom: 15px; margin-left: 178px; font-size: 14px; color: rgb(0 150 136); cursor: pointer"
+        @click="onAddCategory"
+      >
+        + 添加分类
+      </a>
 
       <el-form-item label="avatar" prop="Avatar:">
         <UploadImg v-model:image-url="drawerProps.row!.avatar" width="135px" height="135px" :file-size="3">
@@ -97,6 +112,21 @@
         <el-input v-model="drawerProps.row!.ai_desc" type="textarea" :rows="3" placeholder="introduce" clearable></el-input>
       </el-form-item>
 
+      <el-form-item label="一级标签" prop="common_tags" v-for="(common_tag, index) in saveParams.common_tags" :key="common_tag">
+        <el-select v-model="saveParams.common_tags[index]">
+          <el-option v-for="item in allTags" :key="item.id" :label="item.tag_name" :value="item.id" />
+        </el-select>
+        <a style="font-size: 14px; color: rgb(0 150 136); cursor: pointer" @click="onDeleteCommonTag(index)">删除</a>
+      </el-form-item>
+
+      <a
+        v-if="!drawerProps.isView"
+        style="display: block; margin-bottom: 15px; margin-left: 178px; font-size: 14px; color: rgb(0 150 136); cursor: pointer"
+        @click="onAddCommonTag"
+      >
+        + 添加一级标签
+      </a>
+
       <el-form-item label="虚拟人标签" prop="tags">
         <el-tag
           class="mx-1"
@@ -105,7 +135,7 @@
           v-for="(tag, index) in tags"
           :key="tag"
           @close="onDelTag(index)"
-          style="margin-top: 10px"
+          style="margin-bottom: 10px"
         >
           {{ tag }}
         </el-tag>
@@ -115,9 +145,9 @@
             v-if="tags.length < 6"
             placeholder="请输入标签名"
             maxlength="20"
-            style="width: 120px; margin-top: 10px; margin-right: 10px"
+            style="width: 120px; margin-right: 10px"
           />
-          <el-tag class="mx-1" style="margin-top: 10px" v-if="tags.length < 6" @click="onAddTag">添加标签</el-tag>
+          <el-tag class="mx-1" style="" v-if="tags.length < 6" @click="onAddTag">添加标签</el-tag>
         </template>
       </el-form-item>
 
@@ -332,9 +362,23 @@
           <el-option v-for="item in optionOpenState" :key="item.value" :label="item.label" :value="item.value"> </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="是否置顶" prop="is_top">
+        <el-radio-group v-model="drawerProps.row!.is_top">
+          <el-radio :label="1">是</el-radio>
+          <el-radio :label="0">否</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="Weight" prop="weight">
         <el-input v-model="drawerProps.row!.weight" placeholder="weight" clearable></el-input>
       </el-form-item>
+      <!-- <el-form-item label="置顶权重" prop="weight" v-if="drawerProps.row!.is_top">
+        <el-input
+          v-model="drawerProps.row!.weight"
+          placeholder="作为置顶的角色的排序依依据，数大的在前"
+          type="number"
+          clearable
+        ></el-input>
+      </el-form-item> -->
     </el-form>
     <template #footer>
       <el-button @click="drawerVisible = false"> 取消 </el-button>
@@ -393,6 +437,7 @@ import UploadImgs from "@/components/Upload/Imgs.vue";
 import UploadImgs2 from "@/components/Upload/Imgs.vue"; // UploadImgs2 组件可以预览图库的图片数据结构
 import { uploadFile, savePic } from "@/api/gallery";
 import { useRoute } from "vue-router";
+import { getAllTags, getAllCategories } from "@/api/label";
 
 const route = useRoute();
 
@@ -400,6 +445,8 @@ const route = useRoute();
 let ai_platform = 0;
 if (route.name === "virtualHuman2") {
   ai_platform = 1;
+} else if (route.name === "virtualHuman3") {
+  ai_platform = 2;
 }
 
 /**
@@ -490,7 +537,9 @@ const saveParams = ref({
   quick_pic1: [],
   quick_pic2: [],
   ai_uid: "",
-  pic_level: 0
+  pic_level: 0,
+  common_tags: [""], // 一级标签
+  categories: [""] // 分类
 });
 
 const handleClose = (params: DrawerProps) => {
@@ -503,7 +552,6 @@ const handleClose = (params: DrawerProps) => {
   drawerProps.value.row = {};
   activeName.value = "";
   recognitionList.value = {};
-  console.log("drawerProps", drawerProps);
   drawerVisible.value = false;
 };
 
@@ -598,6 +646,14 @@ const optionOpenState = [
   }
 ];
 
+const allTags = ref();
+const allCategories = ref();
+const init = async () => {
+  const [tags, categories] = await Promise.all([getAllTags(), getAllCategories()]);
+  allTags.value = tags.data || [];
+  allCategories.value = categories.data || [];
+};
+
 const acceptParams = (params: DrawerProps) => {
   saveParams.value.quick_pic1 =
     params.row.quick_pic1 && Object.keys(params.row.quick_pic1).length ? [{ url: params.row.quick_pic1.pic_source_url }] : [];
@@ -605,6 +661,8 @@ const acceptParams = (params: DrawerProps) => {
     params.row.quick_pic2 && Object.keys(params.row.quick_pic2).length ? [{ url: params.row.quick_pic2.pic_source_url }] : [];
   saveParams.value.ai_uid = params.row.ai_uid;
   saveParams.value.pic_level = 0;
+  saveParams.value.common_tags = params.row.common_tag_ids?.length ? params.row.common_tag_ids : [""];
+  saveParams.value.categories = params.row.category_ids?.length ? params.row.category_ids : [""];
   drawerProps.value = params;
   // console.log("drawerProps", params.generatePhotModel);
   drawerProps.value.row.images = [];
@@ -624,9 +682,9 @@ const acceptParams = (params: DrawerProps) => {
   drawerProps.value.row.generate_photo_btn = drawerProps.value.row.generate_photo_btn == "1" ? true : false;
   drawerProps.value.row.selfie_btn_show = drawerProps.value.row.selfie_btn_show == "1" ? true : false;
   drawerProps.value.row!.drama_date_btn_show = drawerProps.value.row!.drama_date_btn_show == "1" ? true : false;
-
   drawerProps.value.row.large_scale_open = drawerProps.value.row.large_scale_open == "1" ? true : false;
   drawerProps.value.row.open_remark_img_switch = drawerProps.value.row.open_remark_img_switch == "1" ? true : false;
+  drawerProps.value.row!.is_top = drawerProps.value.row!.is_top == 1 ? 1 : 0;
 
   drawerVisible.value = true;
   getLoraListApi(false);
@@ -640,6 +698,8 @@ const acceptParams = (params: DrawerProps) => {
       recognitionList.value[element.intention] = element.collection;
     });
   }
+
+  init();
 };
 
 const loraList = ref();
@@ -694,6 +754,19 @@ const onDelTag = (index: number) => {
   tags.value.splice(index, 1);
 };
 
+const onAddCommonTag = () => {
+  saveParams.value.common_tags.push("");
+};
+const onDeleteCommonTag = (index: number) => {
+  saveParams.value.common_tags.splice(index, 1);
+};
+const onAddCategory = () => {
+  saveParams.value.categories.push("");
+};
+const onDeleteCategory = (index: number) => {
+  saveParams.value.categories.splice(index, 1);
+};
+
 // 提交数据（新增/编辑）
 const ruleFormRef = ref<FormInstance>();
 const handleSubmit = () => {
@@ -730,12 +803,14 @@ const handleSubmit = () => {
   drawerProps.value.row.open_remark_img_switch = drawerProps.value.row.open_remark_img_switch ? "1" : "0";
   drawerProps.value.row.intent_recognition_list = intent_recognition_list;
   drawerProps.value.row!.drama_date_btn_show = drawerProps.value.row!.drama_date_btn_show ? "1" : "0";
-
   drawerProps.value.row.posters = [];
-  // console.log("drawerProps.value.row.images", drawerProps.value.row.images != undefined);
   drawerProps.value.row.images.forEach((element: { url: any }) => {
     drawerProps.value.row.posters.push(element.url);
   });
+
+  drawerProps.value.row.common_tag_ids = Array.from(new Set(saveParams.value.common_tags.filter(t => !!t)));
+  drawerProps.value.row.category_ids = Array.from(new Set(saveParams.value.categories.filter(t => !!t)));
+
   ruleFormRef.value!.validate(async valid => {
     if (!valid) {
       return;
@@ -778,6 +853,7 @@ const handleSubmit = () => {
       const params = {
         ...drawerProps.value.row,
         tags: tags.value,
+        weight: isNaN(drawerProps.value.row.weight) ? undefined : Number(drawerProps.value.row.weight),
         ai_platform
       };
       const res = await drawerProps.value.api!(params);

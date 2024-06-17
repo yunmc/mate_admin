@@ -15,7 +15,18 @@
 
       <template #tags="scope">
         <div style="white-space: initial">
+          <el-tag class="mx-1" v-for="item in scope.row.common_tags" :key="item" style="margin: 2px 4px" type="warning">
+            {{ item.tag_name }}
+          </el-tag>
           <el-tag class="mx-1" v-for="item in scope.row.tags" :key="item" style="margin: 2px 4px"> {{ item }} </el-tag>
+        </div>
+      </template>
+
+      <template #categories="scope">
+        <div style="white-space: initial">
+          <el-tag class="mx-1" v-for="item in scope.row.categories" :key="item" style="margin: 2px 4px">
+            {{ item.category_name }}
+          </el-tag>
         </div>
       </template>
 
@@ -53,6 +64,7 @@ import { useRoute, useRouter } from "vue-router";
 import { usePromptStore } from "@/stores/modules/prompt";
 import VirtualHumanDrawer from "./components/VirtualHumanDrawer.vue";
 import Drawer from "./components/detail.vue";
+import { getAllCategories, getAllTags } from "@/api/label";
 
 const usePrompt = usePromptStore();
 
@@ -63,6 +75,8 @@ const route = useRoute();
 let ai_platform = 0;
 if (route.name === "virtualHuman2") {
   ai_platform = 1;
+} else if (route.name === "virtualHuman3") {
+  ai_platform = 2;
 }
 
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
@@ -149,6 +163,10 @@ const columns: ColumnProps[] = [
     label: "AI标签"
   },
   {
+    prop: "categories",
+    label: "AI分类"
+  },
+  {
     prop: "ai_state",
     label: "上线状态",
     search: { el: "tree-select", props: { filterable: true }, key: "state" },
@@ -164,6 +182,11 @@ const columns: ColumnProps[] = [
   {
     prop: "weight",
     label: "Weight"
+  },
+  {
+    prop: "is_top",
+    label: "置顶状态",
+    render: scope => <span>{scope.row.is_top ? `置顶` : ""}</span>
   },
   {
     prop: "bind_celebrity_account",
@@ -183,7 +206,7 @@ const onChangeStatus = (ai_uid: string) => {
   });
 };
 
-const getPhotomodel = (option: any) => {
+const getPhotoModel = (option: any) => {
   const params = {
     page: option.page,
     pageSize: option.pageSize,
@@ -202,8 +225,16 @@ const getPhotomodel = (option: any) => {
     }
   });
 };
+getPhotoModel({ page: 1, pageSize: 1 });
 
-getPhotomodel({ page: 1, pageSize: 1 });
+const allTags = ref();
+const allCategories = ref();
+const init = async () => {
+  const [tags, categories] = await Promise.all([getAllTags(), getAllCategories()]);
+  allTags.value = tags.data || [];
+  allCategories.value = categories.data || [];
+};
+init();
 
 const drawerRef = ref<InstanceType<typeof VirtualHumanDrawer> | null>(null);
 //添加

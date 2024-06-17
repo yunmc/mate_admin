@@ -573,7 +573,7 @@
       "redirect": "/label",
       "meta": {
         "icon": "MessageBox",
-        "title": "标签管理",
+        "title": "分类和标签",
         "isLink": "",
         "isHide": false,
         "isFull": false,
@@ -582,12 +582,98 @@
       },
       "children": [
         {
+          "path": "/label/category/index",
+          "name": "category",
+          "component": "/label/category/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "分类管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
           "path": "/label/top_level_label/index",
           "name": "top_level_label",
           "component": "/label/top-level-label/index",
           "meta": {
             "icon": "Menu",
             "title": "一级标签",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "/user/virtual-human3",
+      "name": "virtualHuman3",
+      "redirect": "/user/virtual-human3",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "Web AI管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/user/virtual-human3",
+          "name": "virtualHuman3",
+          "component": "/user/virtualHuman/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "Web PGC AI管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/user/virtual-human/prompt3",
+          "name": "prompt3",
+          "component": "/user/prompt/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "prompt配置",
+            "isLink": "",
+            "isHide": true,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": false
+          }
+        },
+        {
+          "path": "/user/gallery3",
+          "name": "gallery3",
+          "component": "/user/gallery/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "Web PGC 图库管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/channel",
+          "name": "channel",
+          "component": "/channel/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "渠道管理",
             "isLink": "",
             "isHide": false,
             "isFull": false,
