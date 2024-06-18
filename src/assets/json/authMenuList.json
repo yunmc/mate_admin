@@ -612,6 +612,64 @@
       ]
     },
     {
+      "path": "/user/virtual-human4",
+      "name": "virtualHuman4",
+      "redirect": "/user/virtual-human4",
+      "meta": {
+        "icon": "MessageBox",
+        "title": "ML官网AI管理",
+        "isLink": "",
+        "isHide": false,
+        "isFull": false,
+        "isAffix": false,
+        "isKeepAlive": true
+      },
+      "children": [
+        {
+          "path": "/user/virtual-human4",
+          "name": "virtualHuman4",
+          "component": "/user/virtualHuman/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "ML官网PGC AI管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        },
+        {
+          "path": "/user/virtual-human/prompt4",
+          "name": "prompt4",
+          "component": "/user/prompt/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "prompt配置",
+            "isLink": "",
+            "isHide": true,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": false
+          }
+        },
+        {
+          "path": "/user/gallery4",
+          "name": "gallery4",
+          "component": "/user/gallery/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "ML官网PGC 图库管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": true
+          }
+        }
+      ]
+    },
+    {
       "path": "/user/virtual-human3",
       "name": "virtualHuman3",
       "redirect": "/user/virtual-human3",

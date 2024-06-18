@@ -71,12 +71,14 @@ const usePrompt = usePromptStore();
 const router = useRouter();
 const route = useRoute();
 
-// 0:ios(web) 1:android 2:web大尺度
+// 0:ios(web) 1:android 2:web大尺度 3:web
 let ai_platform = 0;
 if (route.name === "virtualHuman2") {
   ai_platform = 1;
 } else if (route.name === "virtualHuman3") {
   ai_platform = 2;
+} else if (route.name === "virtualHuman4") {
+  ai_platform = 3;
 }
 
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）

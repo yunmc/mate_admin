@@ -54,12 +54,14 @@ import { useRoute } from "vue-router";
 
 const route = useRoute();
 
-// 0:ios(web) 1:android 2:web大尺度
+// 0:ios(web) 1:android 2:web大尺度 3:web
 let ai_platform = 0;
 if (route.name === "gallery2") {
   ai_platform = 1;
 } else if (route.name === "gallery3") {
   ai_platform = 2;
+} else if (route.name === "gallery4") {
+  ai_platform = 3;
 }
 
 const rules = reactive({});
