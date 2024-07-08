@@ -26,13 +26,7 @@
         </el-form-item>
 
         <el-form-item label="更新内容" prop="upgrade_content">
-          <el-input
-            v-model="drawerProps.row!.upgrade_content"
-            :rows="3"
-            maxlength="200"
-            type="textarea"
-            placeholder="请输入更新内容"
-          />
+          <el-input v-model="drawerProps.row!.upgrade_content" :rows="5" type="textarea" placeholder="请输入更新内容" />
         </el-form-item>
       </el-form>
       <template #footer>
