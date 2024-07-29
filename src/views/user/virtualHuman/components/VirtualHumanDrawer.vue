@@ -69,6 +69,9 @@
       </el-form-item>
 
       <el-form-item label="introduce_image" prop="introduce_image">
+        <template #label>
+          <span class="label-with-break" style="text-align: right">introduce_image<br />默认官网</span>
+        </template>
         <UploadImg v-model:image-url="drawerProps.row!.introduce_image" height="140px" width="140px" :file-size="5">
           <template #empty>
             <el-icon><Picture /></el-icon>
@@ -79,6 +82,9 @@
       </el-form-item>
 
       <el-form-item label="introduce_video" prop="introduce_video">
+        <template #label>
+          <span class="label-with-break" style="text-align: right">introduce_video<br />默认官网</span>
+        </template>
         <UploadVideo v-model:image-url="drawerProps.row!.introduce_video" height="140px" width="540px" :file-size="10">
           <template #empty>
             <el-icon><Picture /></el-icon>
@@ -89,7 +95,49 @@
       </el-form-item>
 
       <el-form-item label="introduce_video_cover" prop="introduce_video_cover">
+        <template #label>
+          <span class="label-with-break" style="text-align: right">introduce_video_cover<br />默认官网</span>
+        </template>
         <UploadImg v-model:image-url="drawerProps.row!.introduce_video_cover" height="140px" width="140px" :file-size="5">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+          <template #tip> 照片大小不能超过 5M </template>
+        </UploadImg>
+      </el-form-item>
+
+      <el-form-item label="introduce_image" prop="introduce_image_home" v-if="ai_platform == 2">
+        <template #label>
+          <span class="label-with-break" style="text-align: right">introduce_image<br />渠道官网</span>
+        </template>
+        <UploadImg v-model:image-url="drawerProps.row!.introduce_image_home" height="140px" width="140px" :file-size="5">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传照片</span>
+          </template>
+          <template #tip> 照片大小不能超过 5M </template>
+        </UploadImg>
+      </el-form-item>
+
+      <el-form-item label="introduce_video" prop="introduce_video_home" v-if="ai_platform == 2">
+        <template #label>
+          <span class="label-with-break" style="text-align: right">introduce_video<br />渠道官网</span>
+        </template>
+        <UploadVideo v-model:image-url="drawerProps.row!.introduce_video_home" height="140px" width="540px" :file-size="10">
+          <template #empty>
+            <el-icon><Picture /></el-icon>
+            <span>请上传视频文件</span>
+          </template>
+          <template #tip> 视频大小不能超过 10M </template>
+        </UploadVideo>
+      </el-form-item>
+
+      <el-form-item label="introduce_video_cover" prop="introduce_video_cover_home" v-if="ai_platform == 2">
+        <template #label>
+          <span class="label-with-break" style="text-align: right">introduce_video_cover<br />渠道官网</span>
+        </template>
+        <UploadImg v-model:image-url="drawerProps.row!.introduce_video_cover_home" height="140px" width="140px" :file-size="5">
           <template #empty>
             <el-icon><Picture /></el-icon>
             <span>请上传照片</span>
@@ -382,7 +430,7 @@
     </el-form>
     <template #footer>
       <el-button @click="drawerVisible = false"> 取消 </el-button>
-      <el-button v-show="!drawerProps.isView" type="primary" @click="handleSubmit"> 确定 </el-button>
+      <el-button v-show="!drawerProps.isView" type="primary" @click="handleSubmit"> 确定1 </el-button>
     </template>
   </el-drawer>
 

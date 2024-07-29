@@ -19,21 +19,21 @@
           <!-- <source :src="imageUrl" type="video/*" />
           您的浏览器不支持 video 元素。 -->
         </video>
-        <!-- <img :src="imageUrl" class="upload-image" />
+        <!-- <img :src="imageUrl" class="upload-image" /> -->
         <div class="upload-handle" @click.stop>
-          <div v-if="!self_disabled" class="handle-icon" @click="editImg">
+          <!-- <div v-if="!self_disabled" class="handle-icon" @click="editImg">
             <el-icon><Edit /></el-icon>
             <span>编辑</span>
           </div>
           <div class="handle-icon" @click="imgViewVisible = true">
             <el-icon><ZoomIn /></el-icon>
             <span>查看</span>
-          </div>
+          </div> -->
           <div v-if="!self_disabled" class="handle-icon" @click="deleteImg">
             <el-icon><Delete /></el-icon>
             <span>删除</span>
           </div>
-        </div> -->
+        </div>
       </template>
       <template v-else>
         <div class="upload-empty">
@@ -121,6 +121,13 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
     options.onError(error as any);
   }
 };
+/**
+ * @description 删除图片
+ * */
+const deleteImg = () => {
+  emit("update:imageUrl", "");
+};
+
 /**
  * @description 文件上传之前判断
  * @param rawFile 选择的文件
