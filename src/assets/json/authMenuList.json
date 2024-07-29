@@ -738,6 +738,20 @@
             "isAffix": false,
             "isKeepAlive": true
           }
+        },
+        {
+          "path": "/banner",
+          "name": "banner",
+          "component": "/banner/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "默认banner管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": false
+          }
         }
       ]
     }
