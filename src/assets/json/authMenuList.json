@@ -752,6 +752,20 @@
             "isAffix": false,
             "isKeepAlive": false
           }
+        },
+        {
+          "path": "/blog",
+          "name": "blog",
+          "component": "/blog/index",
+          "meta": {
+            "icon": "Menu",
+            "title": "Web blog管理",
+            "isLink": "",
+            "isHide": false,
+            "isFull": false,
+            "isAffix": false,
+            "isKeepAlive": false
+          }
         }
       ]
     }

@@ -213,6 +213,7 @@ const uploadError = () => {
       &:hover {
         border-color: var(--el-color-primary);
         .upload-handle {
+          width: 20%;
           opacity: 1;
         }
       }

@@ -9,14 +9,6 @@
       :model="drawerProps.row"
       :hide-required-asterisk="drawerProps.isView"
     >
-      <el-form-item label="合作渠道" prop="channel_name">
-        <el-input v-model="drawerProps.row!.channel_name" placeholder="" clearable></el-input>
-      </el-form-item>
-
-      <el-form-item label="虚拟人ID" prop="ai_uid">
-        <el-input v-model="drawerProps.row!.ai_uid" placeholder="" clearable></el-input>
-      </el-form-item>
-
       <el-form-item label="活动图" prop="banner_url">
         <UploadImg v-model:image-url="drawerProps.row!.banner_url" width="135px" height="135px" :file-size="1">
           <template #empty>
@@ -24,10 +16,6 @@
             <span>请选择上传图片</span>
           </template>
         </UploadImg>
-      </el-form-item>
-
-      <el-form-item label="是否上线" prop="online_status">
-        <el-switch v-model="drawerProps.row!.online_status" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -37,7 +25,7 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts" name="ChannelEditDrawer">
+<script setup lang="ts" name="BannerEditDrawer">
 import { ref, reactive } from "vue";
 import { ElMessage, FormInstance } from "element-plus";
 import UploadImg from "@/components/Upload/Img.vue";
@@ -72,10 +60,6 @@ const handleSubmit = async () => {
     }
     try {
       const params = {
-        id: drawerProps.value.row!.id,
-        channel_name: drawerProps.value.row!.channel_name,
-        ai_uid: drawerProps.value.row!.ai_uid,
-        online_status: drawerProps.value.row!.online_status,
         banner_url: drawerProps.value.row!.banner_url
       };
       const res = await drawerProps.value.api!(params);

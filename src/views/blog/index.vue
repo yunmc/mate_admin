@@ -8,9 +8,23 @@
       :init-param="initParam"
       :data-callback="dataCallback"
     >
+      <!-- 表格 header 按钮 -->
+      <template #tableHeader="">
+        <el-button type="primary" icon="CirclePlus" @click="handleAddChannel()"> 添加 </el-button>
+      </template>
+
+      <template #ai_name="scope">
+        {{ scope.row.ai_name }}
+      </template>
+
       <!-- 表格操作 -->
       <template #operation="scope">
         <el-button type="primary" link @click="handleEditChannel(scope.row)"> 编辑 </el-button>
+        <el-popconfirm title="确定要删除?" @confirm="handleDeleteBlog(scope.row)">
+          <template #reference>
+            <el-button type="danger" link> 删除</el-button>
+          </template>
+        </el-popconfirm>
       </template>
     </ProTable>
   </div>
@@ -19,29 +33,27 @@
   <PreviewImage ref="previewRef" />
 
   <!-- 编辑抽屉 -->
-  <BannerEditDrawer ref="drawerRef" />
+  <BlogEditDrawer ref="drawerRef" />
 </template>
 
 <script setup lang="tsx" name="channel">
 import { ref, reactive } from "vue";
 import { ProTableInstance, ColumnProps } from "@/components/ProTable/interface";
 import PreviewImage from "@/views/proTable/components/PreviewImage.vue";
-import { getChannelList, updateChannel, saveChannel, deleteChannel } from "@/api/channel";
-import { getBannerList, updateBanner } from "@/api/banner";
+import { getBlogList, saveBlog, updateBlog, deleteBlog } from "@/api/blog";
 import { deepClone } from "@/utils/index";
-import { ElMessage } from "element-plus";
-import BannerEditDrawer from "./components/BannerEditDrawer.vue";
+import BlogEditDrawer from "./components/BlogEditDrawer.vue";
 
 const proTable = ref<ProTableInstance>();
 const initParam = reactive({});
 const getTableList = async (option: any) => {
-  return getBannerList();
+  const params: any = {
+    page: option.page,
+    pageSize: option.pageSize,
+    ai_platform: 2
+  };
+  return getBlogList(params);
 };
-// const getTableList = async (option: any) => {
-//   console.log(getBannerList());
-//   console.log("option", getBannerList());
-//   return getBannerList();
-// };
 const previewRef = ref<InstanceType<typeof PreviewImage> | null>(null);
 const showImages = (row: any, index: number) => {
   const params = {
@@ -52,8 +64,12 @@ const showImages = (row: any, index: number) => {
 };
 const columns: ColumnProps[] = [
   {
+    prop: "article_title",
+    label: "标题"
+  },
+  {
     prop: "banner_url",
-    label: "活动图",
+    label: "封面",
     render: scope => {
       return (
         <el-image
@@ -65,6 +81,16 @@ const columns: ColumnProps[] = [
     }
   },
   {
+    prop: "article_weight",
+    label: "排序权重",
+    render: scope => scope.row.ai_user_info?.ai_name
+  },
+  {
+    prop: "created_time",
+    label: "创建时间",
+    render: scope => scope.row.ai_user_info?.ai_uid
+  },
+  {
     prop: "operation",
     label: "操作",
     fixed: "right",
@@ -72,29 +98,40 @@ const columns: ColumnProps[] = [
   }
 ];
 const dataCallback = (data: any) => {
-  console.log(data);
-  const test = [];
-  test.push(data);
-  //data目前是一个对象，需要转换成数组
   return {
-    list: test
+    list: data.list,
+    total: data.total,
+    page: data.page,
+    pageSize: data.pageSize
   };
 };
 
-const drawerRef = ref<InstanceType<typeof BannerEditDrawer> | null>(null);
+const drawerRef = ref<InstanceType<typeof BlogEditDrawer> | null>(null);
 
+const handleAddChannel = () => {
+  const params = {
+    row: { online_status: 1 },
+    isView: false,
+    api: saveBlog,
+    getTableList: proTable.value?.getTableList
+  };
+  drawerRef.value?.acceptParams(params);
+};
 const handleEditChannel = (row: any) => {
-  console.log(row);
   const params = {
     isView: false,
     row: { ...row },
-    api: updateBanner,
+    api: updateBlog,
     getTableList: proTable.value?.getTableList
   };
   const _params = deepClone(params); // 断一下引用
-  _params.api = updateBanner;
+  _params.api = updateBlog;
   _params.getTableList = proTable.value?.getTableList;
   drawerRef.value?.acceptParams(_params);
+};
+const handleDeleteBlog = async (row: any) => {
+  await deleteBlog({ id: row.id });
+  proTable.value?.getTableList();
 };
 </script>
 
